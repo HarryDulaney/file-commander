@@ -1,5 +1,5 @@
 # _SuperCommander_v1.0.0_
-## File conversions made simple. 
+## _File conversions made simple._ 
 ## 1. Set your preferences the first time you run it.
 ## 2. SuperCommander will do the rest. 
 

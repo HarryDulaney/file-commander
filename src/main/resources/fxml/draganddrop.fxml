@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="551.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.DragDropController">
+    <children>
+        <BorderPane prefHeight="700.0" prefWidth="551.0" styleClass="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <VBox BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="19.0" prefWidth="217.0" text="Input Directory:">
+                                    <font>
+                                        <Font name="Source Serif Pro" size="13.0" />
+                                    </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                                </Label>
+                                <Label fx:id="superDirectoryLabel" prefHeight="21.0" prefWidth="549.0" style="-fx-text-fill: Blue" text="superDirectoryLabel" HBox.hgrow="ALWAYS">
+                                    <font>
+                                        <Font name="Source Serif Pro" size="13.0" />
+                                    </font>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                                </Label>
+
+                            </children>
+                        </HBox>
+                        <Group>
+                            <children>
+                                <HBox alignment="CENTER" layoutX="66.0">
+                                    <children>
+                                        <CheckBox fx:id="filterChangeCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="196.0" selected="true" text="Filter By Preferences">
+                                            <font>
+                                                <Font name="Source Serif Pro" size="13.0" />
+                                            </font>
+                                            <HBox.margin>
+                                                <Insets left="5.0" right="50.0" />
+                                            </HBox.margin>
+                                        </CheckBox>
+                              <Button fx:id="runConvertButton" layoutX="451.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleSelectedItemConvert" text="Run Selected">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </Group>
+                        <AnchorPane fx:id="embeddedPane" prefHeight="603.0" prefWidth="619.0" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </AnchorPane>
+                    </children>
+                </VBox>
+            </center>
+            <bottom>
+                <AnchorPane BorderPane.alignment="CENTER">
+               <HBox prefHeight="51.0" prefWidth="551.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="0.0">
+                  <children>
+                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="121.0" text="Output Directory:">
+                              <font>
+                                  <Font name="Source Serif Pro" size="13.0" />
+                              </font>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                          </Label>
+                     <Label fx:id="outputDirPathLbl" layoutX="10.0" layoutY="10.0" prefHeight="19.0" prefWidth="415.0" style="-fx-text-fill: Blue" text="OutputDirectory">
+                        <font>
+                           <Font name="Source Serif Pro" size="13.0" />
+                        </font>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                     </Label>
+                  </children>
+               </HBox>
+                </AnchorPane>
+            </bottom>
+            <top>
+                <HBox prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                    <ImageView fitHeight="80.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../images/spreadsheet-download-icon.png" />
+                    </ImageView>
+                    <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" prefHeight="70.0" prefWidth="460.0" text="File Manager" textAlignment="CENTER" wrapText="true">
+                        <font>
+                            <Font name="Source Serif Pro Bold" size="54.0" />
+                        </font>
+                    </Label>
+                </HBox>
+            </top>
+        </BorderPane>
+    </children>
+    <stylesheets>
+        <URL value="@../style/main.css" />
+    </stylesheets>
+</AnchorPane>

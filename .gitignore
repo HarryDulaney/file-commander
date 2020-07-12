@@ -1,23 +1,15 @@
-# Compiled class file
-*.class
-
-# Log file
+!SuperCommanderV2.0/.mvn/wrapper/maven-wrapper.jar
 *.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+.idea/
+design/
+target/
+.classpath
+.project
+.apt_generated
+.class
+.factorypath
+.springBeans
+.sts4-cache
+.settings/
+/src/main/resources/application.properties
+SuperCommander.iml

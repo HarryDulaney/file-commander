@@ -7,6 +7,6 @@
  * __Style options including dark mode via. multiple stylesheets (CSS)__
  * __Support for several new file types__
  
-<img src="screenshots/Untitled.png" width="100px" hspace="2"></image> 
-<img src="screenshots/Untitled2.png" width="100px" hspace="2"></image>  
+<div align="center"><img src="screenshots/Untitled.png" width="300px" hspace="2"></image> 
+<img src="screenshots/Untitled2.png" width="300px" hspace="2"></image></div>  
 

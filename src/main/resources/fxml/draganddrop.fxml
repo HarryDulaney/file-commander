@@ -42,7 +42,7 @@
                             <children>
                                 <HBox alignment="CENTER" layoutX="66.0">
                                     <children>
-                                        <CheckBox fx:id="filterChangeCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="196.0" selected="true" text="Filter By Preferences">
+                                        <CheckBox fx:id="filterChangeCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="196.0" selected="true" text="Show Need Converting">
                                             <font>
                                                 <Font name="Source Serif Pro" size="13.0" />
                                             </font>

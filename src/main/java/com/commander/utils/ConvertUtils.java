@@ -35,7 +35,6 @@ import java.util.Iterator;
  * interface and perform single file conversions.
  *
  * @author HGDIV
- *
  */
 public class ConvertUtils {
 
@@ -48,6 +47,7 @@ public class ConvertUtils {
     private ConvertUtils() {
 
     }
+
     /**
      * {@code csvToXlsx.class} is for programmatically converting a csv to a xlsx formatted file.
      */
@@ -56,15 +56,18 @@ public class ConvertUtils {
         private final File csvIn;
         private final File xlsxOut;
         private static Boolean success = true;
+        private Integer linesPerSheet;
 
-        public csvToXlsx(File csvIn, File xlsxOut) {
+        public csvToXlsx(File csvIn, File xlsxOut,Integer linesPerSheet) {
             this.csvIn = csvIn;
             this.xlsxOut = xlsxOut;
+            this.linesPerSheet = linesPerSheet;
+
         }
 
         @Override
         public void convert() {
-
+            log.info("convert() -- running -- From: " + csvIn.getName() + " To-> "  + xlsxOut.getName());
             try (Workbook workBook = new SXSSFWorkbook()) {
 
                 CSVReader reader;
@@ -118,10 +121,7 @@ public class ConvertUtils {
                 }
 
             }
-
         }
-
-
     }
 
     /**
@@ -142,6 +142,7 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
+            log.info("convert() -- running -- From: " + xlsxIn.getName() + " To-> "  + csvOut.getName());
             FileWriter csvWriter = null;
             try {
                 csvWriter = new FileWriter(csvOut);
@@ -187,11 +188,10 @@ public class ConvertUtils {
                                     case STRING:
                                         stringBuffer.append(cell.getRichStringCellValue());
                                         break;
-                                    case BOOLEAN:
-                                        stringBuffer.append(cell.getBooleanCellValue());
-                                        break;
                                     case BLANK:
                                         stringBuffer.append(" ");
+                                    case BOOLEAN:
+                                        stringBuffer.append(cell.getBooleanCellValue());
                                         break;
                                     case ERROR:
                                         stringBuffer.append(cell.getErrorCellValue());
@@ -208,7 +208,7 @@ public class ConvertUtils {
                 csvWriter.flush();
                 workBook.close();
 
-                DialogHelper.showInfoAlert("Your new file has been successfully created.", false);
+                DialogHelper.showInfoAlert("Successfully converted your Excel workbook to a csv file.", false);
 
             } catch (IOException e) {
                 success = false;
@@ -237,8 +237,8 @@ public class ConvertUtils {
      */
     static class docxToPdf implements Convertible {
 
-        File in;
-        File out;
+        private final File in;
+        private final File out;
         private static Boolean success = true;
 
 
@@ -250,6 +250,8 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
+            log.info("convert() -- running -- From: " + in.getName() + " To-> "  + out.getName());
+
             try {
                 PdfOptions pdfOptions = PdfOptions.create();
                 pdfOptions.fontEncoding("UTF-8");
@@ -262,6 +264,18 @@ public class ConvertUtils {
             } catch (IOException | InvalidFormatException e) {
                 DialogHelper.showErrorAlert("Something went wrong, we were unable to convert you document.\nPlease ensure the output folder is write enabled");
                 e.printStackTrace();
+                success = false;
+            }
+            if (deleteSourceAfterConverted) {
+                if (success) {
+                    try {
+                        Files.delete(in.toPath());
+                    } catch (IOException ex) {
+                        DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
+                        ex.printStackTrace();
+                    }
+
+                }
             }
 
         }
@@ -272,8 +286,8 @@ public class ConvertUtils {
      */
     static class pdfToDocx implements Convertible {
 
-        private File in;
-        private File out;
+        private final File in;
+        private final File out;
         private static Boolean success = true;
 
         public pdfToDocx(File in, File out) {
@@ -285,6 +299,7 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
+            log.info("convert() -- running -- From: " + in.getName() + " To-> "  + out.getName());
             XWPFDocument doc = new XWPFDocument();
             PdfReader reader;
             try {
@@ -307,21 +322,32 @@ public class ConvertUtils {
 
 
             } catch (IOException e) {
+                success = false;
                 e.printStackTrace();
             }
+            if (deleteSourceAfterConverted) {
+                if (success) {
+                    try {
+                        Files.delete(in.toPath());
+                    } catch (IOException ex) {
+                        DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
+                        ex.printStackTrace();
+                    }
 
+                }
+            }
         }
     }
+
     /**
-     * {@code ImageConvert.class} is for programmatically converting between image file storage types.
+     * {@code ImageConvert.class} is for programmatically converting between image file types.
      * <em>Special case required for converting from a PNG to a JPG</em> {@link PngToJpg}
      */
     static class ImageConvert implements Convertible {
 
         private final File in;
-        private File out;
+        private final File out;
         private final String format;
-        private static Boolean success = true;
 
         public ImageConvert(File in, File out, String format) {
             this.in = in;
@@ -337,6 +363,7 @@ public class ConvertUtils {
 
             } catch (IOException e) {
                 log.error(e.getCause() + " happened while reading image: " + in.getName());
+                result = false;
                 e.printStackTrace();
 
             }
@@ -347,7 +374,7 @@ public class ConvertUtils {
                     ImageIO.write(bufferedImage, format, out);
                 }
 
-            }catch (IllegalArgumentException iae){
+            } catch (IllegalArgumentException iae) {
                 DialogHelper.showErrorAlert("We could not complete the conversion because One or more required fields is null.");
                 iae.printStackTrace();
                 result = false;
@@ -363,8 +390,17 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-
-            if (genericConversion()) {
+            log.info("convert() -- running -- From: " + in.getName() + " To-> "  + out.getName());
+            Boolean succeeded = genericConversion();
+            if (succeeded) {
+                if (deleteSourceAfterConverted) {
+                    try {
+                        Files.delete(in.toPath());
+                    } catch (IOException ex) {
+                        DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
+                        ex.printStackTrace();
+                    }
+                }
                 DialogHelper.showInfoAlert("Success! Your image was converted. To view it, click on the link to your output directory", false);
             } else {
                 DialogHelper.showErrorAlert("Something went wrong converting the image, please ensure it is a supported format and try again.");
@@ -380,8 +416,8 @@ public class ConvertUtils {
      */
     static class PngToJpg implements Convertible {
 
-        private File in;
-        private File out;
+        private final File in;
+        private final File out;
         private static Boolean success = true;
 
 
@@ -400,18 +436,32 @@ public class ConvertUtils {
                 bufferedImage = ImageIO.read(in);
             } catch (IOException e) {
                 log.error(e.getCause() + " happened while reading the PNG file.");
+                success = false;
                 e.printStackTrace();
             }
 
-            assert bufferedImage != null;
-            BufferedImage outBuffImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-            outBuffImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
+            if (bufferedImage != null) {
+                BufferedImage outBuffImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+                outBuffImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
 
-            try {
-                ImageIO.write(bufferedImage, "jpg", out);
-            } catch (IOException e) {
-                log.error(e.getCause() + " happened while writing the JPG file");
-                e.printStackTrace();
+                try {
+                    ImageIO.write(bufferedImage, "jpg", out);
+                } catch (IOException e) {
+                    log.error(e.getCause() + " happened while writing the JPG file");
+                    success = false;
+                    e.printStackTrace();
+                }
+                if (deleteSourceAfterConverted) {
+                    if (success) {
+                        try {
+                            Files.delete(in.toPath());
+                        } catch (IOException ex) {
+                            DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
+                            ex.printStackTrace();
+                        }
+
+                    }
+                }
             }
         }
     }

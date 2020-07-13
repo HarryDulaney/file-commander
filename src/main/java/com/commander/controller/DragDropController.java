@@ -5,14 +5,13 @@ import com.commander.service.FileService;
 import com.commander.utils.*;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.HostServices;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -37,6 +36,7 @@ import java.util.List;
 /**
  * {@code DragDropController} is Controller for the list view
  * scene for performing file conversions
+ *
  * @author HGDIV
  */
 
@@ -86,9 +86,9 @@ public class DragDropController extends ParentController {
 
     /**
      * {@code handleSelectedItemConvert(ActionEvent e)}
-     * This method handles running the one to one file conversion feature.
+     * This method handles running a file conversion.
      *
-     * @param event ActionEvent invoked when user selects to run single file conversion.
+     * @param event ActionEvent invoked when user selects to run file conversion.
      */
     @FXML
     private void handleSelectedItemConvert(ActionEvent event) {
@@ -125,9 +125,8 @@ public class DragDropController extends ParentController {
                 case JPG:
                 case GIF:
                 case PNG:
-                   String dotExt = "." + ext;
                     convertible = ConvertibleFactory.createImageConvert(fileName,
-                            user.getDirectoryPath(), user.getWriteDirectoryPath(), dotExt, user.getImgPreference());
+                            user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                     break;
 
                 default:
@@ -204,6 +203,7 @@ public class DragDropController extends ParentController {
      */
     private void toggleFileFilter() {
         observableList.clear();
+        runConvertButton.setDisable(true);
         if (filterChangeCheckBox.isSelected()) {
             fileService.getFilterDirectoryFiles(user, e -> {
                 File[] files = (File[]) e.getSource().getValue();
@@ -224,7 +224,10 @@ public class DragDropController extends ParentController {
 
             }, null);
 
+
         }
+
+
     }
 
     /**
@@ -253,7 +256,7 @@ public class DragDropController extends ParentController {
             for (File file : files) {
                 Path dirPath = Paths.get(user.getDirectoryPath());
                 Path filePath = dirPath.resolve(FilenameUtils.getName(file.getAbsolutePath()));
-                try(OutputStream outStream = new FileOutputStream(filePath.toFile())) {
+                try (OutputStream outStream = new FileOutputStream(filePath.toFile())) {
                     try {
                         Files.copy(file.toPath(), outStream);
                         observableList.add(new Label(file.getName()));
@@ -262,7 +265,7 @@ public class DragDropController extends ParentController {
                         e.printStackTrace();
                         DialogHelper.showErrorAlert("Application encountered an exception while copying the file, it is likely that the file is read only.");
                     }
-                }catch (IOException fnfe){
+                } catch (IOException fnfe) {
                     fnfe.printStackTrace();
                     DialogHelper.showErrorAlert("Something went wrong copying the file");
 
@@ -272,10 +275,23 @@ public class DragDropController extends ParentController {
             event2.consume();
         });
         listView.setOnMousePressed(event -> {
-            if (runConvertButton.isDisabled()){
+            if (runConvertButton.isDisabled()) {
                 if (listView.getSelectionModel().getSelectedItem() != null)
                     runConvertButton.setDisable(false);
             }
+        });
+        listView.getSelectionModel().selectedIndexProperty().addListener((observable,oldValue,newValue) -> {
+            if (oldValue.intValue() < 0) {
+                if (newValue.intValue() > 0){
+                    runConvertButton.setDisable(false);
+                }
+            }else {
+                if (newValue.intValue() < 0) {
+                    runConvertButton.setDisable(true);
+                }
+            }
+
+
         });
 
 

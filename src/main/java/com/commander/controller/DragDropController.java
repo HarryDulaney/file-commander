@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.TransferMode;
@@ -79,7 +80,9 @@ public class DragDropController extends ParentController {
     @FXML
     private CheckBox filterChangeCheckBox;
     @FXML
-    public Button runConvertButton;
+    private Button runConvertButton;
+    @FXML
+    private Button refreshListButton;
 
     private HostServices hostServices;
 
@@ -175,6 +178,24 @@ public class DragDropController extends ParentController {
         setLabels();
         initListView();
     }
+
+    /**
+     * Reloads the contents of list view
+     * @param actionEvent refreshListButton pressed
+     */
+    @FXML
+    private void handleRefreshListButton(ActionEvent actionEvent) {
+        observableList.clear();
+        fileService.getFilterDirectoryFiles(user, e -> {
+            File[] files = (File[]) e.getSource().getValue();
+            for (File file : files) {
+                observableList.add(new Label(file.getName()));
+            }
+
+            listView.setItems(observableList);
+        }, null);
+    }
+
 
     /**
      * {@code setLabels()} Initializes the clickable Labels and event listeners for the

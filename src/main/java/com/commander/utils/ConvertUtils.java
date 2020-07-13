@@ -9,6 +9,7 @@ import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.opencsv.CSVReader;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
@@ -23,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
@@ -39,12 +40,32 @@ import java.util.Iterator;
 public class ConvertUtils {
 
     private static Boolean deleteSourceAfterConverted;
-
     private static final String TAG = ConvertUtils.class.getCanonicalName();
     static Logger log = LoggerFactory.getLogger(ConvertUtils.class);
-    public static Integer linesPerSheet = 250;
 
     private ConvertUtils() {
+
+    }
+
+    /**
+     * Evaluates user preference deleteSourceAfterConverted and
+     * the boolean success variable and deletes the source file if appropriate
+     *
+     * @param success was the file successfully converted and written
+     * @param file    the source file
+     */
+    private static void deleteSourceFile(boolean success, File file) {
+        if (deleteSourceAfterConverted) {
+            if (success) {
+                try {
+                    Files.delete(file.toPath());
+                } catch (IOException ex) {
+                    DialogHelper.showErrorAlert("Your source file " + file.getName() + "could not be deleted");
+                    ex.printStackTrace();
+                }
+
+            }
+        }
 
     }
 
@@ -58,7 +79,7 @@ public class ConvertUtils {
         private static Boolean success = true;
         private Integer linesPerSheet;
 
-        public csvToXlsx(File csvIn, File xlsxOut,Integer linesPerSheet) {
+        public csvToXlsx(File csvIn, File xlsxOut, Integer linesPerSheet) {
             this.csvIn = csvIn;
             this.xlsxOut = xlsxOut;
             this.linesPerSheet = linesPerSheet;
@@ -67,7 +88,7 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-            log.info("convert() -- running -- From: " + csvIn.getName() + " To-> "  + xlsxOut.getName());
+            log.info("convert() -- running -- From: " + csvIn.getName() + " To-> " + xlsxOut.getName());
             try (Workbook workBook = new SXSSFWorkbook()) {
 
                 CSVReader reader;
@@ -108,17 +129,7 @@ public class ConvertUtils {
                 log.error("IOException on ConvertUtils.csvToXlsx.workbook", ex.getCause());
                 success = false;
             } finally {
-                if (deleteSourceAfterConverted) {
-                    if (success) {
-                        try {
-                            Files.delete(csvIn.toPath());
-                        } catch (IOException ex) {
-                            DialogHelper.showErrorAlert("Your source file " + csvIn.getName() + "could not be deleted");
-                            ex.printStackTrace();
-                        }
-
-                    }
-                }
+                deleteSourceFile(success, csvIn);
 
             }
         }
@@ -142,7 +153,7 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-            log.info("convert() -- running -- From: " + xlsxIn.getName() + " To-> "  + csvOut.getName());
+            log.info("convert() -- running -- From: " + xlsxIn.getName() + " To-> " + csvOut.getName());
             FileWriter csvWriter = null;
             try {
                 csvWriter = new FileWriter(csvOut);
@@ -216,18 +227,7 @@ public class ConvertUtils {
                 DialogHelper.showErrorAlert("Something went wrong creating your file");
                 e.printStackTrace();
             }
-            if (deleteSourceAfterConverted) {
-                if (success) {
-                    try {
-                        Files.delete(xlsxIn.toPath());
-                    } catch (IOException ex) {
-                        DialogHelper.showErrorAlert("Your source file " + xlsxIn.getName() + "could not be deleted");
-                        ex.printStackTrace();
-                    }
-
-                }
-            }
-
+            deleteSourceFile(success, csvOut);
 
         }
     }
@@ -250,7 +250,7 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-            log.info("convert() -- running -- From: " + in.getName() + " To-> "  + out.getName());
+            log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
 
             try {
                 PdfOptions pdfOptions = PdfOptions.create();
@@ -266,18 +266,7 @@ public class ConvertUtils {
                 e.printStackTrace();
                 success = false;
             }
-            if (deleteSourceAfterConverted) {
-                if (success) {
-                    try {
-                        Files.delete(in.toPath());
-                    } catch (IOException ex) {
-                        DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
-                        ex.printStackTrace();
-                    }
-
-                }
-            }
-
+            deleteSourceFile(success, in);
         }
     }
 
@@ -299,7 +288,7 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-            log.info("convert() -- running -- From: " + in.getName() + " To-> "  + out.getName());
+            log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
             XWPFDocument doc = new XWPFDocument();
             PdfReader reader;
             try {
@@ -325,17 +314,7 @@ public class ConvertUtils {
                 success = false;
                 e.printStackTrace();
             }
-            if (deleteSourceAfterConverted) {
-                if (success) {
-                    try {
-                        Files.delete(in.toPath());
-                    } catch (IOException ex) {
-                        DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
-                        ex.printStackTrace();
-                    }
-
-                }
-            }
+            deleteSourceFile(success, in);
         }
     }
 
@@ -390,17 +369,10 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-            log.info("convert() -- running -- From: " + in.getName() + " To-> "  + out.getName());
+            log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
             Boolean succeeded = genericConversion();
             if (succeeded) {
-                if (deleteSourceAfterConverted) {
-                    try {
-                        Files.delete(in.toPath());
-                    } catch (IOException ex) {
-                        DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
-                        ex.printStackTrace();
-                    }
-                }
+                deleteSourceFile(true, in);
                 DialogHelper.showInfoAlert("Success! Your image was converted. To view it, click on the link to your output directory", false);
             } else {
                 DialogHelper.showErrorAlert("Something went wrong converting the image, please ensure it is a supported format and try again.");
@@ -429,41 +401,36 @@ public class ConvertUtils {
 
         @Override
         public void convert() {
-
             BufferedImage bufferedImage = null;
 
             try {
                 bufferedImage = ImageIO.read(in);
             } catch (IOException e) {
-                log.error(e.getCause() + " happened while reading the PNG file.");
-                success = false;
                 e.printStackTrace();
+                success = false;
             }
-
             if (bufferedImage != null) {
-                BufferedImage outBuffImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-                outBuffImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
 
+                BufferedImage imageRGB = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.OPAQUE);
+                Graphics2D graphics = imageRGB.createGraphics();
+                graphics.drawImage(bufferedImage, 0, 0, null);
                 try {
-                    ImageIO.write(bufferedImage, "jpg", out);
+                    ImageIO.write(imageRGB, "jpg", out);
+                    DialogHelper.showInfoAlert("Successfully converted " + FilenameUtils.getName(in.toString() + " to " +
+                            FilenameUtils.getName(out.toString())),false);
                 } catch (IOException e) {
                     log.error(e.getCause() + " happened while writing the JPG file");
                     success = false;
                     e.printStackTrace();
                 }
-                if (deleteSourceAfterConverted) {
-                    if (success) {
-                        try {
-                            Files.delete(in.toPath());
-                        } catch (IOException ex) {
-                            DialogHelper.showErrorAlert("Your source file " + in.getName() + "could not be deleted");
-                            ex.printStackTrace();
-                        }
+                graphics.dispose();
+            } else {
 
-                    }
-                }
+                success = false;
             }
+            deleteSourceFile(success,in);
         }
+
     }
 
     public static void setDeleteSourceAfterConverted(Boolean deleteSourceAfterConverted) {

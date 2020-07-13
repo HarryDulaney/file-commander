@@ -40,9 +40,9 @@
                         </HBox>
                         <Group>
                             <children>
-                                <HBox alignment="CENTER" layoutX="66.0">
+                                <HBox alignment="CENTER" layoutX="66.0" prefHeight="30.0" prefWidth="547.0">
                                     <children>
-                                        <CheckBox fx:id="filterChangeCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="196.0" selected="true" text="Show Need Converting">
+                                        <CheckBox fx:id="filterChangeCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" selected="true" text="Show Need Converting">
                                             <font>
                                                 <Font name="Source Serif Pro" size="13.0" />
                                             </font>
@@ -50,12 +50,17 @@
                                                 <Insets left="5.0" right="50.0" />
                                             </HBox.margin>
                                         </CheckBox>
-                              <Button fx:id="runConvertButton" layoutX="451.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleSelectedItemConvert" text="Run Selected">
+                              <Button fx:id="runConvertButton" layoutX="451.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleSelectedItemConvert" text="Run">
                                  <font>
                                     <Font size="13.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="refreshListButton" mnemonicParsing="false" onAction="#handleRefreshListButton" text="Refresh List">
+                                 <HBox.margin>
+                                    <Insets left="150.0" right="1.0" />
                                  </HBox.margin>
                               </Button>
                                     </children>

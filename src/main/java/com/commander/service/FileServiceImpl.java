@@ -8,7 +8,6 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +19,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
+/**
+ * {@code FileServiceImpl.class} Spring Service Bean for handling
+ *  interaction with the User's file system and
+ *  TODO for handling reading and writing property files
+ *
+ * @author HGDIV
+ */
 @Service("fileService")
 public class FileServiceImpl extends ParentService implements FileService {
 
@@ -29,7 +34,6 @@ public class FileServiceImpl extends ParentService implements FileService {
 
 
 
-    @Autowired
     private FileServiceImpl() {
         super();
 
@@ -84,7 +88,7 @@ public class FileServiceImpl extends ParentService implements FileService {
      * @param directoryPath User's input source directory folder
      * @param onSuccess service worker reports state after successful thread execution
      * @param beforeStart service worker reports state before executing thread
-     * @return String of path to write path
+     * @return String of write path
      */
     @Override
     public javafx.concurrent.Service<String> writeOutputDirectory(String directoryPath,

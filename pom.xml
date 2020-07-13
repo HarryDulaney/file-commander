@@ -13,7 +13,7 @@
     <groupId>com.commander</groupId>
     <artifactId>SuperCommander2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <!--   <packaging>jar</packaging> -->
+    <packaging>jar</packaging>
     <name>SuperCommanderV2.0</name>
     <description>File converter system with convenient user preferences</description>
 
@@ -95,7 +95,7 @@
 
 
     <build>
-        <finalName>Super-CommanderV2.0.0</finalName>
+        <finalName>Super-Commander-Original</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

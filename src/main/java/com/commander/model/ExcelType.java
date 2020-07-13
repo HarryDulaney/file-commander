@@ -1,5 +1,9 @@
 package com.commander.model;
 
+/**
+ * Represents a Excel workbook/ Spreadsheet type that is eligible for
+ * converting
+ */
 public enum ExcelType {
     CSV(".csv"),
     XLSX(".xlsx");

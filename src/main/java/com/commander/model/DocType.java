@@ -1,5 +1,9 @@
 package com.commander.model;
 
+/**
+ * Represents a document type that is eligible for
+ * converting
+ */
 public enum DocType {
     DOCX(".docx"),
     PDF(".pdf"),

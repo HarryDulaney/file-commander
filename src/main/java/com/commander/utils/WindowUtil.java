@@ -24,7 +24,6 @@ public class WindowUtil {
 
     private static ConfigurableApplicationContext ctx;
 
-
     private WindowUtil() {
     }
 
@@ -112,4 +111,5 @@ public class WindowUtil {
             throw new RuntimeException(ioException);
         }
     }
+
 }

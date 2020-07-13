@@ -1,5 +1,9 @@
 package com.commander.model;
 
+/**
+ * Represents a image type that is eligible for
+ * converting
+ */
 public enum ImgType {
     BMP(".bmp"),
     PNG(".png"),

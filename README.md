@@ -1,12 +1,9 @@
-# _SuperCommander_v2.0.0_
- ### This is a new version of the SuperCommander project. Contributions welcome.
-## _[Click Here For SuperCommander_v1.0.0](https://www.github.com/harrydulaney/super-commander)_
- 
-*__New features in process include:__*
- * __Batch converting all files users SuperCommander directory__
- * __Style options including dark mode via. multiple stylesheets (CSS)__
- * __Support for several new file types__
- 
-<img src="screenshots/Untitled.png" width="100px" hspace="2"></image> 
-<img src="screenshots/Untitled2.png" width="100px" hspace="2"></image>  
+# _SuperCommander_v1.0.0_
+## _File conversions made simple._ 
+## 1. Set your preferences the first time you run it.
+## 2. SuperCommander will do the rest. 
+
+### If you are looking to contribute please use the link below to navigate to the newest version of this project.
+## _[Click Here For SuperCommander_v2 (In Process)](https://www.github.com/harrydulaney/SuperCommanderV2)_
+<div align="center"><img src="screenshots/Untitled.png" width="300px" hspace="2"></image> </div>  
 

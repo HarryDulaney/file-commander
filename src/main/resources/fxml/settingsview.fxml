@@ -264,7 +264,7 @@
           </padding>
       </AnchorPane>
    </children>
-    <stylesheets>
+        <stylesheets>
         <URL value="@../style/main.css" />
     </stylesheets>
 </VBox>

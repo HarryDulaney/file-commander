@@ -90,7 +90,7 @@ public class RootController extends ParentController {
 
 
     /**
-     * @param stage The primary stage
+     * @param stage      The primary stage
      * @param parameters Are message resources passed from caller
      */
     @Override
@@ -113,7 +113,7 @@ public class RootController extends ParentController {
                 }
 
             }
-
+            docxRadioButton.setDisable(true);
             setProjectLabels();
             configRadioButtonGroups();
             configComboBox();
@@ -135,7 +135,6 @@ public class RootController extends ParentController {
     }
 
     /**
-     *
      * @param event User's source file policy changed on UI
      */
     @FXML
@@ -213,7 +212,7 @@ public class RootController extends ParentController {
         try {
             WindowUtil.replaceFxmlOnWindow(rootPane, DRAG_DROP_FXML, stage, pbMap);
             openPreferencesButton.setDisable(false);
-                saveUserPreferences.setDisable(true);
+            saveUserPreferences.setDisable(true);
             openConverterButton.setDisable(true);
 
         } catch (Exception e1) {
@@ -379,8 +378,7 @@ public class RootController extends ParentController {
         pdfRadioButton.setToggleGroup(docGroup);
         docxRadioButton.setToggleGroup(docGroup);
         docGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            RadioButton docChoice = (RadioButton) docGroup.getSelectedToggle();
-
+            RadioButton docChoice = pdfRadioButton;
             if (docChoice.getText().equalsIgnoreCase(DocType.PDF.getExtension())) {
                 user.setDocPreference(DocType.PDF);
             } else

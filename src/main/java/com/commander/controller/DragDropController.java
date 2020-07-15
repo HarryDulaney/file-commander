@@ -2,17 +2,20 @@ package com.commander.controller;
 
 import com.commander.model.Convertible;
 import com.commander.service.FileService;
-import com.commander.utils.*;
+import com.commander.utils.ConvertUtils;
+import com.commander.utils.ConvertibleFactory;
+import com.commander.utils.DialogHelper;
+import com.commander.utils.ValidationUtils;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.HostServices;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -214,7 +217,7 @@ public class DragDropController extends ParentController {
             hostServices.showDocument(path.toUri().toString());
         });
 
-        filterChangeCheckBox.setOnAction(e -> toggleFileFilter());
+//        filterChangeCheckBox.setOnAction(e -> toggleFileFilter());
     }
 
     /**
@@ -225,7 +228,7 @@ public class DragDropController extends ParentController {
     private void toggleFileFilter() {
         observableList.clear();
         runConvertButton.setDisable(true);
-        if (filterChangeCheckBox.isSelected()) {
+//        if (filterChangeCheckBox.isSelected()) {
             fileService.getFilterDirectoryFiles(user, e -> {
                 File[] files = (File[]) e.getSource().getValue();
                 for (File file : files) {
@@ -235,21 +238,21 @@ public class DragDropController extends ParentController {
                 listView.setItems(observableList);
             }, null);
 
-        } else {
-            fileService.getDirectoryFiles(user, e -> {
-                File[] files = (File[]) e.getSource().getValue();
-                for (File file : files) {
-                    observableList.add(new Label(file.getName()));
-                }
-                listView.setItems(observableList);
+//        } else {
+//            fileService.getDirectoryFiles(user, e -> {
+//                File[] files = (File[]) e.getSource().getValue();
+//                for (File file : files) {
+//                    observableList.add(new Label(file.getName()));
+//                }
+//                listView.setItems(observableList);
+//
+//            }, null);
+//
+//
+//        }
 
-            }, null);
 
-
-        }
-
-
-    }
+      }
 
     /**
      * {@code initListView()} handles updating and populating the ListView with files

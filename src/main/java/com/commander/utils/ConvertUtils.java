@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.opencsv.CSVReader;
+import fr.opensagres.poi.xwpf.converter.core.FileImageExtractor;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.commons.io.FilenameUtils;
@@ -297,10 +298,11 @@ public class ConvertUtils {
                 for (int i = 1; i <= reader.getNumberOfPages(); i++) {
                     TextExtractionStrategy strategy =
                             parser.processContent(i, new SimpleTextExtractionStrategy());
+
                     String text = strategy.getResultantText();
                     XWPFParagraph p = doc.createParagraph();
                     XWPFRun run = p.createRun();
-                    run.setText(text);
+
                     run.addBreak(BreakType.PAGE);
                     FileOutputStream fos = new FileOutputStream(out);
                     doc.write(fos);
@@ -340,7 +342,7 @@ public class ConvertUtils {
 
         private boolean genericConversion() {
             boolean result = true;
-            BufferedImage bufferedImage = null;
+            BufferedImage bufferedImage;
 
             try (FileInputStream fis = new FileInputStream(in)) {
                 bufferedImage = ImageIO.read(fis);

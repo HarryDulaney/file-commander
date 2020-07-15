@@ -63,10 +63,8 @@ public class WindowUtil {
      * @param parameters message k,v passed from calling controller
      * @param <T> message, usually a String
      * @return Stage returns the instance of the set stage
-     * @throws Exception
      */
-    public static <T> Stage open(Stage stage, String fxmlPath, String title, HashMap<String, T> parameters)
-            throws Exception {
+    public static <T> Stage open(Stage stage, String fxmlPath, String title, HashMap<String, T> parameters) {
 
         stage.setTitle(title);
         stage.setResizable(true);
@@ -75,7 +73,6 @@ public class WindowUtil {
 
         try {
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add("src/main/resources/style/main.css");
 
             stage.setScene(scene);
             stage.show();

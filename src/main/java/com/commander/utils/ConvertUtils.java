@@ -327,50 +327,53 @@ public class ConvertUtils {
         private final File in;
         private final File out;
         private final String format;
+        private static Logger log = LoggerFactory.getLogger(ImageConvert.class);
 
         public ImageConvert(File in, File out, String format) {
             this.in = in;
+            System.out.println("File in: " + in.toString());
             this.out = out;
+            System.out.println("File out: " + out.toString());
             this.format = format;
+            System.out.println("Format: " + format);
         }
 
         private boolean genericConversion() {
             boolean result = true;
             BufferedImage bufferedImage = null;
-            try {
-                bufferedImage = ImageIO.read(in);
 
-            } catch (IOException e) {
-                log.error(e.getCause() + " happened while reading image: " + in.getName());
-                result = false;
-                e.printStackTrace();
-
-            }
-            try {
-                if (bufferedImage == null) {
-                    result = false;
-                } else {
+            try (FileInputStream fis = new FileInputStream(in)) {
+                bufferedImage = ImageIO.read(fis);
+                try (FileOutputStream fos = new FileOutputStream(out)) {
                     ImageIO.write(bufferedImage, format, out);
+
+                } catch (IllegalArgumentException iae) {
+                    DialogHelper.showErrorAlert("We could not complete the conversion because One or more required fields is null.");
+                    iae.printStackTrace();
+                    result = false;
+
+                } catch (IOException ie) {
+                    DialogHelper.showErrorAlert("Something went wrong reading or writing the files,\n we could not complete the conversion.");
+                    log.error(ie.getCause() + " happened while writing image file: " + out.getName());
+                    ie.printStackTrace();
+                    result = false;
                 }
 
-            } catch (IllegalArgumentException iae) {
-                DialogHelper.showErrorAlert("We could not complete the conversion because One or more required fields is null.");
-                iae.printStackTrace();
+            } catch (IOException e) {
+                log.error("Image read failed on " + in.getName());
+                DialogHelper.showErrorAlert("Check you have permission to read this file. Failed to read image from input: " + in.getName());
+                e.printStackTrace();
                 result = false;
 
-            } catch (IOException ie) {
-                DialogHelper.showErrorAlert("Something went wrong reading or writing the files,\n we could not complete the conversion.");
-                log.error(ie.getCause() + " happened while writing image file: " + out.getName());
-                ie.printStackTrace();
-                result = false;
             }
+
             return result;
         }
 
         @Override
         public void convert() {
             log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
-            Boolean succeeded = genericConversion();
+            boolean succeeded = genericConversion();
             if (succeeded) {
                 deleteSourceFile(true, in);
                 DialogHelper.showInfoAlert("Success! Your image was converted. To view it, click on the link to your output directory", false);
@@ -384,7 +387,8 @@ public class ConvertUtils {
 
     /**
      * {@code PngToJpg.class} is for programmatically converting from png to jpg image format type.
-     * <em>This case requires manually setting the background color.</em>
+     * <em>This case requires manually removing the alpha channel before rendering the image as
+     * a JPEG</em>
      */
     static class PngToJpg implements Convertible {
 
@@ -415,9 +419,9 @@ public class ConvertUtils {
                 Graphics2D graphics = imageRGB.createGraphics();
                 graphics.drawImage(bufferedImage, 0, 0, null);
                 try {
-                    ImageIO.write(imageRGB, "jpg", out);
+                    ImageIO.write(imageRGB, "JPG", out);
                     DialogHelper.showInfoAlert("Successfully converted " + FilenameUtils.getName(in.toString() + " to " +
-                            FilenameUtils.getName(out.toString())),false);
+                            FilenameUtils.getName(out.toString())), false);
                 } catch (IOException e) {
                     log.error(e.getCause() + " happened while writing the JPG file");
                     success = false;
@@ -428,7 +432,7 @@ public class ConvertUtils {
 
                 success = false;
             }
-            deleteSourceFile(success,in);
+            deleteSourceFile(success, in);
         }
 
     }

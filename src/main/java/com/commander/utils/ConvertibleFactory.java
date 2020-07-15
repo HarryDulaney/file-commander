@@ -63,15 +63,17 @@ public class ConvertibleFactory {
 
         String justName = FilenameUtils.removeExtension(fileName);
         String inputExt = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
-        String userPrefExt = userPref.getExtension();
-        log.info("Creating Image Convert: From: " + inputExt + " To-> " + userPrefExt);
+        String outputExt = userPref.getExtension();
+        String userPrefExt = outputExt.replace(".","").toUpperCase();
+
+        log.info("Creating Image Convert: From: " + inputExt + " To-> " + outputExt);
 
         if (inputExt.equals(ImgType.png()) && userPref.getExtension().equals(ImgType.jpg())) {
 
             return new PngToJpg(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, ImgType.jpg()));
 
         } else {
-            return new ImageConvert(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, userPrefExt), userPrefExt);
+            return new ImageConvert(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath,outputExt), userPrefExt);
 
         }
 
@@ -85,7 +87,7 @@ public class ConvertibleFactory {
 
     }
 
-    private static File configWritePath(String baseName, String writeDirectory, final String EXT) {
+    private static File configWritePath(String baseName, String writeDirectory, String EXT) {
         Path writePath = Paths.get(writeDirectory);
         Path resolvedPath = writePath.resolve(baseName + EXT);
         return resolvedPath.toFile();

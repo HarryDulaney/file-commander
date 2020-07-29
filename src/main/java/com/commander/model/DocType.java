@@ -1,24 +1,39 @@
 package com.commander.model;
 
 /**
- * Represents a document type that is eligible for
+ * A document type that is eligible for
  * converting
  */
 public enum DocType {
-    DOCX(".docx"),
-    PDF(".pdf"),
-    TXT(".txt");
+    DOCX(".docx", "docx"),
+    PDF(".pdf", "pdf"),
+    TXT(".txt", "txt"),
+    XLSX(".xlsx", "xlsx"),
+    CSV(".csv", "csv"),
+    HTML(".html", "html"),
+    BMP(".bmp", "bmp"),
+    PNG(".png", "png"),
+    GIF(".gif", "gif"),
+    JPG(".jpg", "jpg");
 
-    private String extension;
 
-    DocType(String extension) {
+    private final String id;
+    private final String extension;
+
+
+    DocType(final String extension,final String id) {
         this.extension = extension;
+        this.id = id;
     }
 
 
     public String getExtension() {
         return extension;
 
+    }
+
+    public String getId() {
+        return id;
     }
 
     public static String docx() {

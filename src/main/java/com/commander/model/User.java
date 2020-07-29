@@ -27,7 +27,7 @@ public class User {
     private Boolean nuUser;
 
     private ExcelType excelPreference;
-    private DocType docPreference;
+    private DocOperation docPreference;
     private ImgType imgPreference;
 
 
@@ -35,7 +35,7 @@ public class User {
 
     }
 
-    public User(ExcelType e, DocType d, ImgType i) {
+    public User(ExcelType e, DocOperation d, ImgType i) {
 
             excelPreference = e;
             docPreference = d;
@@ -51,11 +51,11 @@ public class User {
         this.excelPreference = excelPreference;
     }
 
-    public DocType getDocPreference() {
+    public DocOperation getDocPreference() {
         return docPreference;
     }
 
-    public void setDocPreference(DocType docPreference) {
+    public void setDocPreference(DocOperation docPreference) {
         this.docPreference = docPreference;
     }
 

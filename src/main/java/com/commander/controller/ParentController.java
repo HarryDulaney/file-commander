@@ -1,9 +1,6 @@
 package com.commander.controller;
 
-import com.commander.model.DocType;
-import com.commander.model.ExcelType;
-import com.commander.model.ImgType;
-import com.commander.model.User;
+import com.commander.model.*;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,13 +51,12 @@ public abstract class ParentController {
     static final String SOURCE_POLICY_KEY = "SOURCE_POLICY";
 
     /* --------------------------------------- Default values for User Enums --------------------------------------------- */
-    private static final DocType DEFAULT_DOC_TYPE = DocType.DOCX;
     private static final ExcelType DEFAULT_EXCEL_TYPE = ExcelType.XLSX;
     private static final ImgType DEFAULT_IMG_TYPE = ImgType.JPG;
 
     /* ----------------------------------------- Misc Controller Keys ---------------------------------------------------- */
-    static final String PROJECT_SOURCE_DELETE_KEY = "Delete-On-Converted";
-    static final String PROJECT_SOURCE_SAVE_KEY = "Save-On-Converted";
+    static final String PROJECT_SOURCE_DELETE_KEY = "Delete";
+    static final String PROJECT_SOURCE_SAVE_KEY = "Save";
 
 
     /**
@@ -98,7 +94,7 @@ public abstract class ParentController {
         userPreferences.put(DIR_PATH_KEY, user.getDirectoryPath());
         userPreferences.put(DIR_WRITE_PATH_KEY, user.getWriteDirectoryPath());
         userPreferences.put(EXCEL_PREF_KEY, user.getExcelPreference().getExtension());
-        userPreferences.put(DOC_TYPE_KEY, user.getDocPreference().getExtension());
+        userPreferences.put(DOC_TYPE_KEY, DocOperation.DOCX_TO_PDF.getDocOperation());
         userPreferences.put(IMG_TYPE_KEY, user.getImgPreference().getExtension());
         userPreferences.put(SOURCE_POLICY_KEY, user.getSourceFilePolicy());
         userPreferences.put(NEW_USER_KEY, "false");
@@ -119,32 +115,36 @@ public abstract class ParentController {
 
         userPreferences = Preferences.userNodeForPackage(ParentController.class);
 
-        user.setNuUser(userPreferences.getBoolean(NEW_USER_KEY, true));
+        user.setNuUser(userPreferences.getBoolean(NEW_USER_KEY, true)); //Default value is true, meaning no prefs stored for this user
         user.setDirectoryPath(userPreferences.get(DIR_PATH_KEY, null));
         user.setWriteDirectoryPath(userPreferences.get(DIR_WRITE_PATH_KEY, null));
-        user.setSourceFilePolicy(userPreferences.get(SOURCE_POLICY_KEY, PROJECT_SOURCE_SAVE_KEY));
+        user.setSourceFilePolicy(userPreferences.get(SOURCE_POLICY_KEY, PROJECT_SOURCE_SAVE_KEY)); //Default is Save source file
 
-        String docType = userPreferences.get(DOC_TYPE_KEY, DEFAULT_DOC_TYPE.getExtension());
-        String excelType = userPreferences.get(EXCEL_PREF_KEY, DEFAULT_EXCEL_TYPE.getExtension());
-        String imgType = userPreferences.get(IMG_TYPE_KEY, DEFAULT_IMG_TYPE.getExtension());
+        String docPreference = userPreferences.get(DOC_TYPE_KEY,DocOperation.DOCX_TO_PDF.getDocOperation()); //Default treatment for Word Documents Docx to Pdf
+        String excelPreference = userPreferences.get(EXCEL_PREF_KEY, DEFAULT_EXCEL_TYPE.getExtension()); //Default Excel Type is XLSX
+        String imgPreference = userPreferences.get(IMG_TYPE_KEY, DEFAULT_IMG_TYPE.getExtension()); //Default ImgType is JPG
 
-        if (docType.equals(DocType.docx())) {
-            user.setDocPreference(DocType.DOCX);
-        } else if (docType.equals(DocType.pdf())) {
-            user.setDocPreference(DocType.PDF);
+        if (docPreference.equals(DocOperation.DOCX_TO_PDF.getDocOperation())) {
+            user.setDocPreference(DocOperation.DOCX_TO_PDF);
+        } else if (docPreference.equals(DocOperation.PDF_TO_TEXT.getDocOperation())) {
+            user.setDocPreference(DocOperation.PDF_TO_TEXT);
+        } else if (docPreference.equals(DocOperation.DOCX_TO_HTML.getDocOperation())) {
+            user.setDocPreference(DocOperation.DOCX_TO_HTML);
+        } else if (docPreference.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {
+            user.setDocPreference(DocOperation.HTML_TO_DOCX);
         }
 
-        if (excelType.equals(ExcelType.csv())) {
+        if (excelPreference.equals(ExcelType.CSV.getExtension())) {
             user.setExcelPreference(ExcelType.CSV);
-        } else if (excelType.equals(ExcelType.xlsx())) {
+        } else if (excelPreference.equals(ExcelType.XLSX.getExtension())) {
             user.setExcelPreference(ExcelType.XLSX);
         }
 
-        if (imgType.equals(ImgType.bmp())) {
+        if (imgPreference.equals(ImgType.BMP.getExtension())) {
             user.setImgPreference(ImgType.BMP);
-        } else if (imgType.equals(ImgType.gif())) {
+        } else if (imgPreference.equals(ImgType.GIF.getExtension())) {
             user.setImgPreference(ImgType.GIF);
-        } else if (imgType.equals(ImgType.jpg())) {
+        } else if (imgPreference.equals(ImgType.JPG.getExtension())) {
             user.setImgPreference(ImgType.JPG);
         } else {
             user.setImgPreference(ImgType.PNG);

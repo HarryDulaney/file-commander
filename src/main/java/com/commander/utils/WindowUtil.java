@@ -17,7 +17,7 @@ import java.util.HashMap;
  *
  * This how you inject a Spring Application Controller class with FXML objects from mark-up.
  *
- * @author HGDIV with big thanks to:
+ * @author HGDIV with help from:
  * (https://blog.jetbrains.com/idea/2019/11/tutorial-reactive-spring-boot-a-javafx-line-chart/) by: Trisha Gee
  */
 public class WindowUtil {
@@ -25,6 +25,7 @@ public class WindowUtil {
     private static ConfigurableApplicationContext ctx;
 
     private WindowUtil() {
+        throw new UnsupportedOperationException("WindowUtil is should never be instantiated it is purely a utility class.");
     }
 
     /**

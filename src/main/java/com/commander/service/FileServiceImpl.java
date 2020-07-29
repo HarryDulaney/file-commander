@@ -21,8 +21,7 @@ import java.nio.file.Paths;
 
 /**
  * {@code FileServiceImpl.class} Spring Service Bean for handling
- *  interaction with the User's file system and
- *  TODO for handling reading and writing property files
+ *  interaction with the User's file system
  *
  * @author HGDIV
  */
@@ -50,7 +49,7 @@ public class FileServiceImpl extends ParentService implements FileService {
     public javafx.concurrent.Service<File[]> getDirectoryFiles(User user, EventHandler<WorkerStateEvent> onSuccess,
                                                                EventHandler<WorkerStateEvent> beforeStart) {
         return createService(new Task<File[]>() {
-            FileSystemResource path = new FileSystemResource(user.getDirectoryPath());
+            final FileSystemResource path = new FileSystemResource(user.getDirectoryPath());
 
             protected File[] call() {
                 final File file = path.getFile();
@@ -65,12 +64,13 @@ public class FileServiceImpl extends ParentService implements FileService {
     public javafx.concurrent.Service<File[]> getFilterDirectoryFiles(User user,
                                                                      EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
         return createService(new Task<File[]>() {
-            final String docTypeExt = user.getDocPreference().getExtension();
+            final String docTypeExt = user.getDocPreference().getDocOperation();
             final String ssTypeExt = user.getExcelPreference().getExtension();
+            final String imgTypeExt = user.getImgPreference().getExtension();
 
             protected File[] call() {
                 final File file = new File(user.getDirectoryPath());
-                FilenameFilter filter = (dir, name) -> !name.endsWith(docTypeExt) && !name.endsWith(ssTypeExt);
+                FilenameFilter filter = (dir, name) -> !name.endsWith(docTypeExt) && !name.endsWith(ssTypeExt) && !name.endsWith(imgTypeExt);
 
                 return file.listFiles(filter);
 

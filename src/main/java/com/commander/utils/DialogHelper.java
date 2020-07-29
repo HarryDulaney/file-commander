@@ -10,10 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.awt.WindowIDProvider;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -184,15 +186,16 @@ public final class DialogHelper {
     }
 
     public static void showAutoHidePopup(Stage stage, String message) {
+        Window window = new Stage();
         Label label = new Label(message);
         label.setStyle(" -fx-background-color: white;");
         label.setMinWidth(250);
         label.setMinHeight(250);
-        JFXPopup popup = new JFXPopup();
-        popup.setPopupContent(label);
-        popup.setAutoHide(true);
+        label.setFont(Font.font("SansSerif",18.0));
+        Popup popup = new Popup();
+        popup.getContent().add(label);
         popup.centerOnScreen();
         popup.addEventHandler(MouseEvent.MOUSE_CLICKED, t -> popup.hide());
-        popup.show(stage);
+        popup.show(window);
     }
 }

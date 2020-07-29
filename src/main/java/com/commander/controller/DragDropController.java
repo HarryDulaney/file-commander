@@ -1,6 +1,8 @@
 package com.commander.controller;
 
 import com.commander.model.Convertible;
+import com.commander.model.DocOperation;
+import com.commander.model.DocType;
 import com.commander.service.FileService;
 import com.commander.utils.ConvertUtils;
 import com.commander.utils.ConvertibleFactory;
@@ -13,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
@@ -49,24 +50,6 @@ public class DragDropController extends ParentController {
 
     final Logger log = LoggerFactory.getLogger(DragDropController.class);
 
-    /**************************************************************
-     * Extension Type Constants
-     ***************************************************************/
-    private static final String CSV = "csv";
-    private static final String XLSX = "xlsx";
-
-    //DocTypes
-    private static final String DOCX = "docx";
-    private static final String PDF = "pdf";
-    private static final String TXT = "txt";
-
-    //ImgTypes
-    private static final String PNG = "png";
-    private static final String GIF = "gif";
-    private static final String JPG = "jpg";
-    private static final String BMP = "bmp";
-
-
     private ConfigurableApplicationContext ctx;
     private FileService fileService;
     private ObservableList<Label> observableList = FXCollections.observableArrayList();
@@ -80,8 +63,6 @@ public class DragDropController extends ParentController {
     private Label outputDirPathLbl;
     @FXML
     private AnchorPane rootPane;
-    @FXML
-    private CheckBox filterChangeCheckBox;
     @FXML
     private Button runConvertButton;
     @FXML
@@ -106,31 +87,35 @@ public class DragDropController extends ParentController {
 
         if (fileName != null) {
             String ext = FilenameUtils.getExtension(fileName);
-            Convertible convertible;
+            Convertible convertible = null;
             switch (ext) {
-                case CSV:
+                case "csv":
                     convertible = ConvertibleFactory.createCsvToXlsx(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case XLSX:
+                case "xlsx":
                     convertible = ConvertibleFactory.createXlsxToCsv(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case DOCX:
+                case "docx -> pdf":
                     convertible = ConvertibleFactory.createDocxToPdf(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case PDF:
+                case "pdf -> (EXTRACT TEXT) -> docx":
                     convertible = ConvertibleFactory.createPdfToDocx(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
-                case BMP:
-                case JPG:
-                case GIF:
-                case PNG:
+                case "docx -> html":
+                case "NO_PREFERENCE":
+                case "html -> docx":
+                    break;
+                case "bmp":
+                case "jpg":
+                case "gif":
+                case "png":
                     convertible = ConvertibleFactory.createImageConvert(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                     break;
@@ -145,8 +130,7 @@ public class DragDropController extends ParentController {
                 e.printStackTrace();
 
             } catch (Exception e) {
-                log.error("Exception @ running fileService.convert(Convertible convertible)",
-                        e.getCause());
+                log.error("Exception @ FileServiceImpl.convert()");
             }
 
 
@@ -163,19 +147,13 @@ public class DragDropController extends ParentController {
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
 
-        if (ValidationUtils.validateUserPaths(user)) {
-            fileService = (FileService) ctx.getBean("fileService");
-
-            String policy = user.getSourceFilePolicy();
-            if (policy.equals(PROJECT_SOURCE_DELETE_KEY)) {
-                ConvertUtils.setDeleteSourceAfterConverted(true);
-
-            } else {
-                ConvertUtils.setDeleteSourceAfterConverted(false);
-            }
+        fileService = (FileService) ctx.getBean("fileService");
+        String policy = user.getSourceFilePolicy();
+        if (policy.equals(PROJECT_SOURCE_DELETE_KEY)) {
+            ConvertUtils.setDeleteSourceAfterConverted(true);
 
         } else {
-            DialogHelper.showErrorAlert("You can't move on until you set all of your user preferences!");
+            ConvertUtils.setDeleteSourceAfterConverted(false);
         }
         runConvertButton.setDisable(true);
         setLabels();
@@ -184,6 +162,7 @@ public class DragDropController extends ParentController {
 
     /**
      * Reloads the contents of list view
+     *
      * @param actionEvent refreshListButton pressed
      */
     @FXML
@@ -229,14 +208,14 @@ public class DragDropController extends ParentController {
         observableList.clear();
         runConvertButton.setDisable(true);
 //        if (filterChangeCheckBox.isSelected()) {
-            fileService.getFilterDirectoryFiles(user, e -> {
-                File[] files = (File[]) e.getSource().getValue();
-                for (File file : files) {
-                    observableList.add(new Label(file.getName()));
-                }
+        fileService.getFilterDirectoryFiles(user, e -> {
+            File[] files = (File[]) e.getSource().getValue();
+            for (File file : files) {
+                observableList.add(new Label(file.getName()));
+            }
 
-                listView.setItems(observableList);
-            }, null);
+            listView.setItems(observableList);
+        }, null);
 
 //        } else {
 //            fileService.getDirectoryFiles(user, e -> {
@@ -252,7 +231,7 @@ public class DragDropController extends ParentController {
 //        }
 
 
-      }
+    }
 
     /**
      * {@code initListView()} handles updating and populating the ListView with files
@@ -304,12 +283,12 @@ public class DragDropController extends ParentController {
                     runConvertButton.setDisable(false);
             }
         });
-        listView.getSelectionModel().selectedIndexProperty().addListener((observable,oldValue,newValue) -> {
+        listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue.intValue() < 0) {
-                if (newValue.intValue() > 0){
+                if (newValue.intValue() > 0) {
                     runConvertButton.setDisable(false);
                 }
-            }else {
+            } else {
                 if (newValue.intValue() < 0) {
                     runConvertButton.setDisable(true);
                 }

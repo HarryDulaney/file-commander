@@ -1,7 +1,6 @@
 package com.commander;
 
 import com.commander.controller.RootController;
-import com.commander.model.User;
 import com.commander.utils.DialogHelper;
 import com.commander.utils.WindowUtil;
 import javafx.application.Application;
@@ -24,12 +23,12 @@ import java.util.HashMap;
 public class SCApplication extends Application {
 
     private ConfigurableApplicationContext ctx;
-
-    @Value("${application.ui.title}")
+    @Value
+    ("${application.ui.title}")
     private String title;
 
 
-    public static void main(String[] args) {
+            public static void main(String[]args) {
         launch(args);
 
     }
@@ -45,7 +44,7 @@ public class SCApplication extends Application {
 
         try {
             HashMap<String, String> messageMap = new HashMap<>();
-            messageMap.put(RootController.MES_KEY,RootController.FRESH_START);
+            messageMap.put(RootController.MES_KEY, RootController.FRESH_START);
             WindowUtil.open(primaryStage, RootController.getRootFxml(), title, messageMap);
 
         } catch (Exception ex) {

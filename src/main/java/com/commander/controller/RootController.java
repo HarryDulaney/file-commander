@@ -1,11 +1,12 @@
 package com.commander.controller;
 
-import com.commander.model.DocType;
+import com.commander.model.DocOperation;
 import com.commander.model.ExcelType;
 import com.commander.model.ImgType;
 import com.commander.model.User;
 import com.commander.service.FileService;
 import com.commander.utils.DialogHelper;
+import com.commander.utils.ValidationUtils;
 import com.commander.utils.WindowUtil;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -46,7 +47,6 @@ public class RootController extends ParentController {
 
     private FileService fileService;
     private ToggleGroup ssheetGroup;
-    private ToggleGroup docGroup;
     private ToggleGroup imgGroup;
 
     private HostServices hostServices;
@@ -70,10 +70,6 @@ public class RootController extends ParentController {
     @FXML
     private RadioButton csvRadioButton;
     @FXML
-    private RadioButton pdfRadioButton;
-    @FXML
-    private RadioButton docxRadioButton;
-    @FXML
     private TextField directoryPathTextField;
     @FXML
     private TextField outputPathTextField;
@@ -84,6 +80,8 @@ public class RootController extends ParentController {
     @FXML
     private ComboBox<String> prefsComboBox;
     @FXML
+    private ComboBox<String> textDocPrefsComboBox;
+    @FXML
     private MenuItem saveUserPreferences;
     @FXML
     private MenuItem openPreferencesButton;
@@ -91,7 +89,7 @@ public class RootController extends ParentController {
 
     /**
      * @param stage      The primary stage
-     * @param parameters Are message resources passed from caller
+     * @param parameters message resources pass info about application lifecycle
      */
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
@@ -103,45 +101,73 @@ public class RootController extends ParentController {
                 loadPreferences();
                 openPreferencesButton.setDisable(true);
 
-
                 if (user.getNuUser()) {
                     handleNewProject();
                     openConverterButton.setDisable(true);
                     saveButton.setDisable(true);
                 } else {
-                    // Welcome message
+                    DialogHelper.showAutoHidePopup(getStage(), "Welcome back to File Commander!");
                 }
 
             }
-            docxRadioButton.setDisable(true);
             setProjectLabels();
             configRadioButtonGroups();
-            configComboBox();
+            configComboBoxes();
 
         }
 
     }
 
     /**
-     * Configures the Source File Policy combobox with values and sets resets from
-     * user preferences
+     * Configures the Source File Policy Combobox and the Text Docs
+     * Combobox
      */
-    private void configComboBox() {
+    private void configComboBoxes() {
+        //Src File Policy ComboBox configure
         List<String> list = Arrays
                 .asList(PROJECT_SOURCE_DELETE_KEY, PROJECT_SOURCE_SAVE_KEY);
         prefsComboBox.getItems().setAll(list);
         prefsComboBox.getSelectionModel().select(user.getSourceFilePolicy());
 
+
+        // Text Doc preferences ComboBox configure
+        List<String> docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation(), DocOperation.DOCX_TO_HTML.getDocOperation(),
+                DocOperation.PDF_TO_TEXT.getDocOperation(), DocOperation.HTML_TO_DOCX.getDocOperation());
+        textDocPrefsComboBox.getItems().setAll(docOpsList);
+        textDocPrefsComboBox.getSelectionModel().select(user.getDocPreference().getDocOperation());
+
     }
 
     /**
-     * @param event User's source file policy changed on UI
+     * @param event change event triggered on src file preference combobox
      */
     @FXML
-    private void handleChangedValue(ActionEvent event) {
+    private void handleSrcFilePrefChanged(ActionEvent event) {
         String pref = prefsComboBox.getSelectionModel().getSelectedItem();
         user.setSourceFilePolicy(pref);
 
+    }
+
+    /**
+     * @param actionEvent change event triggered on Word Type combobox
+     */
+    @FXML
+    private void handleTextDocPrefChanged(ActionEvent actionEvent) {
+        String docPref = textDocPrefsComboBox.getSelectionModel().getSelectedItem();
+
+        if (docPref.equals(DocOperation.PDF_TO_TEXT.getDocOperation())) {
+            user.setDocPreference(DocOperation.PDF_TO_TEXT);
+
+        } else if (docPref.equals(DocOperation.DOCX_TO_HTML.getDocOperation())) {
+            user.setDocPreference(DocOperation.DOCX_TO_HTML);
+
+        } else if (docPref.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {
+            user.setDocPreference(DocOperation.HTML_TO_DOCX);
+
+        } else {
+            user.setDocPreference(DocOperation.DOCX_TO_PDF);
+
+        }
     }
 
     /**
@@ -170,9 +196,10 @@ public class RootController extends ParentController {
         try {
             setPreferences();
 
-            DialogHelper.showInfoAlert(
-                    "Your preferences have been saved \nNow you can drag and drop files to your directory folder", true);
+//            DialogHelper.showInfoAlert(
+//                    "Your preferences have been saved \nNow you can drag and drop files to your directory folder", true);
             handleOpenConverter(event);
+            DialogHelper.showAutoHidePopup(getStage(), "Your preferences have been saved \nNow you can drag and drop files to your directory folder");
 
         } catch (Exception e3) {
             DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your project.");
@@ -188,7 +215,7 @@ public class RootController extends ParentController {
      */
     @FXML
     private void handleOpenPreferences(ActionEvent event) {
-        HashMap<String, String> pbMap = null;
+        HashMap<String, String> pbMap;
 
         pbMap = new HashMap<>();
         pbMap.put(MES_KEY, OPEN_PREFERENCES);
@@ -207,16 +234,22 @@ public class RootController extends ParentController {
 
     @FXML
     private void handleOpenConverter(ActionEvent event) {
-        HashMap<String, String> pbMap = new HashMap<>();
-        pbMap.put(MES_KEY, OPEN_CONVERTER);
-        try {
-            WindowUtil.replaceFxmlOnWindow(rootPane, DRAG_DROP_FXML, stage, pbMap);
-            openPreferencesButton.setDisable(false);
-            saveUserPreferences.setDisable(true);
-            openConverterButton.setDisable(true);
 
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        if (ValidationUtils.validateUser(user)) {
+
+            HashMap<String, String> pbMap = new HashMap<>();
+            pbMap.put(MES_KEY, OPEN_CONVERTER);
+            try {
+                WindowUtil.replaceFxmlOnWindow(rootPane, DRAG_DROP_FXML, stage, pbMap);
+                openPreferencesButton.setDisable(false);
+                saveUserPreferences.setDisable(true);
+                openConverterButton.setDisable(true);
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } else {
+            DialogHelper.showErrorAlert("Please confirm you have selected a preference for all fields before moving on.");
         }
     }
 
@@ -315,20 +348,8 @@ public class RootController extends ParentController {
 
     private void configRadioButtonGroups() {
         ssheetGroup = new ToggleGroup();
-        docGroup = new ToggleGroup();
         imgGroup = new ToggleGroup();
 
-        switch (user.getDocPreference()) {
-            case PDF:
-                pdfRadioButton.setSelected(true);
-                break;
-            case DOCX:
-                docxRadioButton.setSelected(true);
-                break;
-            default:
-                pdfRadioButton.setSelected(false);
-                docxRadioButton.setSelected(false);
-        }
         switch (user.getExcelPreference()) {
             case XLSX:
                 xlsxRadioButton.setSelected(true);
@@ -375,15 +396,6 @@ public class RootController extends ParentController {
                 user.setExcelPreference(ExcelType.CSV);
         });
 
-        pdfRadioButton.setToggleGroup(docGroup);
-        docxRadioButton.setToggleGroup(docGroup);
-        docGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            RadioButton docChoice = pdfRadioButton;
-            if (docChoice.getText().equalsIgnoreCase(DocType.PDF.getExtension())) {
-                user.setDocPreference(DocType.PDF);
-            } else
-                user.setDocPreference(DocType.DOCX);
-        });
         jpgRadioButton.setToggleGroup(imgGroup);
         bmpRadioButton.setToggleGroup(imgGroup);
         pngRadioButton.setToggleGroup(imgGroup);

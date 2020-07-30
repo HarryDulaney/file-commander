@@ -15,7 +15,7 @@ public interface FileService {
     javafx.concurrent.Service<File[]> getFilterDirectoryFiles(User user, EventHandler<WorkerStateEvent> onSuccess,
                                             EventHandler<WorkerStateEvent> beforeStart);
 
-    javafx.concurrent.Service<String> writeOutputDirectory(String outPath, EventHandler<WorkerStateEvent> onSuccess,
+    javafx.concurrent.Service<String> writeOutputDirectory(EventHandler<WorkerStateEvent> onSuccess,
                                                            EventHandler<WorkerStateEvent> beforeStart);
 
     void convert(Convertible convertible) throws Exception;

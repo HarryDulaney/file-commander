@@ -10,6 +10,7 @@ import com.opencsv.CSVReader;
 import fr.opensagres.poi.xwpf.converter.core.FileImageExtractor;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import javafx.scene.layout.Pane;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -39,6 +40,12 @@ import java.util.Iterator;
  * @author HGDIV
  */
 public class ConvertUtils {
+
+    private static Pane toastPane;
+
+    public static void setToastPane(Pane pane) {
+        toastPane = pane;
+    }
 
     private static Boolean deleteSourceAfterConverted;
     private static final String TAG = ConvertUtils.class.getCanonicalName();
@@ -261,7 +268,7 @@ public class ConvertUtils {
                 PdfConverter.getInstance().convert(d, fileOutputStream, pdfOptions);
                 fileOutputStream.close();
 
-                DialogHelper.showInfoAlert("Success!: Your Word document has been converted to pdf.", false);
+                DialogHelper.snackbarToast(toastPane,"Success!: Your Word document has been converted to pdf.");
             } catch (IOException | InvalidFormatException e) {
                 DialogHelper.showErrorAlert("Something went wrong, we were unable to convert you document.\nPlease ensure the output folder is write enabled");
                 e.printStackTrace();
@@ -272,7 +279,7 @@ public class ConvertUtils {
     }
 
     /**
-     * {@code pdfToDocx.class} is for programmatically converting a pdf to docx formatted file.
+     * {@code pdfToDocx.class} Extract the text content from the pdf and write to docx
      */
     static class pdfToDocx implements Convertible {
 
@@ -307,7 +314,9 @@ public class ConvertUtils {
                     FileOutputStream fos = new FileOutputStream(out);
                     doc.write(fos);
                     fos.close();
-                    DialogHelper.showInfoAlert("Success!", false);
+                    DialogHelper.snackbarToast(toastPane
+                            , "Successfully created a new DOCX file with the text content from your PDF");
+
                     doc.close();
                 }
 

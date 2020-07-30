@@ -2,7 +2,6 @@ package com.commander.service;
 
 import com.commander.model.Convertible;
 import com.commander.model.User;
-import com.commander.utils.DialogHelper;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -19,9 +18,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 /**
  * {@code FileServiceImpl.class} Spring Service Bean for handling
- *  interaction with the User's file system
+ * interaction with the User's file system
  *
  * @author HGDIV
  */
@@ -29,8 +29,7 @@ import java.nio.file.Paths;
 public class FileServiceImpl extends ParentService implements FileService {
 
     final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
-    private static final String DEFAULT_OUTPUT_DIR_NAME = "SC-app-files";
-
+    private static final String DEFAULT_OUTPUT_DIR_NAME = "super-commander-tmp";
 
 
     private FileServiceImpl() {
@@ -64,7 +63,7 @@ public class FileServiceImpl extends ParentService implements FileService {
     public javafx.concurrent.Service<File[]> getFilterDirectoryFiles(User user,
                                                                      EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
         return createService(new Task<File[]>() {
-            final String docTypeExt = user.getDocPreference().getDocOperation();
+            final String docTypeExt = user.getDocPreference().getSourceFileExt();
             final String ssTypeExt = user.getExcelPreference().getExtension();
             final String imgTypeExt = user.getImgPreference().getExtension();
 
@@ -81,33 +80,28 @@ public class FileServiceImpl extends ParentService implements FileService {
 
     /**
      * This method creates directory folder nested in the User's source directory in the event
-     *
+     * <p>
      * 1.) SuperCommander can't write to the output directory
      * 2.) Application needs a backup folder to write info for the User to easily access
      *
-     * @param directoryPath User's input source directory folder
-     * @param onSuccess service worker reports state after successful thread execution
+     * @param onSuccess   service worker reports state after successful thread execution
      * @param beforeStart service worker reports state before executing thread
      * @return String of write path
      */
     @Override
-    public javafx.concurrent.Service<String> writeOutputDirectory(String directoryPath,
-                                                                  EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
+    public javafx.concurrent.Service<String> writeOutputDirectory(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
         return createService(new Task<String>() {
             protected String call() throws IOException {
-                Path path = Paths.get(directoryPath);
+                final String tmpFile = System.getProperty("java.io.tmpdir");
+
+                Path path = Paths.get(tmpFile);
                 Path writePath = path.resolve(DEFAULT_OUTPUT_DIR_NAME);
-                File file = writePath.toFile();
-                if (file.exists()) {
-                    DialogHelper.showErrorAlert("Write directory already exists.");
-                    return file.getAbsolutePath();
-                } else {
-                    Path p = Files.createDirectory(writePath);
-                    return p.toString();
-                }
+                Path p = Files.createDirectory(writePath);
 
+                logger.info("Created temp file at" + p.toString());
+
+                return p.toString();
             }
-
         }, onSuccess, beforeStart);
     }
 

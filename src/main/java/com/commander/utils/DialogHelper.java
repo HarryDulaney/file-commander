@@ -1,18 +1,25 @@
 package com.commander.utils;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.*;
+import com.jfoenix.skins.JFXPopupSkin;
 import com.sun.javafx.css.Style;
+import com.sun.prism.paint.Paint;
+import javafx.application.Platform;
+import javafx.css.PseudoClass;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.*;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.awt.WindowIDProvider;
@@ -20,6 +27,7 @@ import sun.awt.WindowIDProvider;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Stack;
 
 /**
  * This is a class of static methods to utilize for Alerts, Pop-ups and UI
@@ -65,7 +73,9 @@ public final class DialogHelper {
             action.onAction();
         });
         content.setActions(yesButton);
-
+        root.setOnMouseClicked(event -> {
+            dialog.close();
+        });
         JFXButton noButton = new JFXButton("No");
         noButton.setOnAction(event -> {
             dialog.close();
@@ -185,17 +195,22 @@ public final class DialogHelper {
 
     }
 
-    public static void showAutoHidePopup(Stage stage, String message) {
-        Window window = new Stage();
+    public static void snackbarToast(Pane pane, String message) {
+        JFXSnackbar snackbar = new JFXSnackbar(pane);
+        snackbar.setPrefWidth(500);
+        VBox vbox = new VBox();
         Label label = new Label(message);
-        label.setStyle(" -fx-background-color: white;");
-        label.setMinWidth(250);
-        label.setMinHeight(250);
-        label.setFont(Font.font("SansSerif",18.0));
-        Popup popup = new Popup();
-        popup.getContent().add(label);
-        popup.centerOnScreen();
-        popup.addEventHandler(MouseEvent.MOUSE_CLICKED, t -> popup.hide());
-        popup.show(window);
+        label.setFont(Font.font("SansSerif", FontWeight.BOLD,16.0));
+        label.setTextFill(Color.WHITE);
+        label.setWrapText(true);
+        vbox.setAlignment(Pos.CENTER);
+        label.setPrefSize(500,100);
+        vbox.autosize();
+        label.setBackground(new Background(new BackgroundFill(Color.GRAY,new CornerRadii(3.5),Insets.EMPTY)));
+        vbox.getChildren().add(label);
+        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(3.33),null);
+        snackbar.enqueue(snackbarEvent);
+
     }
+
 }

@@ -40,6 +40,9 @@
                         <font>
                             <Font name="Source Serif Pro Bold" size="14.0"/>
                         </font>
+                        <tooltip>
+                            <Tooltip wrapText="true" text="Choose how you want Excel workbook files to be handled"/>
+                        </tooltip>
                     </Label>
                     <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER"
                             mnemonicParsing="false" onAction="#handleSaveButton" text="Save and Continue"
@@ -72,6 +75,9 @@
                         <font>
                             <Font name="Source Serif Pro Bold" size="14.0"/>
                         </font>
+                        <tooltip>
+                            <Tooltip wrapText="true" text="Choose how you want Word document files to be handled"/>
+                        </tooltip>
                     </Label>
                     <RadioButton mnemonicParsing="false" text="RadioButton" visible="false"
                                  GridPane.halignment="RIGHT" GridPane.rowIndex="2">

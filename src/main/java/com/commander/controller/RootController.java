@@ -8,6 +8,7 @@ import com.commander.service.FileService;
 import com.commander.utils.DialogHelper;
 import com.commander.utils.ValidationUtils;
 import com.commander.utils.WindowUtil;
+import com.jfoenix.controls.JFXSnackbar;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -48,6 +49,8 @@ public class RootController extends ParentController {
     private FileService fileService;
     private ToggleGroup ssheetGroup;
     private ToggleGroup imgGroup;
+    private JFXSnackbar snackbar;
+
 
     private HostServices hostServices;
     private ConfigurableApplicationContext ctx;
@@ -60,9 +63,9 @@ public class RootController extends ParentController {
     private RadioButton pngRadioButton;
     @FXML
     private RadioButton jpgRadioButton;
-
     @FXML
     private AnchorPane rootPane;
+
     @FXML
     private Label projectUserLabel;
     @FXML
@@ -106,7 +109,7 @@ public class RootController extends ParentController {
                     openConverterButton.setDisable(true);
                     saveButton.setDisable(true);
                 } else {
-                    DialogHelper.showAutoHidePopup(getStage(), "Welcome back to File Commander!");
+                    DialogHelper.showInfoAlert("Welcome Back to File Commander!", false);
                 }
 
             }
@@ -131,8 +134,8 @@ public class RootController extends ParentController {
 
 
         // Text Doc preferences ComboBox configure
-        List<String> docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation(), DocOperation.DOCX_TO_HTML.getDocOperation(),
-                DocOperation.PDF_TO_TEXT.getDocOperation(), DocOperation.HTML_TO_DOCX.getDocOperation());
+        List<String> docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation()/*, DocOperation.DOCX_TO_HTML.getDocOperation()*/,
+                DocOperation.PDF_txt_TO_DOCX.getDocOperation()/*, DocOperation.HTML_TO_DOCX.getDocOperation()*/);
         textDocPrefsComboBox.getItems().setAll(docOpsList);
         textDocPrefsComboBox.getSelectionModel().select(user.getDocPreference().getDocOperation());
 
@@ -155,8 +158,8 @@ public class RootController extends ParentController {
     private void handleTextDocPrefChanged(ActionEvent actionEvent) {
         String docPref = textDocPrefsComboBox.getSelectionModel().getSelectedItem();
 
-        if (docPref.equals(DocOperation.PDF_TO_TEXT.getDocOperation())) {
-            user.setDocPreference(DocOperation.PDF_TO_TEXT);
+        if (docPref.equals(DocOperation.PDF_txt_TO_DOCX.getDocOperation())) {
+            user.setDocPreference(DocOperation.PDF_txt_TO_DOCX);
 
         } else if (docPref.equals(DocOperation.DOCX_TO_HTML.getDocOperation())) {
             user.setDocPreference(DocOperation.DOCX_TO_HTML);
@@ -177,7 +180,8 @@ public class RootController extends ParentController {
     private void handleSaveUser(ActionEvent event) {
         try {
             setPreferences();
-            DialogHelper.showInfoAlert("Your preferences have been saved.", true);
+//            DialogHelper.showInfoAlert(, true);
+            DialogHelper.snackbarToast(rootPane, "Your preferences have been saved.");
         } catch (Exception e) {
             e.printStackTrace();
             DialogHelper.showErrorAlert("Something went wrong trying to save your preferences");
@@ -199,8 +203,7 @@ public class RootController extends ParentController {
 //            DialogHelper.showInfoAlert(
 //                    "Your preferences have been saved \nNow you can drag and drop files to your directory folder", true);
             handleOpenConverter(event);
-            DialogHelper.showAutoHidePopup(getStage(), "Your preferences have been saved \nNow you can drag and drop files to your directory folder");
-
+            DialogHelper.snackbarToast(rootPane, "Your preferences have been saved");
         } catch (Exception e3) {
             DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your project.");
             e3.printStackTrace();

@@ -49,7 +49,7 @@ public class SCApplication extends Application {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            DialogHelper.showWarningAlert("Application failed to load properly, please try again or contact the developers");
+            DialogHelper.showWarningAlert("Application failed to load properly, please try again or contact the developers at -> github.com/harrydulaney/super-commander");
         }
     }
 

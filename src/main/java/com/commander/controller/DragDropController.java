@@ -1,24 +1,24 @@
 package com.commander.controller;
 
 import com.commander.model.Convertible;
-import com.commander.model.DocOperation;
-import com.commander.model.DocType;
 import com.commander.service.FileService;
 import com.commander.utils.ConvertUtils;
 import com.commander.utils.ConvertibleFactory;
 import com.commander.utils.DialogHelper;
-import com.commander.utils.ValidationUtils;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -52,6 +52,7 @@ public class DragDropController extends ParentController {
 
     private ConfigurableApplicationContext ctx;
     private FileService fileService;
+
     private ObservableList<Label> observableList = FXCollections.observableArrayList();
     private JFXListView<Label> listView;
 
@@ -67,6 +68,13 @@ public class DragDropController extends ParentController {
     private Button runConvertButton;
     @FXML
     private Button refreshListButton;
+    @FXML
+    private FlowPane wordDocDisplayPane;
+    @FXML
+    private FlowPane excelPrefDisplayPane;
+    @FXML
+    private FlowPane imgPrefDisplayPane;
+
 
     private HostServices hostServices;
 
@@ -99,18 +107,19 @@ public class DragDropController extends ParentController {
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case "docx -> pdf":
+                case DOCX2PDF:
                     convertible = ConvertibleFactory.createDocxToPdf(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case "pdf -> (EXTRACT TEXT) -> docx":
+                case PDFtxt2DOCX:
                     convertible = ConvertibleFactory.createPdfToDocx(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
-                case "docx -> html":
-                case "NO_PREFERENCE":
-                case "html -> docx":
+                case DOCX2HTML:
+
+                    break;
+                case HTML2DOCX:
                     break;
                 case "bmp":
                 case "jpg":
@@ -147,17 +156,39 @@ public class DragDropController extends ParentController {
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
 
+
         fileService = (FileService) ctx.getBean("fileService");
         String policy = user.getSourceFilePolicy();
+        ConvertUtils.setToastPane(rootPane);
+
         if (policy.equals(PROJECT_SOURCE_DELETE_KEY)) {
             ConvertUtils.setDeleteSourceAfterConverted(true);
 
         } else {
             ConvertUtils.setDeleteSourceAfterConverted(false);
         }
+        setPreferencesViewer();
         runConvertButton.setDisable(true);
         setLabels();
         initListView();
+    }
+
+    private void setPreferencesViewer() {
+        Label wordPref = new Label(user.getDocPreference().getDocOperation().toUpperCase());
+        wordPref.setFont(Font.font("SansSerif", 17.0));
+        wordPref.setAlignment(Pos.CENTER);
+        Label excelPref = new Label(user.getExcelPreference().getExtension().toUpperCase());
+        excelPref.setFont(Font.font("SansSerif", 17.0));
+        excelPref.setAlignment(Pos.CENTER);
+        Label imgPref = new Label(user.getImgPreference().getExtension().toUpperCase());
+        imgPref.setFont(Font.font("SansSerif", 17.0));
+        imgPref.setAlignment(Pos.CENTER);
+
+
+        wordDocDisplayPane.getChildren().add(wordPref);
+        excelPrefDisplayPane.getChildren().add(excelPref);
+        imgPrefDisplayPane.getChildren().add(imgPref);
+
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.commander.controller;
 
 import com.commander.model.*;
+import com.jfoenix.controls.JFXSnackbar;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,9 @@ public abstract class ParentController {
 
     static {
         user = new User();
+
     }
+
 
     /* ------------------------------------------ FXML Path Constants ---------------------------------------------------- */
     static final String DRAG_DROP_FXML = "/fxml/draganddrop.fxml";
@@ -58,6 +62,10 @@ public abstract class ParentController {
     static final String PROJECT_SOURCE_DELETE_KEY = "Delete";
     static final String PROJECT_SOURCE_SAVE_KEY = "Save";
 
+    static final String DOCX2PDF = "docx -> pdf";
+    static final String DOCX2HTML = "docx -> html";
+    static final String HTML2DOCX = "html -> docx";
+    static final String PDFtxt2DOCX = "pdf -> (EXTRACT TEXT) -> docx";
 
     /**
      * {@code init(Stage s, HashMap<String,T> p} Overridden in child controller
@@ -94,7 +102,7 @@ public abstract class ParentController {
         userPreferences.put(DIR_PATH_KEY, user.getDirectoryPath());
         userPreferences.put(DIR_WRITE_PATH_KEY, user.getWriteDirectoryPath());
         userPreferences.put(EXCEL_PREF_KEY, user.getExcelPreference().getExtension());
-        userPreferences.put(DOC_TYPE_KEY, DocOperation.DOCX_TO_PDF.getDocOperation());
+        userPreferences.put(DOC_TYPE_KEY, user.getDocPreference().getDocOperation());
         userPreferences.put(IMG_TYPE_KEY, user.getImgPreference().getExtension());
         userPreferences.put(SOURCE_POLICY_KEY, user.getSourceFilePolicy());
         userPreferences.put(NEW_USER_KEY, "false");
@@ -126,8 +134,8 @@ public abstract class ParentController {
 
         if (docPreference.equals(DocOperation.DOCX_TO_PDF.getDocOperation())) {
             user.setDocPreference(DocOperation.DOCX_TO_PDF);
-        } else if (docPreference.equals(DocOperation.PDF_TO_TEXT.getDocOperation())) {
-            user.setDocPreference(DocOperation.PDF_TO_TEXT);
+        } else if (docPreference.equals(DocOperation.PDF_txt_TO_DOCX.getDocOperation())) {
+            user.setDocPreference(DocOperation.PDF_txt_TO_DOCX);
         } else if (docPreference.equals(DocOperation.DOCX_TO_HTML.getDocOperation())) {
             user.setDocPreference(DocOperation.DOCX_TO_HTML);
         } else if (docPreference.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {

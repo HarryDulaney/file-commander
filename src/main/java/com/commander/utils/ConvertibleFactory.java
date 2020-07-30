@@ -30,39 +30,9 @@ public class ConvertibleFactory {
         throw new UnsupportedOperationException("ConvertibleFactory is not meant to be instantiated.");
     }
 
-
-    /**
-     * Build new csv to xlsx convertible.
-     *
-     * @param fileName           sourcefile filename.ext
-     * @param directoryPath      User's src file path
-     * @param writeDirectoryPath User's write dir path
-     * @return the convertible
-     */
-    public static Convertible createCsvToXlsx(String fileName, String directoryPath, String writeDirectoryPath) {
-        String numRows = DialogHelper.showInputPrompt("Rows Per Sheet?", "How many rows would you like each sheet to have in your .XLSX workbook?\nPlease enter an integer number (e.g. 300)", "Info Request");
-        Integer rowsPerSheet = Integer.parseInt(numRows);
-        String baseName = FilenameUtils.removeExtension(fileName);
-
-        return new csvToXlsx(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.xlsx()), rowsPerSheet);
-    }
-
-
-    /**
-     * Build new xlsx to csv convertible.
-     *
-     * @param fileName           sourcefile filename.ext
-     * @param directoryPath      User's src file path
-     * @param writeDirectoryPath User's write dir path
-     * @return the convertible
-     */
-    public static Convertible createXlsxToCsv(String fileName, String directoryPath, String writeDirectoryPath) {
-
-        String baseName = FilenameUtils.removeExtension(fileName);
-
-        return new xlsxToCsv(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.csv()));
-    }
-
+/************************************************/
+/*   MSWord File Format Convertible builders
+/*************************************************/
 
     /**
      * Build new docx to pdf convertible.
@@ -94,6 +64,45 @@ public class ConvertibleFactory {
 
         return new pdfToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
     }
+/************************************************/
+/*   Excel File Format Convertible Builders      *
+/*************************************************/
+
+    /**
+     * Build new csv to xlsx convertible.
+     *
+     * @param fileName           sourcefile filename.ext
+     * @param directoryPath      User's src file path
+     * @param writeDirectoryPath User's write dir path
+     * @return the convertible
+     */
+    public static Convertible createCsvToXlsx(String fileName, String directoryPath, String writeDirectoryPath) {
+        String numRows = DialogHelper.showInputPrompt("Rows Per Sheet?", "How many rows would you like each sheet to have in your .XLSX workbook?\nPlease enter an integer number (e.g. 300)", "Info Request");
+        Integer rowsPerSheet = Integer.parseInt(numRows);
+        String baseName = FilenameUtils.removeExtension(fileName);
+
+        return new csvToXlsx(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.xlsx()), rowsPerSheet);
+    }
+
+
+    /**
+     * Build new xlsx to csv convertible.
+     *
+     * @param fileName           source file filename.ext
+     * @param directoryPath      User's src file path
+     * @param writeDirectoryPath User's write dir path
+     * @return the convertible
+     */
+    public static Convertible createXlsxToCsv(String fileName, String directoryPath, String writeDirectoryPath) {
+
+        String baseName = FilenameUtils.removeExtension(fileName);
+
+        return new xlsxToCsv(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.csv()));
+    }
+/************************************************/
+/*   Image File Format Convertible Builders
+/*************************************************/
+
 
     /**
      * Build new {@code ConvertUtils.ImageConvert} convertible.

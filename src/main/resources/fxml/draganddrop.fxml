@@ -7,12 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="700.0" prefWidth="551.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.DragDropController">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.DragDropController">
     <children>
-        <BorderPane prefHeight="700.0" prefWidth="551.0" styleClass="" AnchorPane.bottomAnchor="0.0"
-                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <BorderPane prefHeight="656.0" prefWidth="900.0" styleClass="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
@@ -20,38 +17,35 @@
                             <children>
                                 <Label prefHeight="19.0" prefWidth="217.0" text="Input Directory:">
                                     <tooltip>
-                                        <Tooltip
-                                                text="Click the link to the right to open your source directory folder">
+                                        <Tooltip text="Click the link to the right to open your source directory folder">
                                             <font>
-                                                <Font name="Source Serif Pro" size="14.0"/>
+                                                <Font name="Source Serif Pro" size="14.0" />
                                             </font>
                                         </Tooltip>
                                     </tooltip>
                                     <font>
-                                        <Font name="Source Serif Pro" size="13.0"/>
+                                        <Font name="Source Serif Pro" size="13.0" />
                                     </font>
                                     <HBox.margin>
-                                        <Insets left="5.0"/>
+                                        <Insets left="5.0" />
                                     </HBox.margin>
                                 </Label>
-                                <Label fx:id="superDirectoryLabel" prefHeight="21.0" prefWidth="549.0"
-                                       style="-fx-text-fill: Blue" text="superDirectoryLabel" HBox.hgrow="ALWAYS">
+                                <Label fx:id="superDirectoryLabel" prefHeight="21.0" prefWidth="549.0" style="-fx-text-fill: Blue" text="superDirectoryLabel" HBox.hgrow="ALWAYS">
                                     <tooltip>
-                                        <Tooltip
-                                                text="Click to open your source directory folder">
+                                        <Tooltip text="Click to open your source directory folder">
                                             <font>
-                                                <Font name="Source Serif Pro" size="14.0"/>
+                                                <Font name="Source Serif Pro" size="14.0" />
                                             </font>
                                         </Tooltip>
                                     </tooltip>
                                     <font>
-                                        <Font name="Source Serif Pro" size="13.0"/>
+                                        <Font name="Source Serif Pro" size="13.0" />
                                     </font>
                                     <HBox.margin>
-                                        <Insets right="5.0"/>
+                                        <Insets right="5.0" />
                                     </HBox.margin>
                                     <cursor>
-                                        <Cursor fx:constant="HAND"/>
+                                        <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </Label>
 
@@ -69,111 +63,137 @@
                                                        <Insets left="5.0" right="50.0" />
                                                    </HBox.margin>
                                                </CheckBox> -->
-                                        <Button fx:id="runConvertButton" layoutX="451.0" layoutY="11.0"
-                                                mnemonicParsing="false" onAction="#handleSelectedItemConvert"
-                                                text="Run">
+                                        <Button fx:id="runConvertButton" layoutX="451.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleSelectedItemConvert" text="Run">
                                             <tooltip>
-                                                <Tooltip
-                                                        text="Convert the currently selected list item to your preferred format">
+                                                <Tooltip text="Convert the currently selected list item to your preferred format">
                                                     <font>
-                                                        <Font name="Source Serif Pro" size="14.0"/>
+                                                        <Font name="Source Serif Pro" size="14.0" />
                                                     </font>
                                                 </Tooltip>
                                             </tooltip>
                                             <font>
-                                                <Font size="13.0"/>
+                                                <Font size="13.0" />
                                             </font>
                                             <HBox.margin>
-                                                <Insets left="5.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                             </HBox.margin>
                                         </Button>
-                                        <Button fx:id="refreshListButton" mnemonicParsing="false"
-                                                onAction="#handleRefreshListButton" text="Refresh List">
+                                        <Button fx:id="refreshListButton" mnemonicParsing="false" onAction="#handleRefreshListButton" text="Refresh List">
                                             <tooltip>
                                                 <Tooltip text="Manually refresh the list">
                                                     <font>
-                                                        <Font name="Source Serif Pro" size="14.0"/>
+                                                        <Font name="Source Serif Pro" size="14.0" />
                                                     </font>
                                                 </Tooltip>
                                             </tooltip>
                                             <HBox.margin>
-                                                <Insets left="150.0" right="1.0"/>
+                                                <Insets bottom="5.0" left="150.0" right="5.0" top="5.0" />
                                             </HBox.margin>
                                         </Button>
                                     </children>
                                 </HBox>
                             </children>
                         </Group>
-                        <AnchorPane fx:id="embeddedPane" prefHeight="603.0" prefWidth="619.0" VBox.vgrow="ALWAYS">
+                        <AnchorPane fx:id="embeddedPane" prefHeight="571.0" prefWidth="378.0" VBox.vgrow="ALWAYS">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
+                     <children>
+                               <Label alignment="CENTER" contentDisplay="CENTER" layoutY="499.0" prefHeight="19.0" prefWidth="121.0" text="Output Directory:">
+                                   <tooltip>
+                                       <Tooltip text="Click on the link to the right open your output directory folder">
+                                           <font>
+                                               <Font name="Source Serif Pro" size="14.0" />
+                                           </font>
+                                       </Tooltip>
+                                   </tooltip>
+                                   <font>
+                                       <Font name="Source Serif Pro" size="13.0" />
+                                   </font>
+                               </Label>
+                               <Label fx:id="outputDirPathLbl" layoutX="120.0" layoutY="499.0" prefHeight="19.0" prefWidth="427.0" style="-fx-text-fill: Blue" text="OutputDirectory" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="499.0">
+                                   <tooltip>
+                                       <Tooltip text="Click to open your output directory folder">
+                                           <font>
+                                               <Font name="Source Serif Pro" size="14.0" />
+                                           </font>
+                                       </Tooltip>
+                                   </tooltip>
+                                   <font>
+                                       <Font name="Source Serif Pro" size="13.0" />
+                                   </font>
+                                   <cursor>
+                                       <Cursor fx:constant="HAND" />
+                                   </cursor>
+                               </Label>
+                     </children>
                         </AnchorPane>
                     </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
                 </VBox>
             </center>
-            <bottom>
-                <AnchorPane BorderPane.alignment="CENTER">
-                    <HBox prefHeight="51.0" prefWidth="551.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                          AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="0.0">
-                        <children>
-                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="121.0"
-                                   text="Output Directory:">
-                                <tooltip>
-                                    <Tooltip text="Click on the link to the right open your output directory folder">
-                                        <font>
-                                            <Font name="Source Serif Pro" size="14.0"/>
-                                        </font>
-                                    </Tooltip>
-                                </tooltip>
-                                <font>
-                                    <Font name="Source Serif Pro" size="13.0"/>
-                                </font>
-                            </Label>
-                            <Label fx:id="outputDirPathLbl" layoutX="10.0" layoutY="10.0" prefHeight="19.0"
-                                   prefWidth="415.0" style="-fx-text-fill: Blue" text="OutputDirectory">
-                                <tooltip>
-                                    <Tooltip
-                                            text="Click to open your output directory folder">
-                                        <font>
-                                            <Font name="Source Serif Pro" size="14.0"/>
-                                        </font>
-                                    </Tooltip>
-                                </tooltip>
-                                <font>
-                                    <Font name="Source Serif Pro" size="13.0"/>
-                                </font>
-                                <cursor>
-                                    <Cursor fx:constant="HAND"/>
-                                </cursor>
-                            </Label>
-                        </children>
-                    </HBox>
-                </AnchorPane>
-            </bottom>
             <top>
-                <HBox prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                <HBox BorderPane.alignment="CENTER">
                     <ImageView fitHeight="80.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../images/spreadsheet-download-icon.png"/>
+                        <Image url="@../images/spreadsheet-download-icon.png" />
                     </ImageView>
-                    <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" prefHeight="70.0"
-                           prefWidth="460.0" text="File Manager" textAlignment="CENTER" wrapText="true">
+                    <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" prefHeight="82.0" prefWidth="1030.0" text="File Manager" textAlignment="CENTER" wrapText="true">
                         <tooltip>
-                            <Tooltip wrapText="true" prefWidth="549.0"
-                                     text="This is the File Manager window, you can drag and drop files on the list below. This list will only display files that require converting, based on your current preferences. For Example: If your spreadsheet preference is .csv then you will only see .xlsx files that are contained in the source directory.">
+                            <Tooltip prefWidth="549.0" text="This is the File Manager window, you can drag and drop files on the list below. This list will only display files that require converting, based on your current preferences. For Example: If your spreadsheet preference is .csv then you will only see .xlsx files that are contained in the source directory." wrapText="true">
                                 <font>
-                                    <Font name="Source Serif Pro" size="14.0"/>
+                                    <Font name="Source Serif Pro" size="14.0" />
                                 </font>
                             </Tooltip>
                         </tooltip>
                         <font>
-                            <Font name="Source Serif Pro Bold" size="54.0"/>
+                            <Font name="Source Serif Pro Bold" size="54.0" />
                         </font>
                     </Label>
                 </HBox>
             </top>
+         <right>
+            <AnchorPane prefHeight="200.0" prefWidth="162.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox layoutX="14.0" layoutY="152.0" prefHeight="608.8" prefWidth="162.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="0.0" prefWidth="162.0" text="Preferences">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="0.0" prefWidth="162.0" text="Word Docs">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Label>
+                        <FlowPane fx:id="wordDocDisplayPane" layoutX="10.0" layoutY="82.0" prefHeight="200.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="47.0" prefHeight="0.0" prefWidth="162.0" text="Excel Workbooks">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Label>
+                        <FlowPane fx:id="excelPrefDisplayPane" layoutX="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="64.0" prefHeight="0.0" prefWidth="162.0" text="Images">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Label>
+                        <FlowPane fx:id="imgPrefDisplayPane" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </right>
         </BorderPane>
     </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
     <!-- <stylesheets>
          <URL value="@../style/main.css" />
      </stylesheets> -->

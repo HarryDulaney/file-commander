@@ -32,7 +32,7 @@
         <BorderPane>
             <center>
                 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                            minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="600.0"
+                            minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="900.0"
                             BorderPane.alignment="CENTER">
                     <GridPane alignment="CENTER" prefHeight="656.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -58,6 +58,9 @@
                             <font>
                                 <Font name="Source Serif Pro Bold" size="14.0"/>
                             </font>
+                            <tooltip>
+                                <Tooltip wrapText="true" text="Choose how you want Excel workbook file types to be handled"/>
+                            </tooltip>
                         </Label>
                         <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER"
                                 mnemonicParsing="false" onAction="#handleSaveButton" text="Save and Continue"
@@ -203,8 +206,7 @@
                                 <Insets top="25.0"/>
                             </GridPane.margin>
                             <tooltip>
-                                <Tooltip text="Choose your format preference for images. All bmp, jpg, png, and gif's will format to
-                                    this." wrapText="true"/>
+                                <Tooltip text="Choose your format preference for images. All bmp, jpg, png, and gifs will format to the value set below" wrapText="true"/>
                             </tooltip>
                         </Label>
                         <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"

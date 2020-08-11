@@ -1,6 +1,7 @@
 package com.commander.service;
 
 import com.commander.model.Convertible;
+import com.commander.model.DocType;
 import com.commander.model.User;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -18,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.util.Arrays;
+
 
 /**
  * {@code FileServiceImpl.class} Spring Service Bean for handling
@@ -28,6 +31,9 @@ import java.nio.file.Paths;
 @Service("fileService")
 public class FileServiceImpl extends ParentService implements FileService {
 
+    /**
+     * The Logger.
+     */
     final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
     private static final String DEFAULT_OUTPUT_DIR_NAME = "super-commander-tmp";
 
@@ -43,7 +49,13 @@ public class FileServiceImpl extends ParentService implements FileService {
         convertible.convert();
     }
 
-
+    /**
+     *
+     * @param user
+     * @param onSuccess
+     * @param beforeStart
+     * @return
+     */
     @Override
     public javafx.concurrent.Service<File[]> getDirectoryFiles(User user, EventHandler<WorkerStateEvent> onSuccess,
                                                                EventHandler<WorkerStateEvent> beforeStart) {
@@ -59,6 +71,19 @@ public class FileServiceImpl extends ParentService implements FileService {
 
     }
 
+    /**
+     * {@code getFilterDirectoryFiles} returns a filtered array of files to populate the Main ObservableList in the
+     * user interface. The users input directory is iterated and files are added to the array if:
+     * 1.  Their file extension belongs to a file type that this application is capable of processing
+     * 2.  Their file extension does not belong to the file type of the users current output preference, because such
+     *     a file is already in the preferred format and does not need to be converted.
+     *
+     *
+     * @param user The current User
+     * @param onSuccess Service worker indicates successful completion of the service
+     * @param beforeStart Service worker indicates it's about to start the service
+     * @return an Array of filtered files
+     */
     @Override
     public javafx.concurrent.Service<File[]> getFilterDirectoryFiles(User user,
                                                                      EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
@@ -69,7 +94,10 @@ public class FileServiceImpl extends ParentService implements FileService {
 
             protected File[] call() {
                 final File file = new File(user.getDirectoryPath());
-                FilenameFilter filter = (dir, name) -> !name.endsWith(docTypeExt) && !name.endsWith(ssTypeExt) && !name.endsWith(imgTypeExt);
+                FilenameFilter filter = (dir, name) -> !name.endsWith(docTypeExt) && !name.endsWith(ssTypeExt) && !name.endsWith(imgTypeExt)
+                        && (name.endsWith(DocType.JPG.getExtension()) || name.endsWith(DocType.GIF.getExtension())
+                        || name.endsWith(DocType.BMP.getExtension()) || name.endsWith(DocType.PNG.getExtension()) || name.endsWith(DocType.PDF.getExtension())
+                        || name.endsWith(DocType.DOCX.getExtension()) || name.endsWith(DocType.CSV.getExtension()) || name.endsWith(DocType.XLSX.getExtension()));
 
                 return file.listFiles(filter);
 

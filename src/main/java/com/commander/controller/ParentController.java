@@ -1,8 +1,6 @@
 package com.commander.controller;
 
 import com.commander.model.*;
-import com.jfoenix.controls.JFXSnackbar;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +64,8 @@ public abstract class ParentController {
     static final String DOCX2HTML = "docx -> html";
     static final String HTML2DOCX = "html -> docx";
     static final String PDFtxt2DOCX = "pdf -> (EXTRACT TEXT) -> docx";
+    static final String CLONE_PDF_TO_DOCX = "pdf -> docx (Windows Only)";
+
 
     /**
      * {@code init(Stage s, HashMap<String,T> p} Overridden in child controller
@@ -79,6 +79,7 @@ public abstract class ParentController {
      */
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         this.stage = stage;
+
 
         this.stage.setOnHiding(e -> onClose());
         this.stage.setOnHidden(e -> onClose());
@@ -122,8 +123,7 @@ public abstract class ParentController {
     protected static void loadPreferences() {
 
         userPreferences = Preferences.userNodeForPackage(ParentController.class);
-
-        user.setNuUser(userPreferences.getBoolean(NEW_USER_KEY, true)); //Default value is true, meaning no prefs stored for this user
+        user.setNuUser(userPreferences.getBoolean(NEW_USER_KEY, true)); //Default value is true, meaning no pref stored for this user
         user.setDirectoryPath(userPreferences.get(DIR_PATH_KEY, null));
         user.setWriteDirectoryPath(userPreferences.get(DIR_WRITE_PATH_KEY, null));
         user.setSourceFilePolicy(userPreferences.get(SOURCE_POLICY_KEY, PROJECT_SOURCE_SAVE_KEY)); //Default is Save source file
@@ -140,6 +140,8 @@ public abstract class ParentController {
             user.setDocPreference(DocOperation.DOCX_TO_HTML);
         } else if (docPreference.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {
             user.setDocPreference(DocOperation.HTML_TO_DOCX);
+        } else if (docPreference.equals(DocOperation.PDF_TO_DOCX.getDocOperation())) {
+            user.setDocPreference(DocOperation.PDF_TO_DOCX);
         }
 
         if (excelPreference.equals(ExcelType.CSV.getExtension())) {

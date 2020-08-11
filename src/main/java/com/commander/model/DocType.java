@@ -19,7 +19,16 @@ public enum DocType {
 
     private final String id;
     private final String extension;
-
+    public static final String CSV_ID = "csv";
+    public static final String XLSX_ID = "xlsx";
+    public static final String DOCX_ID = "docx";
+    public static final String PDF_ID = "pdf";
+    public static final String TXT_ID = "txt";
+    public static final String HTML_ID = "html";
+    public static final String BMP_ID = "bmp";
+    public static final String PNG_ID = "png";
+    public static final String JPG_ID = "jpg";
+    public static final String GIF_ID = "gif";
 
     DocType(final String extension,final String id) {
         this.extension = extension;

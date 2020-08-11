@@ -125,8 +125,8 @@ public class SCTest extends SCApplication {
 //
 //    private static class TestResource {
 //
-//        private static final String PROJECT_SOURCE_DELETE_KEY = "Delete-On-Converted";
-//        private static final String PROJECT_SOURCE_SAVE_KEY = "Save-On-Converted";
+//        private static final String PROJECT_SOURCE_DELETE_KEY = "Delete";
+//        private static final String PROJECT_SOURCE_SAVE_KEY = "Save";
 //
 //
 //    }

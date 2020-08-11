@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class RootController extends ParentController {
     private ToggleGroup ssheetGroup;
     private ToggleGroup imgGroup;
     private JFXSnackbar snackbar;
-
+    private final boolean enable_PDF_to_DOCX = System.getProperty("os.name").contains("Windows");
 
     private HostServices hostServices;
     private ConfigurableApplicationContext ctx;
@@ -111,7 +112,6 @@ public class RootController extends ParentController {
                 } else {
                     DialogHelper.showInfoAlert("Welcome Back to File Commander!", false);
                 }
-
             }
             setProjectLabels();
             configRadioButtonGroups();
@@ -132,10 +132,18 @@ public class RootController extends ParentController {
         prefsComboBox.getItems().setAll(list);
         prefsComboBox.getSelectionModel().select(user.getSourceFilePolicy());
 
+        // Text Doc preferences ComboBox configure based on os = Windows or os = other
+        List<String> docOpsList;
 
-        // Text Doc preferences ComboBox configure
-        List<String> docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation()/*, DocOperation.DOCX_TO_HTML.getDocOperation()*/,
-                DocOperation.PDF_txt_TO_DOCX.getDocOperation()/*, DocOperation.HTML_TO_DOCX.getDocOperation()*/);
+        if (enable_PDF_to_DOCX) {
+            docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation(),
+                    DocOperation.PDF_txt_TO_DOCX.getDocOperation(),
+                    DocOperation.PDF_TO_DOCX.getDocOperation());
+        } else {
+            docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation(),
+                    DocOperation.PDF_txt_TO_DOCX.getDocOperation());
+        }
+
         textDocPrefsComboBox.getItems().setAll(docOpsList);
         textDocPrefsComboBox.getSelectionModel().select(user.getDocPreference().getDocOperation());
 
@@ -167,6 +175,9 @@ public class RootController extends ParentController {
         } else if (docPref.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {
             user.setDocPreference(DocOperation.HTML_TO_DOCX);
 
+        } else if (docPref.equals(DocOperation.PDF_TO_DOCX.getDocOperation())) {
+            user.setDocPreference(DocOperation.PDF_TO_DOCX);
+
         } else {
             user.setDocPreference(DocOperation.DOCX_TO_PDF);
 
@@ -180,7 +191,6 @@ public class RootController extends ParentController {
     private void handleSaveUser(ActionEvent event) {
         try {
             setPreferences();
-//            DialogHelper.showInfoAlert(, true);
             DialogHelper.snackbarToast(rootPane, "Your preferences have been saved.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,9 +209,6 @@ public class RootController extends ParentController {
     private void handleSaveButton(ActionEvent event) {
         try {
             setPreferences();
-
-//            DialogHelper.showInfoAlert(
-//                    "Your preferences have been saved \nNow you can drag and drop files to your directory folder", true);
             handleOpenConverter(event);
             DialogHelper.snackbarToast(rootPane, "Your preferences have been saved");
         } catch (Exception e3) {
@@ -260,7 +267,6 @@ public class RootController extends ParentController {
     protected void handleGitHubOpen(ActionEvent event) {
         final String gitHubUrl = "https://www.github.com/HarryDulaney/SuperCommanderV2";
         hostServices.showDocument(gitHubUrl);
-
 
     }
 

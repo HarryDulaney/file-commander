@@ -31,7 +31,7 @@ public class ConvertibleFactory {
     }
 
 /************************************************/
-/*   MSWord File Format Convertible builders
+/*   MSWord File Format Convertible builders    *
 /*************************************************/
 
     /**
@@ -49,11 +49,10 @@ public class ConvertibleFactory {
         return new docxToPdf(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.pdf()));
     }
 
-
     /**
-     * Build new pdf extract text to docx convertible.
+     * Build new PDF EXTRACT TEXT TO DOCX Convertible.
      *
-     * @param fileName           sourcefile filename.ext
+     * @param fileName           source file filename.ext
      * @param directoryPath      User's src file path
      * @param writeDirectoryPath User's write dir path
      * @return the convertible
@@ -64,6 +63,48 @@ public class ConvertibleFactory {
 
         return new pdfToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
     }
+
+    /**
+     * Build new PDF TO DOCX CLONE convertible.
+     *
+     * @param fileName           source file filename.ext
+     * @param directoryPath      User's src file path
+     * @param writeDirectoryPath User's write dir path
+     * @return the convertible
+     */
+    public static Convertible createClonePDFtoDOCX(String fileName, String directoryPath, String writeDirectoryPath) {
+
+        String name = FilenameUtils.removeExtension(fileName);
+
+        return new ClonePdfToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
+    }
+
+
+
+
+
+    /**
+     * @param fileName
+     * @param directoryPath
+     * @param writeDirectoryPath
+     * @return new Convertible
+     */
+    public static Convertible createDocx2HTML(String fileName, String directoryPath, String writeDirectoryPath) {
+        return new DocxToHtml(null, null);//TODO
+    }
+
+    /**
+     * @param fileName
+     * @param directoryPath
+     * @param writeDirectoryPath
+     * @return new Convertible
+     */
+    public static Convertible createHtmlToDocx(String fileName, String directoryPath, String writeDirectoryPath) {
+        return new HtmlToDocx(null, null);//TODO
+    }
+
+
+
 /************************************************/
 /*   Excel File Format Convertible Builders      *
 /*************************************************/
@@ -71,7 +112,7 @@ public class ConvertibleFactory {
     /**
      * Build new csv to xlsx convertible.
      *
-     * @param fileName           sourcefile filename.ext
+     * @param fileName           source file filename.ext
      * @param directoryPath      User's src file path
      * @param writeDirectoryPath User's write dir path
      * @return the convertible
@@ -81,7 +122,7 @@ public class ConvertibleFactory {
         Integer rowsPerSheet = Integer.parseInt(numRows);
         String baseName = FilenameUtils.removeExtension(fileName);
 
-        return new csvToXlsx(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.xlsx()), rowsPerSheet);
+        return new CsvToXlsx(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.xlsx()), rowsPerSheet);
     }
 
 
@@ -97,17 +138,19 @@ public class ConvertibleFactory {
 
         String baseName = FilenameUtils.removeExtension(fileName);
 
-        return new xlsxToCsv(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.csv()));
+        return new XlsxToCsv(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.csv()));
     }
+
+
 /************************************************/
-/*   Image File Format Convertible Builders
+/*   Image File Format Convertible Builders      *
 /*************************************************/
 
 
     /**
      * Build new {@code ConvertUtils.ImageConvert} convertible.
      *
-     * @param fileName      sourcefile filename.ext
+     * @param fileName      source file filename.ext
      * @param directoryPath User's src file path
      * @param writeDirPath  User's write dir path
      * @param userPref      User's preference for this file format
@@ -120,7 +163,7 @@ public class ConvertibleFactory {
         String outputExt = userPref.getExtension();
         String userPrefExt = outputExt.replace(".", "").toUpperCase();
 
-        log.info("Creating Image Convert: From: " + inputExt + " To-> " + outputExt);
+        log.info("Creating Image Convert: From: " + inputExt + " To -> " + outputExt);
 
         if (inputExt.equals(ImgType.png()) && userPref.getExtension().equals(ImgType.jpg())) {
 
@@ -128,7 +171,6 @@ public class ConvertibleFactory {
 
         } else {
             return new ImageConvert(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), userPrefExt);
-
         }
 
     }
@@ -146,4 +188,5 @@ public class ConvertibleFactory {
         Path resolvedPath = writePath.resolve(baseName + EXT);
         return resolvedPath.toFile();
     }
+
 }

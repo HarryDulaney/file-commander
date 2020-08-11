@@ -22,7 +22,7 @@ public class User {
     private String sourceFilePolicy;
 
     /**
-     * First time User with no persistant preferences
+     * First time User with no persistent preferences
      */
     private Boolean nuUser;
 
@@ -32,6 +32,7 @@ public class User {
 
 
     public User() {
+        super();
 
     }
 

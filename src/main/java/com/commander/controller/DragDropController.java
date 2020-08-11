@@ -1,6 +1,7 @@
 package com.commander.controller;
 
 import com.commander.model.Convertible;
+import com.commander.model.DocType;
 import com.commander.service.FileService;
 import com.commander.utils.ConvertUtils;
 import com.commander.utils.ConvertibleFactory;
@@ -97,34 +98,42 @@ public class DragDropController extends ParentController {
             String ext = FilenameUtils.getExtension(fileName);
             Convertible convertible = null;
             switch (ext) {
-                case "csv":
+                case DocType
+                        .CSV_ID:
                     convertible = ConvertibleFactory.createCsvToXlsx(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case "xlsx":
+                case DocType.XLSX_ID:
                     convertible = ConvertibleFactory.createXlsxToCsv(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
 
-                case DOCX2PDF:
-                    convertible = ConvertibleFactory.createDocxToPdf(fileName,
-                            user.getDirectoryPath(), user.getWriteDirectoryPath());
+                case DocType.DOCX_ID:
+                    if (user.getDocPreference().getDocOperation().equals(DOCX2PDF)) {
+                        convertible = ConvertibleFactory.createDocxToPdf(fileName,
+                                user.getDirectoryPath(), user.getWriteDirectoryPath());
+                    } else if (user.getDocPreference().getDocOperation().equals(DOCX2HTML)) {
+                        convertible = ConvertibleFactory.createDocx2HTML(fileName,user.getDirectoryPath(),user.getWriteDirectoryPath());
+
+                    }
                     break;
 
-                case PDFtxt2DOCX:
-                    convertible = ConvertibleFactory.createPdfToDocx(fileName,
-                            user.getDirectoryPath(), user.getWriteDirectoryPath());
+                case DocType.PDF_ID:
+                        if (user.getDocPreference().getDocOperation().equals(CLONE_PDF_TO_DOCX)){
+                            convertible = ConvertibleFactory.createClonePDFtoDOCX(fileName,
+                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        }else {
+                            convertible = ConvertibleFactory.createPdfToDocx(fileName,
+                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        }
                     break;
-                case DOCX2HTML:
-
+                case DocType.HTML_ID:
                     break;
-                case HTML2DOCX:
-                    break;
-                case "bmp":
-                case "jpg":
-                case "gif":
-                case "png":
+                case DocType.BMP_ID:
+                case DocType.JPG_ID:
+                case DocType.GIF_ID:
+                case DocType.PNG_ID:
                     convertible = ConvertibleFactory.createImageConvert(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                     break;

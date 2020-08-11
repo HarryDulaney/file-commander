@@ -2,15 +2,20 @@ package com.commander.utils;
 
 
 import com.commander.model.Convertible;
+import com.documents4j.api.DocumentType;
+import com.documents4j.api.IConverter;
+import com.documents4j.job.LocalConverter;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.opencsv.CSVReader;
-import fr.opensagres.poi.xwpf.converter.core.FileImageExtractor;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -26,11 +31,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
+import javax.naming.OperationNotSupportedException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Iterator;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -52,7 +60,6 @@ public class ConvertUtils {
     static Logger log = LoggerFactory.getLogger(ConvertUtils.class);
 
     private ConvertUtils() {
-
     }
 
     /**
@@ -80,14 +87,14 @@ public class ConvertUtils {
     /**
      * {@code csvToXlsx.class} is for programmatically converting a csv to a xlsx formatted file.
      */
-    static class csvToXlsx implements Convertible {
+    static class CsvToXlsx implements Convertible {
 
         private final File csvIn;
         private final File xlsxOut;
         private static Boolean success = true;
         private Integer linesPerSheet;
 
-        public csvToXlsx(File csvIn, File xlsxOut, Integer linesPerSheet) {
+        public CsvToXlsx(File csvIn, File xlsxOut, Integer linesPerSheet) {
             this.csvIn = csvIn;
             this.xlsxOut = xlsxOut;
             this.linesPerSheet = linesPerSheet;
@@ -146,13 +153,13 @@ public class ConvertUtils {
     /**
      * {@code xlsxToCsv.class} is for programmatically converting a xlsx to a csv formatted file.
      */
-    static class xlsxToCsv implements Convertible {
+    static class XlsxToCsv implements Convertible {
 
         private final File xlsxIn;
         private final File csvOut;
         private static Boolean success = true;
 
-        public xlsxToCsv(File xlsxIn, File csvOut) {
+        public XlsxToCsv(File xlsxIn, File csvOut) {
             this.xlsxIn = xlsxIn;
             this.csvOut = csvOut;
 
@@ -241,7 +248,58 @@ public class ConvertUtils {
     }
 
     /**
-     * {@code docxToPdf.class} is for programmatically converting a docx to a pdf formatted file.
+     * {@code ClonePdfToDocx.class } Converts the whole PDF to a DOCX file formatted Word Doc
+     * This conversion calls the underlying Microsoft Office installation,using documents4j, to convent the PDF to a Word formatted file -> .docx.
+     *
+     * For this conversion to be successful, all other instances of MS Word must be closed on the local machine.
+     */
+    static class ClonePdfToDocx implements Convertible {
+
+        private final File in;
+        private final File out;
+        private static Boolean success = false;
+
+
+        public ClonePdfToDocx(final File in, final File out) {
+            this.in = in;
+            this.out = out;
+
+        }
+
+        @Override
+        public void convert() {
+            DialogHelper.showInfoAlert("Please ensure that all instances of Microsoft " +
+                    "Word are closed before pressing OK to start the conversion", true);
+
+            try {
+                IConverter converter = LocalConverter.builder()
+                        .workerPool(20, 25, 2, TimeUnit.SECONDS)
+                        .processTimeout(5, TimeUnit.SECONDS)
+                        .build();
+
+                success = converter
+                        .convert(in).as(DocumentType.DOCX)
+                        .to(out).as(DocumentType.PDF)
+                        .execute();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            AnchorPane ap = new AnchorPane();
+
+            if (success) {
+                DialogHelper.snackbarToast(ap, "Success! We created a Word Document named " +
+                        FilenameUtils.getName(in.toString()) + " from " + FilenameUtils.getName(in.toString()));
+            } else {
+                DialogHelper.snackbarToast(ap, "Something went wrong, we were not able to create a new docx word document " +
+                        "from " + FilenameUtils.getName(in.toString()));
+            }
+
+        }
+    }
+
+    /**
+     * {@code docxToPdf.class} programmatically converts docx to pdf file format.
      */
     static class docxToPdf implements Convertible {
 
@@ -268,7 +326,7 @@ public class ConvertUtils {
                 PdfConverter.getInstance().convert(d, fileOutputStream, pdfOptions);
                 fileOutputStream.close();
 
-                DialogHelper.snackbarToast(toastPane,"Success!: Your Word document has been converted to pdf.");
+                DialogHelper.snackbarToast(toastPane, "Success!: Your Word document has been converted to pdf.");
             } catch (IOException | InvalidFormatException e) {
                 DialogHelper.showErrorAlert("Something went wrong, we were unable to convert you document.\nPlease ensure the output folder is write enabled");
                 e.printStackTrace();
@@ -326,6 +384,61 @@ public class ConvertUtils {
                 e.printStackTrace();
             }
             deleteSourceFile(success, in);
+        }
+    }
+
+    /**
+     * {@code DocxToHtml.class} Converts a  Docx format file
+     */
+    static class DocxToHtml implements Convertible {
+
+        private final File in;
+        private final File out;
+        private static Boolean success = true;
+
+        public DocxToHtml(File in, File out) {
+            this.in = in;
+            this.out = out;
+            //TODO
+
+        }
+
+
+        @Override
+        public void convert() {
+            log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+
+            DialogHelper.snackbarToast(toastPane
+                    , "Success! You converted the Docx file to a Html format file");
+
+//            deleteSourceFile(success, in);
+        }
+    }
+
+    /**
+     * {@code HtmlToDocx.class} Converts a html file to a  Docx format file
+     */
+    static class HtmlToDocx implements Convertible {
+
+        private final File in;
+        private final File out;
+        private static Boolean success = true;
+
+        public HtmlToDocx(File in, File out) {
+            this.in = in;
+            this.out = out;
+
+        }
+//    TODO
+
+        @Override
+        public void convert() {
+            log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+
+            DialogHelper.snackbarToast(toastPane
+                    , "Success! You converted the html file to a Docx file format file");
+
+//            deleteSourceFile(success, in);
         }
     }
 
@@ -391,8 +504,6 @@ public class ConvertUtils {
             } else {
                 DialogHelper.showErrorAlert("Something went wrong converting the image, please ensure it is a supported format and try again.");
             }
-
-
         }
     }
 
@@ -450,5 +561,10 @@ public class ConvertUtils {
 
     public static void setDeleteSourceAfterConverted(Boolean deleteSourceAfterConverted) {
         ConvertUtils.deleteSourceAfterConverted = deleteSourceAfterConverted;
+    }
+    static boolean checkUnderlyingOperSys(String os){
+        String osLCStr = os.toLowerCase();
+        return osLCStr.contains("windows");
+
     }
 }

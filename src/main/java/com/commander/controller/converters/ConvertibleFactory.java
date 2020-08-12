@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -151,13 +150,13 @@ public class ConvertibleFactory {
         String justName = FilenameUtils.removeExtension(fileName);
         String inputExt = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
         String outputExt = userPref.getExtension();
-        String userPrefExt = outputExt.replace(".", "").toUpperCase();
+        String userPrefExt = outputExt.replace(".", "");
 
         log.info("Creating Image Convert: From: " + inputExt + " To -> " + outputExt);
 
-        if (inputExt.equals(ImgType.png()) && userPref.getExtension().equals(ImgType.jpg())) {
+        if (inputExt.equals(DocType.png()) && userPref.getExtension().equals(DocType.jpg())) {
 
-            return new PngToJpg(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, ImgType.jpg()));
+            return new PngToJpg(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, DocType.jpg()));
 
         } else {
             return new ImageConverter(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), userPrefExt);

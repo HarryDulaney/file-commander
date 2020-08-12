@@ -142,11 +142,11 @@ public class DragDropController extends ParentController {
                     case DocType.BMP_ID:
                     case DocType.JPG_ID:
                     case DocType.GIF_ID:
-                    case DocType.PNG_ID: {
+                    case DocType.PNG_ID:
                         convertible = ConvertibleFactory.createImageConvert(fileName,
                                 user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                         break;
-                    }
+
 
                     default:
                         throw new IllegalStateException("Unexpected value: " + fileName);
@@ -158,7 +158,8 @@ public class DragDropController extends ParentController {
                     e.printStackTrace();
 
                 } catch (Exception e) {
-                    log.error("Exception", e.getCause());
+                    log.error("Exception at convertible creation method in controller.." + e.getMessage());
+                    e.printStackTrace();
 
                 }
 

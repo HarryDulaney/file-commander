@@ -30,7 +30,7 @@ public enum DocType {
     public static final String JPG_ID = "jpg";
     public static final String GIF_ID = "gif";
 
-    DocType(final String extension,final String id) {
+    DocType(final String extension, final String id) {
         this.extension = extension;
         this.id = id;
     }
@@ -46,17 +46,48 @@ public enum DocType {
     }
 
     public static String docx() {
-        return ".docx";
+        return DOCX.extension;
 
     }
 
     public static String pdf() {
-        return ".pdf";
+        return PDF.extension;
 
     }
 
     public static String txt() {
-        return ".txt";
+        return TXT.extension;
+    }
+    public static String html() {
+        return HTML.extension;
+    }
+
+    public static String csv() {
+        return CSV.extension;
+
+    }
+
+    public static String xlsx() {
+        return XLSX.extension;
+
+    }
+
+    public static String jpg() {
+        return JPG.extension;
+    }
+
+    public static String png() {
+        return PNG.extension;
+
+    }
+
+    public static String gif() {
+        return GIF.extension;
+
+    }
+
+    public static String bmp() {
+        return BMP.extension;
     }
 
 }

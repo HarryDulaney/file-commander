@@ -130,4 +130,9 @@ public class SCTest extends SCApplication {
 //
 //
 //    }
+//       private void printImgCompat(){
+//          System.out.println("Image Reader Names : " + Arrays.toString(ImageIO.getReaderFormatNames()));
+//        System.out.println("Image Reader Names : " + Arrays.toString(ImageIO.getWriterFormatNames()));
+//
+// }
 //}

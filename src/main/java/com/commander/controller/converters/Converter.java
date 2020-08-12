@@ -59,7 +59,8 @@ public abstract class Converter implements Convertible {
     if (resources.get("root.pane") instanceof Pane) {
         toastPane = (AnchorPane) resources.get("root.pane");
 
-    } else if (resources.get("delete.policy") instanceof Boolean) {
+    }
+    if (resources.get("delete.policy") instanceof Boolean) {
         deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
     }
 

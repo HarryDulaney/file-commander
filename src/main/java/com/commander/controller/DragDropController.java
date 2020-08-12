@@ -9,6 +9,7 @@ import com.commander.controller.converters.ConvertibleFactory;
 import com.commander.utils.DialogHelper;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -334,6 +335,7 @@ public class DragDropController extends ParentController {
         ctx.close();
         fileService.onClose();
         convertService.onClose();
+        Platform.exit();
 
     }
 

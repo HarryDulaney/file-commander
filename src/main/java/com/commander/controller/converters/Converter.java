@@ -2,41 +2,30 @@ package com.commander.controller.converters;
 
 import com.commander.model.Convertible;
 import com.commander.utils.DialogHelper;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.ResourceBundle;
 
 public abstract class Converter implements Convertible {
 
     File in;
     File out;
 
-    static Pane toastPane;
-
-    public static void setToastPane(Pane pane) {
-        toastPane = pane;
-    }
-
-
-    protected static Logger log = LoggerFactory.getLogger(Converter.class);
-
+    static AnchorPane toastPane;
     private static Boolean deleteSourceAfterConverted;
-
-    public static void setDeleteSourceAfterConverted(Boolean deleteSourceAfterConverted) {
-        Converter.deleteSourceAfterConverted = deleteSourceAfterConverted;
-    }
-
+    protected static Logger log = LoggerFactory.getLogger(Converter.class);
     private static final String TAG = Converter.class.getCanonicalName();
 
 
-
-
-
-    public Converter(File in,File out) {
+    public Converter(File in, File out) {
         this.in = in;
         this.out = out;
 
@@ -66,5 +55,13 @@ public abstract class Converter implements Convertible {
     }
 
 
+    public static <T> void setResources(HashMap<String, T> resources) {
+    if (resources.get("root.pane") instanceof Pane) {
+        toastPane = (AnchorPane) resources.get("root.pane");
 
+    } else if (resources.get("delete.policy") instanceof Boolean) {
+        deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
+    }
+
+    }
 }

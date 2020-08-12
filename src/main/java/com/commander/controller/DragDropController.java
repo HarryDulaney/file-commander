@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,9 +39,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -176,18 +175,15 @@ public class DragDropController extends ParentController {
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
 
-
         fileService = (FileService) ctx.getBean("fileService");
         convertService = (ConvertService) ctx.getBean("convertService");
         String policy = user.getSourceFilePolicy();
-        Converter.setToastPane(rootPane);
 
-        if (policy.equals(PROJECT_SOURCE_DELETE_KEY)) {
-            Converter.setDeleteSourceAfterConverted(true);
+        HashMap<String, Object> resources = new HashMap<>();
+        resources.put("root.pane",rootPane);
+        resources.put("delete.policy",policy.equals(PROJECT_SOURCE_DELETE_KEY));
+        Converter.setResources(resources);
 
-        } else {
-            Converter.setDeleteSourceAfterConverted(false);
-        }
         setPreferencesViewer();
         runConvertButton.setDisable(true);
         setLabels();

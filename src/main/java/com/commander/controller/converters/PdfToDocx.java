@@ -40,8 +40,8 @@ public class PdfToDocx extends Converter {
                     .build();
 
             success = converter
-                    .convert(in).as(DocumentType.DOCX)
-                    .to(out).as(DocumentType.PDF)
+                    .convert(in).as(DocumentType.PDF)
+                    .to(out).as(DocumentType.DOCX)
                     .execute();
 
         } catch (Exception e) {

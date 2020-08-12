@@ -44,10 +44,11 @@ public class PdfToDocx extends Converter {
                     .to(out).as(DocumentType.DOCX)
                     .execute();
 
+            converter.shutDown();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        AnchorPane ap = new AnchorPane();
 
         if (success) {
             DialogHelper.showInfoAlert("Success! We created a Word Document named " +

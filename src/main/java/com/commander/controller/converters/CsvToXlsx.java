@@ -55,7 +55,9 @@ public class CsvToXlsx extends Converter {
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(out)) {
                 workBook.write(fileOutputStream);
-                DialogHelper.showInfoAlert("Success! Your .csv file has been converted to .xlsx Excel format", false);
+                if (success) {
+                    DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+                }
 
 
             } catch (FileNotFoundException fnfe) {

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.DragDropController">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.DragDropController">
     <padding>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
     </padding>
@@ -20,10 +28,10 @@
                 <padding>
                     <Insets top="5.0" />
                 </padding>
-                <HBox prefHeight="19.0" prefWidth="633.0" VBox.vgrow="ALWAYS">
+                <HBox prefHeight="19.0" prefWidth="560.0" VBox.vgrow="ALWAYS">
                <Group>
                   <children>
-                          <Label prefHeight="19.0" prefWidth="108.0" text="Input Directory:">
+                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="117.0" text="Input Directory:">
                               <tooltip>
                                   <Tooltip text="Click the link to the right to open your source directory folder">
                                       <font>
@@ -35,7 +43,7 @@
                                   <Font name="Source Serif Pro" size="13.0" />
                               </font>
                           </Label>
-                          <Label fx:id="superDirectoryLabel" layoutX="188.80000591278076" prefHeight="19.0" prefWidth="454.0" style="-fx-text-fill: Blue" text="superDirectoryLabel">
+                          <Label fx:id="superDirectoryLabel" layoutX="136.1999969482422" prefHeight="19.0" prefWidth="435.0" style="-fx-text-fill: Blue" text="superDirectoryLabel">
                               <tooltip>
                                   <Tooltip text="Click to open your source directory folder">
                                       <font>
@@ -124,30 +132,30 @@
                 <VBox layoutX="14.0" layoutY="152.0" prefHeight="608.8" prefWidth="162.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <Label alignment="CENTER" prefHeight="0.0" prefWidth="162.0" text="Preferences">
                         <font>
-                            <Font name="System Bold" size="22.0" />
+                            <Font name="Source Serif Pro" size="22.0" />
                         </font>
                         <VBox.margin>
                             <Insets bottom="5.0" />
                         </VBox.margin>
                     </Label>
-                    <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="0.0" prefWidth="162.0" text="Word Docs">
+                    <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="0.0" prefWidth="162.0" text="Word Documents">
                         <font>
-                            <Font name="System Bold Italic" size="12.0" />
+                            <Font name="Source Serif Pro Black" size="16.0" />
                         </font>
                     </Label>
-                    <FlowPane fx:id="wordDocDisplayPane" alignment="CENTER" layoutX="10.0" layoutY="82.0" prefHeight="200.0" prefWidth="200.0" />
+                    <FlowPane fx:id="wordDocDisplayPane" alignment="CENTER" columnHalignment="CENTER" layoutX="10.0" layoutY="82.0" prefHeight="200.0" prefWidth="200.0" />
                     <Label alignment="CENTER" layoutX="10.0" layoutY="47.0" prefHeight="0.0" prefWidth="162.0" text="Excel Workbooks">
                         <font>
-                            <Font name="System Bold Italic" size="12.0" />
+                            <Font name="Source Serif Pro Black" size="16.0" />
                         </font>
                     </Label>
-                    <FlowPane fx:id="excelPrefDisplayPane" alignment="CENTER" layoutX="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
+                    <FlowPane fx:id="excelPrefDisplayPane" alignment="CENTER" columnHalignment="CENTER" layoutX="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
                     <Label alignment="CENTER" layoutX="10.0" layoutY="64.0" prefHeight="0.0" prefWidth="162.0" text="Images">
                         <font>
-                            <Font name="System Bold Italic" size="12.0" />
+                            <Font name="Source Serif Pro Black" size="16.0" />
                         </font>
                     </Label>
-                    <FlowPane fx:id="imgPrefDisplayPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
+                    <FlowPane fx:id="imgPrefDisplayPane" alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
                 </VBox>
             </AnchorPane>
         </right>

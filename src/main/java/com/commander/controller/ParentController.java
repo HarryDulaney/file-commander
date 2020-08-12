@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.print.Doc;
 import java.util.HashMap;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -53,8 +54,8 @@ public abstract class ParentController {
     static final String SOURCE_POLICY_KEY = "SOURCE_POLICY";
 
     /* --------------------------------------- Default values for User Enums --------------------------------------------- */
-    private static final ExcelType DEFAULT_EXCEL_TYPE = ExcelType.XLSX;
-    private static final ImgType DEFAULT_IMG_TYPE = ImgType.JPG;
+    private static final DocType DEFAULT_EXCEL_TYPE = DocType.XLSX;
+    private static final DocType DEFAULT_IMG_TYPE = DocType.JPG;
 
     /* ----------------------------------------- Misc Controller Keys ---------------------------------------------------- */
     static final String PROJECT_SOURCE_DELETE_KEY = "Delete";
@@ -144,20 +145,20 @@ public abstract class ParentController {
             user.setDocPreference(DocOperation.PDF_TO_DOCX);
         }
 
-        if (excelPreference.equals(ExcelType.CSV.getExtension())) {
-            user.setExcelPreference(ExcelType.CSV);
-        } else if (excelPreference.equals(ExcelType.XLSX.getExtension())) {
-            user.setExcelPreference(ExcelType.XLSX);
+        if (excelPreference.equals(DocType.CSV.getExtension())) {
+            user.setExcelPreference(DocType.CSV);
+        } else if (excelPreference.equals(DocType.XLSX.getExtension())) {
+            user.setExcelPreference(DocType.XLSX);
         }
 
-        if (imgPreference.equals(ImgType.BMP.getExtension())) {
-            user.setImgPreference(ImgType.BMP);
-        } else if (imgPreference.equals(ImgType.GIF.getExtension())) {
-            user.setImgPreference(ImgType.GIF);
-        } else if (imgPreference.equals(ImgType.JPG.getExtension())) {
-            user.setImgPreference(ImgType.JPG);
+        if (imgPreference.equals(DocType.BMP.getExtension())) {
+            user.setImgPreference(DocType.BMP);
+        } else if (imgPreference.equals(DocType.GIF.getExtension())) {
+            user.setImgPreference(DocType.GIF);
+        } else if (imgPreference.equals(DocType.JPG.getExtension())) {
+            user.setImgPreference(DocType.JPG);
         } else {
-            user.setImgPreference(ImgType.PNG);
+            user.setImgPreference(DocType.PNG);
         }
 
     }

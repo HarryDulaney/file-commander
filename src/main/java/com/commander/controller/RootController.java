@@ -1,8 +1,7 @@
 package com.commander.controller;
 
 import com.commander.model.DocOperation;
-import com.commander.model.ExcelType;
-import com.commander.model.ImgType;
+import com.commander.model.DocType;
 import com.commander.model.User;
 import com.commander.service.FileService;
 import com.commander.utils.DialogHelper;
@@ -15,7 +14,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -399,10 +397,10 @@ public class RootController extends ParentController {
 
             RadioButton excelChoice = (RadioButton) ssheetGroup.getSelectedToggle();
 
-            if (excelChoice.getText().equalsIgnoreCase(ExcelType.XLSX.getExtension())) {
-                user.setExcelPreference(ExcelType.XLSX);
+            if (excelChoice.getText().equalsIgnoreCase(DocType.XLSX.getExtension())) {
+                user.setExcelPreference(DocType.XLSX);
             } else
-                user.setExcelPreference(ExcelType.CSV);
+                user.setExcelPreference(DocType.CSV);
         });
 
         jpgRadioButton.setToggleGroup(imgGroup);
@@ -414,15 +412,15 @@ public class RootController extends ParentController {
 
             RadioButton imgChoice = (RadioButton) observable.getValue();
 
-            if (imgChoice.getText().equalsIgnoreCase(ImgType.JPG.getExtension())) {
-                user.setImgPreference(ImgType.JPG);
-            } else if (imgChoice.getText().equalsIgnoreCase(ImgType.BMP.getExtension())) {
-                user.setImgPreference(ImgType.BMP);
+            if (imgChoice.getText().equalsIgnoreCase(DocType.JPG.getExtension())) {
+                user.setImgPreference(DocType.JPG);
+            } else if (imgChoice.getText().equalsIgnoreCase(DocType.BMP.getExtension())) {
+                user.setImgPreference(DocType.BMP);
 
-            } else if (imgChoice.getText().equalsIgnoreCase(ImgType.GIF.getExtension())) {
-                user.setImgPreference(ImgType.GIF);
+            } else if (imgChoice.getText().equalsIgnoreCase(DocType.GIF.getExtension())) {
+                user.setImgPreference(DocType.GIF);
             } else {
-                user.setImgPreference(ImgType.GIF);
+                user.setImgPreference(DocType.GIF);
             }
 
         });

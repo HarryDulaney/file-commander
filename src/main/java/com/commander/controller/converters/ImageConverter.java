@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
 /**
  * {@code ImageConverter.class} is for programmatically converting between image file types.
  * <em>Special case required for converting from a PNG to a JPG</em> {@link PngToJpg}
@@ -24,13 +25,13 @@ public class ImageConverter extends Converter {
     }
 
     private boolean genericConversion() {
-        boolean result = true;
+        boolean result;
         BufferedImage bufferedImage;
 
         try {
             bufferedImage = ImageIO.read(in);
             try {
-                ImageIO.write(bufferedImage, format, out);
+               result = ImageIO.write(bufferedImage, format, out);
 
             } catch (IllegalArgumentException iae) {
                 DialogHelper.showErrorAlert("We could not complete the conversion because One or more required fields is null.");

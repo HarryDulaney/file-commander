@@ -80,9 +80,6 @@ public class ConvertibleFactory {
     }
 
 
-
-
-
     /**
      * @param fileName
      * @param directoryPath
@@ -111,7 +108,7 @@ public class ConvertibleFactory {
         Integer rowsPerSheet = Integer.parseInt(numRows);
         String baseName = FilenameUtils.removeExtension(fileName);
 
-        return new CsvToXlsx(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.xlsx()), rowsPerSheet);
+        return new CsvToXlsx(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, DocType.xlsx()), rowsPerSheet);
     }
 
 
@@ -127,7 +124,7 @@ public class ConvertibleFactory {
 
         String baseName = FilenameUtils.removeExtension(fileName);
 
-        return new XlsxToCsv(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, ExcelType.csv()));
+        return new XlsxToCsv(configReadPath(directoryPath, fileName), configWritePath(baseName, writeDirectoryPath, DocType.csv()));
     }
 
 
@@ -142,24 +139,25 @@ public class ConvertibleFactory {
      * @param fileName      source file filename.ext
      * @param directoryPath User's src file path
      * @param writeDirPath  User's write dir path
-     * @param userPref      User's preference for this file format
+     * @param imgPref       User's preference for this file format
      * @return the convertible
      */
-    public static Convertible createImageConvert(String fileName, String directoryPath, String writeDirPath, ImgType userPref) throws FileAlreadyExistsException {
+    public static Convertible createImageConvert(String fileName, String directoryPath, String writeDirPath, DocType imgPref) throws FileAlreadyExistsException {
 
         String justName = FilenameUtils.removeExtension(fileName);
         String inputExt = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
-        String outputExt = userPref.getExtension();
-        String userPrefExt = outputExt.replace(".", "");
+        String outputExt = imgPref.getExtension();
+        String formatId = imgPref.getId();
+        formatId = formatId.toUpperCase();
 
         log.info("Creating Image Convert: From: " + inputExt + " To -> " + outputExt);
 
-        if (inputExt.equals(DocType.png()) && userPref.getExtension().equals(DocType.jpg())) {
+        if (inputExt.equals(DocType.png()) && imgPref.getExtension().equals(DocType.jpg())) {
 
             return new PngToJpg(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, DocType.jpg()));
 
         } else {
-            return new ImageConverter(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), userPrefExt);
+            return new ImageConverter(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), formatId);
         }
 
     }
@@ -180,7 +178,7 @@ public class ConvertibleFactory {
             String version = baseName + "-" + 1 + EXT;
             resolvedPath = writePath.resolve(version);
             if (resolvedPath.toFile().exists()) {
-              throw new FileAlreadyExistsException("Too many copies of this file already exist in the output directory");
+                throw new FileAlreadyExistsException("Too many copies of this file already exist in the output directory");
             }
         }
         return resolvedPath.toFile();

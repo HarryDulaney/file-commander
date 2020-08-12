@@ -36,11 +36,14 @@ public class DocxToPdf extends Converter {
             PdfConverter.getInstance().convert(d, fileOutputStream, pdfOptions);
             fileOutputStream.close();
 
-            DialogHelper.snackbarToast(toastPane, "Success!: Your Word document has been converted to pdf.");
         } catch (IOException | InvalidFormatException e) {
             DialogHelper.showErrorAlert("Something went wrong, we were unable to convert you document.\nPlease ensure the output folder is write enabled");
             e.printStackTrace();
             success = false;
+        }
+        if (success) {
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+
         }
         deleteSourceFile(success, in);
     }

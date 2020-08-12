@@ -83,7 +83,10 @@ public class PdfTextToDocx extends Converter {
 
         if (!success) {
             DialogHelper.showInfoAlert("Something went wrong and we were unable to complete the operation", false);
+        }else {
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+            deleteSourceFile(true, in);
+
         }
-        deleteSourceFile(success, in);
     }
 }

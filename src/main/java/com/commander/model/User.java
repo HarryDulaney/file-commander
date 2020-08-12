@@ -26,9 +26,9 @@ public class User {
      */
     private Boolean nuUser;
 
-    private ExcelType excelPreference;
+    private DocType excelPreference;
     private DocOperation docPreference;
-    private ImgType imgPreference;
+    private DocType imgPreference;
 
 
     public User() {
@@ -36,19 +36,19 @@ public class User {
 
     }
 
-    public User(ExcelType e, DocOperation d, ImgType i) {
+    public User(DocType excelPreference, DocOperation docPreference, DocType imgPreference) {
 
-            excelPreference = e;
-            docPreference = d;
-            imgPreference = i;
+            this.excelPreference = excelPreference;
+            this.docPreference = docPreference;
+            this.imgPreference = imgPreference;
     }
 
 
-    public ExcelType getExcelPreference() {
+    public DocType getExcelPreference() {
         return excelPreference;
     }
 
-    public void setExcelPreference(ExcelType excelPreference) {
+    public void setExcelPreference(DocType excelPreference) {
         this.excelPreference = excelPreference;
     }
 
@@ -60,11 +60,11 @@ public class User {
         this.docPreference = docPreference;
     }
 
-    public ImgType getImgPreference() {
+    public DocType getImgPreference() {
         return imgPreference;
     }
 
-    public void setImgPreference(ImgType imgPreference) {
+    public void setImgPreference(DocType imgPreference) {
         this.imgPreference = imgPreference;
     }
 
@@ -114,9 +114,9 @@ public class User {
         if (obj instanceof User) {
             return ((User) obj).getDirectoryPath().equals(this.getDirectoryPath())
                     && ((User) obj).getWriteDirectoryPath().equals(this.getWriteDirectoryPath())
-                    && ((User)obj).getSourceFilePolicy().equals(this.getSourceFilePolicy())
-                    && this.excelPreference.equals(((User) obj).getExcelPreference())
-                    && this.docPreference.equals(((User) obj).getDocPreference())
+                    && ((User) obj).getSourceFilePolicy().equals(this.getSourceFilePolicy())
+                    && this.excelPreference.equals(((User)obj).getExcelPreference())
+                    && this.docPreference.equals(((User)obj).getDocPreference())
                     && this.imgPreference.equals(((User)obj).getImgPreference());
         } else
             return false;

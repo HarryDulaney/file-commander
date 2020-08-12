@@ -41,7 +41,7 @@ public class PngToJpg extends Converter{
             Graphics2D graphics = imageRGB.createGraphics();
             graphics.drawImage(bufferedImage, 0, 0, null);
             try {
-                ImageIO.write(imageRGB, "JPG", out);
+                ImageIO.write(imageRGB, "jpg", out);
                 DialogHelper.showInfoAlert("Successfully converted " + FilenameUtils.getName(in.toString() + " to " +
                         FilenameUtils.getName(out.toString())), false);
             } catch (IOException e) {
@@ -53,6 +53,9 @@ public class PngToJpg extends Converter{
         } else {
 
             success = false;
+        }
+        if (success) {
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
         }
         deleteSourceFile(success, in);
     }

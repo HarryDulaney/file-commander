@@ -12,8 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
+/**
+ * Parent class to all Converters e.g XlsxToCsv, DocxToPdf..
+ * Abstracts logic common to all converters: File in and File out
+ * and handling of the source file after conversion is complete.
+ *
+ * @author HGDIV
+ */
 public abstract class Converter implements Convertible {
 
     File in;
@@ -25,7 +31,7 @@ public abstract class Converter implements Convertible {
     private static final String TAG = Converter.class.getCanonicalName();
 
 
-    public Converter(File in, File out) {
+    protected Converter(File in, File out) {
         this.in = in;
         this.out = out;
 
@@ -56,13 +62,13 @@ public abstract class Converter implements Convertible {
 
 
     public static <T> void setResources(HashMap<String, T> resources) {
-    if (resources.get("root.pane") instanceof Pane) {
-        toastPane = (AnchorPane) resources.get("root.pane");
+        if (resources.get("root.pane") instanceof Pane) {
+            toastPane = (AnchorPane) resources.get("root.pane");
 
-    }
-    if (resources.get("delete.policy") instanceof Boolean) {
-        deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
-    }
+        }
+        if (resources.get("delete.policy") instanceof Boolean) {
+            deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
+        }
 
     }
 }

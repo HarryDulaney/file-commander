@@ -51,8 +51,8 @@ public class PdfToDocx extends Converter {
         }
 
         if (success) {
-            DialogHelper.showInfoAlert("Success! We created a Word Document named " +
-                    FilenameUtils.getName(in.toString()) + " from " + FilenameUtils.getName(in.toString()), false);
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+
         } else {
             DialogHelper.snackbarToast(toastPane, "Something went wrong, we were not able to create a new docx word document " +
                     "from " + FilenameUtils.getName(in.toString()));

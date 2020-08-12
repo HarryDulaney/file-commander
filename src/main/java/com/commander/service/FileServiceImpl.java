@@ -43,12 +43,6 @@ public class FileServiceImpl extends ParentService implements FileService {
 
     }
 
-
-    @Override
-    public void convert(Convertible convertible) {
-        convertible.convert();
-    }
-
     /**
      *
      * @param user

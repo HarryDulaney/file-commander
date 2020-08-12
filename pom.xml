@@ -11,11 +11,11 @@
     </parent>
 
     <groupId>com.commander</groupId>
-    <artifactId>SuperCommander2</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>FileCommander</artifactId>
+    <version>0.0.6</version>
     <packaging>jar</packaging>
-    <name>SuperCommanderV2.0</name>
-    <description>File converter system with convenient user preferences</description>
+    <name>FileCommander</name>
+    <description>File format conversion system with settings for preferred file formatting by type</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -100,11 +100,16 @@
             <artifactId>itextpdf</artifactId>
             <version>5.0.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.19</version>
+        </dependency>
     </dependencies>
 
 
     <build>
-        <finalName>Super-Commander-Original</finalName>
+        <finalName>File-Commander-Original</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

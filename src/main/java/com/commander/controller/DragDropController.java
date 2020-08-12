@@ -1,10 +1,11 @@
 package com.commander.controller;
 
+import com.commander.controller.converters.Converter;
 import com.commander.model.Convertible;
 import com.commander.model.DocType;
+import com.commander.service.ConvertService;
 import com.commander.service.FileService;
-import com.commander.utils.ConvertUtils;
-import com.commander.utils.ConvertibleFactory;
+import com.commander.controller.converters.ConvertibleFactory;
 import com.commander.utils.DialogHelper;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.HostServices;
@@ -53,6 +54,7 @@ public class DragDropController extends ParentController {
 
     private ConfigurableApplicationContext ctx;
     private FileService fileService;
+    private ConvertService convertService;
 
     private ObservableList<Label> observableList = FXCollections.observableArrayList();
     private JFXListView<Label> listView;
@@ -82,7 +84,9 @@ public class DragDropController extends ParentController {
 
     /**
      * {@code handleSelectedItemConvert(ActionEvent e)}
-     * This method handles running a file conversion.
+     * Handles determining the conversion to run based on
+     * 1. Extension of the file selected for conversion and
+     * 2. The users preference for that file type.
      *
      * @param event ActionEvent invoked when user selects to run file conversion.
      */
@@ -99,65 +103,61 @@ public class DragDropController extends ParentController {
             Convertible convertible = null;
             switch (ext) {
                 case DocType
-                        .CSV_ID:
+                        .CSV_ID: {
                     convertible = ConvertibleFactory.createCsvToXlsx(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
-
-                case DocType.XLSX_ID:
+                }
+                case DocType.XLSX_ID: {
                     convertible = ConvertibleFactory.createXlsxToCsv(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath());
                     break;
-
-                case DocType.DOCX_ID:
+                }
+                case DocType.DOCX_ID: {
                     if (user.getDocPreference().getDocOperation().equals(DOCX2PDF)) {
                         convertible = ConvertibleFactory.createDocxToPdf(fileName,
                                 user.getDirectoryPath(), user.getWriteDirectoryPath());
                     } else if (user.getDocPreference().getDocOperation().equals(DOCX2HTML)) {
-                        convertible = ConvertibleFactory.createDocx2HTML(fileName,user.getDirectoryPath(),user.getWriteDirectoryPath());
+                        convertible = ConvertibleFactory.createDocx2HTML(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath());
 
                     }
                     break;
-
-                case DocType.PDF_ID:
-                        if (user.getDocPreference().getDocOperation().equals(CLONE_PDF_TO_DOCX)){
-                            convertible = ConvertibleFactory.createClonePDFtoDOCX(fileName,
-                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
-                        }else {
-                            convertible = ConvertibleFactory.createPdfToDocx(fileName,
-                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
-                        }
+                }
+                case DocType.PDF_ID: {
+                    if (user.getDocPreference().getDocOperation().equals(CLONE_PDF_TO_DOCX)) {
+                        convertible = ConvertibleFactory.createClonePDFtoDOCX(fileName,
+                                user.getDirectoryPath(), user.getWriteDirectoryPath());
+                    } else {
+                        convertible = ConvertibleFactory.createPdfToDocx(fileName,
+                                user.getDirectoryPath(), user.getWriteDirectoryPath());
+                    }
                     break;
-                case DocType.HTML_ID:
+                }
+                case DocType.HTML_ID: {
                     break;
+                }
                 case DocType.BMP_ID:
                 case DocType.JPG_ID:
                 case DocType.GIF_ID:
-                case DocType.PNG_ID:
+                case DocType.PNG_ID: {
                     convertible = ConvertibleFactory.createImageConvert(fileName,
                             user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                     break;
+                }
 
                 default:
                     throw new IllegalStateException("Unexpected value: " + fileName);
             }
             try {
-                fileService.convert(convertible);
+                convertService.convert(convertible);
             } catch (IllegalStateException e) {
-                DialogHelper.showErrorAlert("I'm sorry it looks like you are attempted to convert a file that is not supported");
+                DialogHelper.showErrorAlert("It looks like you are attempted to convert a file that is not supported");
                 e.printStackTrace();
 
             } catch (Exception e) {
-                log.error("Exception @ FileServiceImpl.convert()");
+                log.error("Exception", e.getCause());
             }
-
-
-        } else {
-
-            DialogHelper.showErrorAlert("Please select an item from the list before running a 'single-file' conversion.");
-
         }
-
     }
 
 
@@ -167,14 +167,15 @@ public class DragDropController extends ParentController {
 
 
         fileService = (FileService) ctx.getBean("fileService");
+        convertService = (ConvertService) ctx.getBean("convertService");
         String policy = user.getSourceFilePolicy();
-        ConvertUtils.setToastPane(rootPane);
+        Converter.setToastPane(rootPane);
 
         if (policy.equals(PROJECT_SOURCE_DELETE_KEY)) {
-            ConvertUtils.setDeleteSourceAfterConverted(true);
+            Converter.setDeleteSourceAfterConverted(true);
 
         } else {
-            ConvertUtils.setDeleteSourceAfterConverted(false);
+            Converter.setDeleteSourceAfterConverted(false);
         }
         setPreferencesViewer();
         runConvertButton.setDisable(true);
@@ -184,7 +185,7 @@ public class DragDropController extends ParentController {
 
     private void setPreferencesViewer() {
         Label wordPref = new Label(user.getDocPreference().getDocOperation().toUpperCase());
-        wordPref.setFont(Font.font("SansSerif", 17.0));
+        wordPref.setFont(Font.font("SansSerif", 16.0));
         wordPref.setAlignment(Pos.CENTER);
         Label excelPref = new Label(user.getExcelPreference().getExtension().toUpperCase());
         excelPref.setFont(Font.font("SansSerif", 17.0));
@@ -193,31 +194,11 @@ public class DragDropController extends ParentController {
         imgPref.setFont(Font.font("SansSerif", 17.0));
         imgPref.setAlignment(Pos.CENTER);
 
-
         wordDocDisplayPane.getChildren().add(wordPref);
         excelPrefDisplayPane.getChildren().add(excelPref);
         imgPrefDisplayPane.getChildren().add(imgPref);
 
     }
-
-    /**
-     * Reloads the contents of list view
-     *
-     * @param actionEvent refreshListButton pressed
-     */
-    @FXML
-    private void handleRefreshListButton(ActionEvent actionEvent) {
-        observableList.clear();
-        fileService.getFilterDirectoryFiles(user, e -> {
-            File[] files = (File[]) e.getSource().getValue();
-            for (File file : files) {
-                observableList.add(new Label(file.getName()));
-            }
-
-            listView.setItems(observableList);
-        }, null);
-    }
-
 
     /**
      * {@code setLabels()} Initializes the clickable Labels and event listeners for the
@@ -236,7 +217,16 @@ public class DragDropController extends ParentController {
             hostServices.showDocument(path.toUri().toString());
         });
 
-//        filterChangeCheckBox.setOnAction(e -> toggleFileFilter());
+    }
+
+    /**
+     * Loads/Reloads the contents of list view
+     *
+     * @param actionEvent refreshListButton pressed
+     */
+    @FXML
+    private void handleRefreshListButton(ActionEvent actionEvent) {
+        reloadListFiles();
     }
 
     /**
@@ -244,32 +234,16 @@ public class DragDropController extends ParentController {
      * the ListView populates with files in the source directory that need
      * to be converted, under the current preferences settings.
      */
-    private void toggleFileFilter() {
+    private void reloadListFiles() {
         observableList.clear();
         runConvertButton.setDisable(true);
-//        if (filterChangeCheckBox.isSelected()) {
         fileService.getFilterDirectoryFiles(user, e -> {
             File[] files = (File[]) e.getSource().getValue();
             for (File file : files) {
                 observableList.add(new Label(file.getName()));
             }
-
             listView.setItems(observableList);
         }, null);
-
-//        } else {
-//            fileService.getDirectoryFiles(user, e -> {
-//                File[] files = (File[]) e.getSource().getValue();
-//                for (File file : files) {
-//                    observableList.add(new Label(file.getName()));
-//                }
-//                listView.setItems(observableList);
-//
-//            }, null);
-//
-//
-//        }
-
 
     }
 
@@ -284,7 +258,7 @@ public class DragDropController extends ParentController {
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         listView.setPrefSize(610, 610);
-        toggleFileFilter();
+        reloadListFiles();
 
         listView.setItems(observableList);
         listView.setOnDragOver(event -> {
@@ -306,7 +280,8 @@ public class DragDropController extends ParentController {
 
                     } catch (IOException e) {
                         e.printStackTrace();
-                        DialogHelper.showErrorAlert("Application encountered an exception while copying the file, it is likely that the file is read only.");
+                        DialogHelper.showErrorAlert("Application encountered an exception while copying the file," +
+                                " it is likely that the file is read only.");
                     }
                 } catch (IOException fnfe) {
                     fnfe.printStackTrace();
@@ -333,14 +308,9 @@ public class DragDropController extends ParentController {
                     runConvertButton.setDisable(true);
                 }
             }
-
-
         });
-
-
         scrollPane.setContent(listView);
         embeddedPane.getChildren().add(scrollPane);
-
     }
 
 
@@ -363,6 +333,7 @@ public class DragDropController extends ParentController {
     protected void onClose() {
         ctx.close();
         fileService.onClose();
+        convertService.onClose();
 
     }
 

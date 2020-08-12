@@ -1,6 +1,7 @@
-package com.commander.utils;
+package com.commander.controller.converters;
 
 import com.commander.model.*;
+import com.commander.utils.DialogHelper;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.apache.commons.io.FilenameUtils.EXTENSION_SEPARATOR_STR;
-
-import static com.commander.utils.ConvertUtils.*;
 
 /**
  * {@code ConvertibleFactory} is an utility class for creating {@code Convertible} objects
@@ -46,7 +45,7 @@ public class ConvertibleFactory {
 
         String name = FilenameUtils.removeExtension(fileName);
 
-        return new docxToPdf(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.pdf()));
+        return new DocxToPdf(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.pdf()));
     }
 
     /**
@@ -61,7 +60,7 @@ public class ConvertibleFactory {
 
         String name = FilenameUtils.removeExtension(fileName);
 
-        return new pdfToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
+        return new PdfTextToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
     }
 
     /**
@@ -76,7 +75,7 @@ public class ConvertibleFactory {
 
         String name = FilenameUtils.removeExtension(fileName);
 
-        return new ClonePdfToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
+        return new PdfToDocx(configReadPath(directoryPath, fileName), configWritePath(name, writeDirectoryPath, DocType.docx()));
     }
 
 
@@ -92,17 +91,6 @@ public class ConvertibleFactory {
     public static Convertible createDocx2HTML(String fileName, String directoryPath, String writeDirectoryPath) {
         return new DocxToHtml(null, null);//TODO
     }
-
-    /**
-     * @param fileName
-     * @param directoryPath
-     * @param writeDirectoryPath
-     * @return new Convertible
-     */
-    public static Convertible createHtmlToDocx(String fileName, String directoryPath, String writeDirectoryPath) {
-        return new HtmlToDocx(null, null);//TODO
-    }
-
 
 
 /************************************************/
@@ -170,7 +158,7 @@ public class ConvertibleFactory {
             return new PngToJpg(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, ImgType.jpg()));
 
         } else {
-            return new ImageConvert(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), userPrefExt);
+            return new ImageConverter(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), userPrefExt);
         }
 
     }

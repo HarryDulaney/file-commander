@@ -18,7 +18,6 @@ public interface FileService {
     javafx.concurrent.Service<String> writeOutputDirectory(EventHandler<WorkerStateEvent> onSuccess,
                                                            EventHandler<WorkerStateEvent> beforeStart);
 
-    void convert(Convertible convertible) throws Exception;
 
     void onClose();
 }

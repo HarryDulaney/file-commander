@@ -34,10 +34,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 
 
@@ -100,65 +102,73 @@ public class DragDropController extends ParentController {
         String fileName = listView.getSelectionModel().getSelectedItem().getText();
 
         if (fileName != null) {
-            String ext = FilenameUtils.getExtension(fileName);
-            Convertible convertible = null;
-            switch (ext) {
-                case DocType
-                        .CSV_ID: {
-                    convertible = ConvertibleFactory.createCsvToXlsx(fileName,
-                            user.getDirectoryPath(), user.getWriteDirectoryPath());
-                    break;
-                }
-                case DocType.XLSX_ID: {
-                    convertible = ConvertibleFactory.createXlsxToCsv(fileName,
-                            user.getDirectoryPath(), user.getWriteDirectoryPath());
-                    break;
-                }
-                case DocType.DOCX_ID: {
-                    if (user.getDocPreference().getDocOperation().equals(DOCX2PDF)) {
-                        convertible = ConvertibleFactory.createDocxToPdf(fileName,
-                                user.getDirectoryPath(), user.getWriteDirectoryPath());
-                    } else if (user.getDocPreference().getDocOperation().equals(DOCX2HTML)) {
-                        convertible = ConvertibleFactory.createDocx2HTML(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath());
-
-                    }
-                    break;
-                }
-                case DocType.PDF_ID: {
-                    if (user.getDocPreference().getDocOperation().equals(CLONE_PDF_TO_DOCX)) {
-                        convertible = ConvertibleFactory.createClonePDFtoDOCX(fileName,
-                                user.getDirectoryPath(), user.getWriteDirectoryPath());
-                    } else {
-                        convertible = ConvertibleFactory.createPdfToDocx(fileName,
-                                user.getDirectoryPath(), user.getWriteDirectoryPath());
-                    }
-                    break;
-                }
-                case DocType.HTML_ID: {
-                    break;
-                }
-                case DocType.BMP_ID:
-                case DocType.JPG_ID:
-                case DocType.GIF_ID:
-                case DocType.PNG_ID: {
-                    convertible = ConvertibleFactory.createImageConvert(fileName,
-                            user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
-                    break;
-                }
-
-                default:
-                    throw new IllegalStateException("Unexpected value: " + fileName);
-            }
             try {
-                convertService.convert(convertible);
-            } catch (IllegalStateException e) {
-                DialogHelper.showErrorAlert("It looks like you are attempted to convert a file that is not supported");
-                e.printStackTrace();
+                String ext = FilenameUtils.getExtension(fileName);
+                Convertible convertible = null;
+                switch (ext) {
+                    case DocType
+                            .CSV_ID: {
+                        convertible = ConvertibleFactory.createCsvToXlsx(fileName,
+                                user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        break;
+                    }
+                    case DocType.XLSX_ID: {
+                        convertible = ConvertibleFactory.createXlsxToCsv(fileName,
+                                user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        break;
+                    }
+                    case DocType.DOCX_ID: {
+                        if (user.getDocPreference().getDocOperation().equals(DOCX2PDF)) {
+                            convertible = ConvertibleFactory.createDocxToPdf(fileName,
+                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        } else if (user.getDocPreference().getDocOperation().equals(DOCX2HTML)) {
+                            convertible = ConvertibleFactory.createDocx2HTML(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath());
 
-            } catch (Exception e) {
-                log.error("Exception", e.getCause());
+                        }
+                        break;
+                    }
+                    case DocType.PDF_ID: {
+                        if (user.getDocPreference().getDocOperation().equals(CLONE_PDF_TO_DOCX)) {
+                            convertible = ConvertibleFactory.createClonePDFtoDOCX(fileName,
+                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        } else {
+                            convertible = ConvertibleFactory.createPdfToDocx(fileName,
+                                    user.getDirectoryPath(), user.getWriteDirectoryPath());
+                        }
+                        break;
+                    }
+                    case DocType.HTML_ID: {//TODO: Implement html to and from docx and pdf conversions
+                        break;
+                    }
+                    case DocType.BMP_ID:
+                    case DocType.JPG_ID:
+                    case DocType.GIF_ID:
+                    case DocType.PNG_ID: {
+                        convertible = ConvertibleFactory.createImageConvert(fileName,
+                                user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
+                        break;
+                    }
+
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + fileName);
+                }
+                try {
+                    convertService.convert(convertible);
+                } catch (IllegalStateException e) {
+                    DialogHelper.showErrorAlert("It looks like you are attempted to convert a file that is not supported");
+                    e.printStackTrace();
+
+                } catch (Exception e) {
+                    log.error("Exception", e.getCause());
+
+                }
+
+            } catch (FileAlreadyExistsException e2) {
+                DialogHelper.showErrorAlert(e2.getMessage());
+
             }
         }
+
     }
 
 

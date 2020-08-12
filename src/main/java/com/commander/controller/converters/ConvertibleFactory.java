@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -41,7 +43,7 @@ public class ConvertibleFactory {
      * @param writeDirectoryPath the write directory path
      * @return the convertible
      */
-    public static Convertible createDocxToPdf(String fileName, String directoryPath, String writeDirectoryPath) {
+    public static Convertible createDocxToPdf(String fileName, String directoryPath, String writeDirectoryPath) throws FileAlreadyExistsException {
 
         String name = FilenameUtils.removeExtension(fileName);
 
@@ -56,7 +58,7 @@ public class ConvertibleFactory {
      * @param writeDirectoryPath User's write dir path
      * @return the convertible
      */
-    public static Convertible createPdfToDocx(String fileName, String directoryPath, String writeDirectoryPath) {
+    public static Convertible createPdfToDocx(String fileName, String directoryPath, String writeDirectoryPath) throws FileAlreadyExistsException {
 
         String name = FilenameUtils.removeExtension(fileName);
 
@@ -71,7 +73,7 @@ public class ConvertibleFactory {
      * @param writeDirectoryPath User's write dir path
      * @return the convertible
      */
-    public static Convertible createClonePDFtoDOCX(String fileName, String directoryPath, String writeDirectoryPath) {
+    public static Convertible createClonePDFtoDOCX(String fileName, String directoryPath, String writeDirectoryPath) throws FileAlreadyExistsException {
 
         String name = FilenameUtils.removeExtension(fileName);
 
@@ -105,7 +107,7 @@ public class ConvertibleFactory {
      * @param writeDirectoryPath User's write dir path
      * @return the convertible
      */
-    public static Convertible createCsvToXlsx(String fileName, String directoryPath, String writeDirectoryPath) {
+    public static Convertible createCsvToXlsx(String fileName, String directoryPath, String writeDirectoryPath) throws FileAlreadyExistsException {
         String numRows = DialogHelper.showInputPrompt("Rows Per Sheet?", "How many rows would you like each sheet to have in your .XLSX workbook?\nPlease enter an integer number (e.g. 300)", "Info Request");
         Integer rowsPerSheet = Integer.parseInt(numRows);
         String baseName = FilenameUtils.removeExtension(fileName);
@@ -122,7 +124,7 @@ public class ConvertibleFactory {
      * @param writeDirectoryPath User's write dir path
      * @return the convertible
      */
-    public static Convertible createXlsxToCsv(String fileName, String directoryPath, String writeDirectoryPath) {
+    public static Convertible createXlsxToCsv(String fileName, String directoryPath, String writeDirectoryPath) throws FileAlreadyExistsException {
 
         String baseName = FilenameUtils.removeExtension(fileName);
 
@@ -144,7 +146,7 @@ public class ConvertibleFactory {
      * @param userPref      User's preference for this file format
      * @return the convertible
      */
-    public static Convertible createImageConvert(String fileName, String directoryPath, String writeDirPath, ImgType userPref) {
+    public static Convertible createImageConvert(String fileName, String directoryPath, String writeDirPath, ImgType userPref) throws FileAlreadyExistsException {
 
         String justName = FilenameUtils.removeExtension(fileName);
         String inputExt = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
@@ -171,9 +173,17 @@ public class ConvertibleFactory {
 
     }
 
-    private static File configWritePath(String baseName, String writeDirectory, String EXT) {
+    private static File configWritePath(String baseName, String writeDirectory, String EXT) throws FileAlreadyExistsException {
         Path writePath = Paths.get(writeDirectory);
         Path resolvedPath = writePath.resolve(baseName + EXT);
+        // Check to avoid overwrite
+        if (resolvedPath.toFile().exists()) {
+            String version = baseName + "-" + 1 + EXT;
+            resolvedPath = writePath.resolve(version);
+            if (resolvedPath.toFile().exists()) {
+              throw new FileAlreadyExistsException("Too many copies of this file already exist in the output directory");
+            }
+        }
         return resolvedPath.toFile();
     }
 

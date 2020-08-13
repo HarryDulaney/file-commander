@@ -12,7 +12,7 @@ import java.io.IOException;
 
 /**
  * {@code ImageConverter.class} is for programmatically converting between image file types.
- * <em>Special case required for converting from a PNG to a JPG</em> {@link PngToJpg}
+ * <em>Special case required for converting from a PNG to a JPG</em> {@link PngToJpgBmpGif}
  */
 public class ImageConverter extends Converter {
 

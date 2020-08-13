@@ -11,49 +11,47 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * {@code PngToJpg.class} is for programmatically converting from png to jpg image format type.
+ * {@code PngToJpgBmpGif.class} is for programmatically converting from png to the other three
+ * image format types.
  * <em>This case requires manually removing the alpha channel before rendering the image as
- * a JPEG</em>
+ * another image format type.</em>
  */
-public class PngToJpg extends Converter{
+public class PngToJpgBmpGif extends Converter {
 
     private static Boolean success = true;
+    private String format;
 
 
-    public PngToJpg(File fileIn, File fileOut) {
+    public PngToJpgBmpGif(File fileIn, File fileOut, String format) {
         super(fileIn, fileOut);
+        this.format = format;
     }
 
     @Override
     public void convert() {
         log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
         BufferedImage bufferedImage = null;
-
         try {
             bufferedImage = ImageIO.read(in);
         } catch (IOException e) {
             e.printStackTrace();
             success = false;
         }
-        if (bufferedImage != null) {
-
+        if (success) {
             BufferedImage imageRGB = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.OPAQUE);
             Graphics2D graphics = imageRGB.createGraphics();
             graphics.drawImage(bufferedImage, 0, 0, null);
             try {
-                ImageIO.write(imageRGB, "jpg", out);
-                DialogHelper.showInfoAlert("Successfully converted " + FilenameUtils.getName(in.toString() + " to " +
-                        FilenameUtils.getName(out.toString())), false);
+                ImageIO.write(imageRGB, format, out);
+
             } catch (IOException e) {
-                log.error(e.getCause() + " happened while writing the JPG file");
+                log.error(e.getCause() + " happened while writing this PNG to the new image format");
                 success = false;
                 e.printStackTrace();
             }
             graphics.dispose();
-        } else {
-
-            success = false;
         }
+
         if (success) {
             DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
         }

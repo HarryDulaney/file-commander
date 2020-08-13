@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -139,10 +138,14 @@ public class DragDropController extends ParentController {
                     case DocType.HTML_ID: {//TODO: Implement html to and from docx and pdf conversions
                         break;
                     }
+                    case DocType.PNG_ID: {
+                        convertible = ConvertibleFactory.createPngConvert(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath(),
+                                                                                                    user.getImgPreference());
+                        break;
+                    }
                     case DocType.BMP_ID:
                     case DocType.JPG_ID:
                     case DocType.GIF_ID:
-                    case DocType.PNG_ID:
                         convertible = ConvertibleFactory.createImageConvert(fileName,
                                 user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                         break;
@@ -181,8 +184,8 @@ public class DragDropController extends ParentController {
         String policy = user.getSourceFilePolicy();
 
         HashMap<String, Object> resources = new HashMap<>();
-        resources.put("root.pane",rootPane);
-        resources.put("delete.policy",policy.equals(PROJECT_SOURCE_DELETE_KEY));
+        resources.put("root.pane", rootPane);
+        resources.put("delete.policy", policy.equals(PROJECT_SOURCE_DELETE_KEY));
         Converter.setResources(resources);
 
         setPreferencesViewer();

@@ -145,22 +145,39 @@ public class ConvertibleFactory {
     public static Convertible createImageConvert(String fileName, String directoryPath, String writeDirPath, DocType imgPref) throws FileAlreadyExistsException {
 
         String justName = FilenameUtils.removeExtension(fileName);
-        String inputExt = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
-        String outputExt = imgPref.getExtension();
+        String startExtension = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
+        String targetExtension = imgPref.getExtension();
+        String targetID = imgPref.getId();
+        targetID = targetID.toUpperCase();
+
+        log.info("Creating Image Convert: From: " + startExtension + " To -> " + targetExtension);
+
+        return new ImageConverter(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, targetExtension), targetID);
+    }
+
+    /**
+     * Build new {@code PngToJpgBmpGif.class} convertible.
+     *
+     * @param fileName      source file filename.ext
+     * @param directoryPath User's src file path
+     * @param writeDirPath  User's write dir path
+     * @param imgPref       User's preference for this file format
+     * @return the convertible
+     */
+    public static Convertible createPngConvert(String fileName, String directoryPath, String writeDirPath, DocType imgPref) throws FileAlreadyExistsException {
+
+        String name = FilenameUtils.removeExtension(fileName);
+        String inputExtension = EXTENSION_SEPARATOR_STR.concat(FilenameUtils.getExtension(fileName));
+        String targetExtension = imgPref.getExtension();
         String formatId = imgPref.getId();
         formatId = formatId.toUpperCase();
 
-        log.info("Creating Image Convert: From: " + inputExt + " To -> " + outputExt);
+        log.info("Creating PngConvert: From: " + inputExtension + " To -> " + targetExtension);
 
-        if (inputExt.equals(DocType.png()) && imgPref.getExtension().equals(DocType.jpg())) {
 
-            return new PngToJpg(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, DocType.jpg()));
+            return new PngToJpgBmpGif(configReadPath(directoryPath, fileName), configWritePath(name, writeDirPath,targetExtension),formatId);
 
-        } else {
-            return new ImageConverter(configReadPath(directoryPath, fileName), configWritePath(justName, writeDirPath, outputExt), formatId);
         }
-
-    }
 
 
     private static File configReadPath(String directoryPath, String fileName) {

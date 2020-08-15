@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class DocxToPdf extends Converter {
 
-    private static Boolean success = true;
+    private static Boolean success = false;
 
 
     public DocxToPdf(File in, File out) {
@@ -35,11 +35,10 @@ public class DocxToPdf extends Converter {
             FileOutputStream fileOutputStream = new FileOutputStream(out);
             PdfConverter.getInstance().convert(d, fileOutputStream, pdfOptions);
             fileOutputStream.close();
-
+            success = true;
         } catch (IOException | InvalidFormatException e) {
             DialogHelper.showErrorAlert("Something went wrong, we were unable to convert you document.\nPlease ensure the output folder is write enabled");
             e.printStackTrace();
-            success = false;
         }
         if (success) {
             DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);

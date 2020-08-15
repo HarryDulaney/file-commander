@@ -19,31 +19,17 @@ public class ImageConverter extends Converter {
     private String format;
     final static Logger log = LoggerFactory.getLogger(ImageConverter.class);
 
-    public ImageConverter(File fileIn, File fileOut, String format) {
+    public ImageConverter(final File fileIn, final File fileOut, String format) {
         super(fileIn, fileOut);
         this.format = format;
     }
 
     private boolean genericConversion() {
         boolean result;
-        BufferedImage bufferedImage;
 
         try {
-            bufferedImage = ImageIO.read(in);
-            try {
-               result = ImageIO.write(bufferedImage, format, out);
-
-            } catch (IllegalArgumentException iae) {
-                DialogHelper.showErrorAlert("We could not complete the conversion because One or more required fields is null.");
-                iae.printStackTrace();
-                result = false;
-
-            } catch (IOException ie) {
-                DialogHelper.showErrorAlert("Image WRITE failed on " + out.getName() + ",\n we could not complete the conversion.");
-                log.error(ie.getCause() + " happened while writing image file: " + out.getName());
-                ie.printStackTrace();
-                result = false;
-            }
+            BufferedImage bufferedImage = ImageIO.read(in);
+            result = ImageIO.write(bufferedImage, format, out);
 
         } catch (IOException e) {
             log.error("Image READ failed on " + in.getName());
@@ -62,7 +48,7 @@ public class ImageConverter extends Converter {
         boolean succeeded = genericConversion();
         if (succeeded) {
             deleteSourceFile(true, in);
-            DialogHelper.showInfoAlert("Success! Your image named: "+ in.getName() + " was converted to: " + out.getName() +",\nview it by clicking on the link to your output directory", false);
+            DialogHelper.showInfoAlert("Success! Your image named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
         } else {
             DialogHelper.showErrorAlert("Something went wrong converting the image, please ensure it is a supported format and try again.");
         }

@@ -79,7 +79,6 @@ public class DragDropController extends ParentController {
     @FXML
     private FlowPane imgPrefDisplayPane;
 
-
     private HostServices hostServices;
 
 

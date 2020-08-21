@@ -1,11 +1,9 @@
 package com.commander.controller.converters;
 
-import com.commander.model.Convertible;
 import com.commander.utils.DialogHelper;
 import com.documents4j.api.DocumentType;
 import com.documents4j.api.IConverter;
 import com.documents4j.job.LocalConverter;
-import javafx.scene.layout.AnchorPane;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;

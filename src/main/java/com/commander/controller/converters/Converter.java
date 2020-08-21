@@ -2,11 +2,10 @@ package com.commander.controller.converters;
 
 import com.commander.model.Convertible;
 import com.commander.utils.DialogHelper;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 
 import java.io.File;
 import java.io.IOException;

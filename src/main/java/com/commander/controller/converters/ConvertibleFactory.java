@@ -175,7 +175,7 @@ public class ConvertibleFactory {
         log.info("Creating PngConvert: From: " + inputExtension + " To -> " + targetExtension);
 
 
-            return new PngToJpgBmpGif(configReadPath(directoryPath, fileName), configWritePath(name, writeDirPath,targetExtension),formatId);
+            return new PngConversions(configReadPath(directoryPath, fileName), configWritePath(name, writeDirPath,targetExtension),formatId);
 
         }
 

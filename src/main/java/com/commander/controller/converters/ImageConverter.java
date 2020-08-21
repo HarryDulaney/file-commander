@@ -12,14 +12,14 @@ import java.io.IOException;
 
 /**
  * {@code ImageConverter.class} is for programmatically converting between image file types.
- * <em>Special case required for converting from a PNG to a JPG</em> {@link PngToJpgBmpGif}
+ * <em>Special case required for converting from a PNG to a JPG</em> {@link PngConversions}
  */
 public class ImageConverter extends Converter {
 
     private String format;
-    final static Logger log = LoggerFactory.getLogger(ImageConverter.class);
+    static Logger log = LoggerFactory.getLogger(ImageConverter.class);
 
-    public ImageConverter(final File fileIn, final File fileOut, String format) {
+    public ImageConverter(File fileIn, File fileOut, String format) {
         super(fileIn, fileOut);
         this.format = format;
     }

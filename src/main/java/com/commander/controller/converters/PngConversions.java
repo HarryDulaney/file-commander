@@ -15,7 +15,8 @@ import java.io.IOException;
  * <p>
  * Because Png image files often have a transparent background
  * <em>This case requires manually removing the alpha channel before rendering the image as
- * another image format type.</em>
+ * another image format type.</em> //TODO: add Dialog popup to prompt user for background color choice when converting transparent PNG images to
+ *                                            unsupported formats (for transparency).
  *
  * @author Harry Dulaney
  */

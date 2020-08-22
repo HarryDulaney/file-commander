@@ -25,7 +25,8 @@ public class XlsxToCsv extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+        final long starttime = System.currentTimeMillis();
+
         FileWriter csvWriter = null;
         try {
             csvWriter = new FileWriter(out);
@@ -90,6 +91,7 @@ public class XlsxToCsv extends Converter {
             }
             csvWriter.flush();
             workBook.close();
+            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms. "));
 
             DialogHelper.showInfoAlert("Successfully converted your Excel workbook to a csv file.", false);
 

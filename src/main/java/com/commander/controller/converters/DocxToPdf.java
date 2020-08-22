@@ -26,7 +26,8 @@ public class DocxToPdf extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+        final long starttime = System.currentTimeMillis();
+
 
         try {
             PdfOptions pdfOptions = PdfOptions.create();
@@ -36,14 +37,18 @@ public class DocxToPdf extends Converter {
             PdfConverter.getInstance().convert(d, fileOutputStream, pdfOptions);
             fileOutputStream.close();
             success = true;
+            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
+
         } catch (IOException | InvalidFormatException e) {
             DialogHelper.showErrorAlert("Something went wrong, we were unable to convert you document.\nPlease ensure the output folder is write enabled");
             e.printStackTrace();
         }
         if (success) {
-            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() +
+                    ",\nview it by clicking on the link to your output directory", false);
 
         }
         deleteSourceFile(success, in);
+
     }
 }

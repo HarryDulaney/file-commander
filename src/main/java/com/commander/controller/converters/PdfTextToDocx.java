@@ -32,7 +32,7 @@ public class PdfTextToDocx extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+        final long starttime = System.currentTimeMillis();
         PDDocument pdf;
         try {
             pdf = PDDocument.load(in);
@@ -55,10 +55,9 @@ public class PdfTextToDocx extends Converter {
                 try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(out))) {
 
                     wordDoc.write(bos);
-                    DialogHelper.snackbarToast(toastPane
-                            , "Successfully created a new DOCX file with the text content from your PDF");
 
                     wordDoc.close();
+                    log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
 
 
                 } catch (IOException e) {
@@ -71,6 +70,7 @@ public class PdfTextToDocx extends Converter {
                 DialogHelper.showErrorAlert("Document has protected access, please remove password protection or change access permissions to allow " +
                         "the pdf to be read");
                 log.error("Error reading pdf, password protected or access permission restricted", pre.getCause());
+                return;
             }
 
 
@@ -83,8 +83,9 @@ public class PdfTextToDocx extends Converter {
 
         if (!success) {
             DialogHelper.showInfoAlert("Something went wrong and we were unable to complete the operation", false);
-        }else {
-            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+        } else {
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " had it's text content extracted and was saved as: " + out.getName() + "," +
+                    "\nView it by clicking on the link to your output directory", false);
             deleteSourceFile(true, in);
 
         }

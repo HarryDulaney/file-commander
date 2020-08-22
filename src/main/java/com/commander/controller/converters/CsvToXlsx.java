@@ -20,14 +20,15 @@ public class CsvToXlsx extends Converter {
     private Integer linesPerSheet;
 
     public CsvToXlsx(File in, File out, Integer linesPerSheet) {
-        super(in,out);
+        super(in, out);
         this.linesPerSheet = linesPerSheet;
 
     }
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+        final long starttime = System.currentTimeMillis();
+
         try (Workbook workBook = new SXSSFWorkbook()) {
 
             CSVReader reader;
@@ -56,7 +57,8 @@ public class CsvToXlsx extends Converter {
             try (FileOutputStream fileOutputStream = new FileOutputStream(out)) {
                 workBook.write(fileOutputStream);
                 if (success) {
-                    DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+                    DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + "," +
+                            "\nview it by clicking on the link to your output directory", false);
                 }
 
 
@@ -73,5 +75,7 @@ public class CsvToXlsx extends Converter {
             deleteSourceFile(success, in);
 
         }
+        log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
+
     }
 }

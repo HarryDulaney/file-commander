@@ -21,15 +21,30 @@ import java.util.HashMap;
  */
 public abstract class Converter implements Convertible {
 
+    /**
+     * The In File.
+     */
     File in;
+    /**
+     * The Out File.
+     */
     File out;
 
-    static AnchorPane toastPane;
+
     private static Boolean deleteSourceAfterConverted;
+    /**
+     * The constant log.
+     */
     protected static Logger log = LoggerFactory.getLogger(Converter.class);
     private static final String TAG = Converter.class.getCanonicalName();
 
 
+    /**
+     * Instantiates a new Converter.
+     *
+     * @param in  the in
+     * @param out the out
+     */
     protected Converter(File in, File out) {
         this.in = in;
         this.out = out;
@@ -45,10 +60,14 @@ public abstract class Converter implements Convertible {
      * @param file    the source file
      */
     protected static void deleteSourceFile(boolean success, File file) {
+        boolean deleted = false;
         if (deleteSourceAfterConverted) {
             if (success) {
                 try {
                     Files.delete(file.toPath());
+                    if (!Files.exists(file.toPath())) {
+                        deleted = true;
+                    }
                 } catch (IOException ex) {
                     DialogHelper.showErrorAlert("Your source file " + file.getName() + "could not be deleted");
                     ex.printStackTrace();
@@ -56,15 +75,17 @@ public abstract class Converter implements Convertible {
 
             }
         }
-
+        log.info("Source File was " + (deleted ? "deleted" : "not deleted"));
     }
 
 
+    /**
+     * Sets resources.
+     *
+     * @param <T>       the type parameter
+     * @param resources the resources
+     */
     public static <T> void setResources(HashMap<String, T> resources) {
-        if (resources.get("root.pane") instanceof Pane) {
-            toastPane = (AnchorPane) resources.get("root.pane");
-
-        }
         if (resources.get("delete.policy") instanceof Boolean) {
             deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
         }

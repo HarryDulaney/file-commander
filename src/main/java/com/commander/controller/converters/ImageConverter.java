@@ -28,8 +28,12 @@ public class ImageConverter extends Converter {
         boolean result;
 
         try {
+            final long starttime = System.currentTimeMillis();
+
             BufferedImage bufferedImage = ImageIO.read(in);
             result = ImageIO.write(bufferedImage, format, out);
+
+            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
 
         } catch (IOException e) {
             log.error("Image READ failed on " + in.getName());
@@ -44,11 +48,13 @@ public class ImageConverter extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
         boolean succeeded = genericConversion();
         if (succeeded) {
             deleteSourceFile(true, in);
-            DialogHelper.showInfoAlert("Success! Your image named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+            DialogHelper.showInfoAlert("Success! Your image named: " + in.getName() + " was converted to: " + out.getName() +
+                    ",\nview it by clicking on the link to your output directory", false);
+
+
         } else {
             DialogHelper.showErrorAlert("Something went wrong converting the image, please ensure it is a supported format and try again.");
         }

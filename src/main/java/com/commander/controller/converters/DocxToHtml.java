@@ -7,7 +7,7 @@ import java.io.File;
 public class DocxToHtml extends Converter {
 
 
-    private static Boolean success = true;
+    private static Boolean success = false;
 
     public DocxToHtml(File in, File out) {
       super(in,out);
@@ -17,10 +17,13 @@ public class DocxToHtml extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+        long starttime = System.currentTimeMillis();
+        if (success) {
+            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
 
-        DialogHelper.snackbarToast(toastPane
-                , "Success! You converted the Docx file to a Html format file");
+        }
+
+
 
 //            deleteSourceFile(success, in);
     }

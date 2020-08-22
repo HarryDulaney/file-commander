@@ -183,7 +183,6 @@ public class DragDropController extends ParentController {
         String policy = user.getSourceFilePolicy();
 
         HashMap<String, Object> resources = new HashMap<>();
-        resources.put("root.pane", rootPane);
         resources.put("delete.policy", policy.equals(PROJECT_SOURCE_DELETE_KEY));
         Converter.setResources(resources);
 

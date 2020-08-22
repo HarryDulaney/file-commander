@@ -49,7 +49,7 @@ public class RootController extends ParentController {
     private ToggleGroup ssheetGroup;
     private ToggleGroup imgGroup;
     private JFXSnackbar snackbar;
-    private final boolean enable_PDF_to_DOCX = System.getProperty("os.name").contains("Windows");
+    private final boolean isWindowsOS = System.getProperty("os.name").contains("Windows");
 
     private HostServices hostServices;
     private ConfigurableApplicationContext ctx;
@@ -133,7 +133,7 @@ public class RootController extends ParentController {
         // Text Doc preferences ComboBox configure based on os = Windows or os = other
         List<String> docOpsList;
 
-        if (enable_PDF_to_DOCX) {
+        if (isWindowsOS) {
             docOpsList = Arrays.asList(DocOperation.DOCX_TO_PDF.getDocOperation(),
                     DocOperation.PDF_txt_TO_DOCX.getDocOperation(),
                     DocOperation.PDF_TO_DOCX.getDocOperation());
@@ -210,7 +210,7 @@ public class RootController extends ParentController {
             handleOpenConverter(event);
             DialogHelper.snackbarToast(rootPane, "Your preferences have been saved");
         } catch (Exception e3) {
-            DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your project.");
+            DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your preferences.");
             e3.printStackTrace();
         }
 
@@ -263,7 +263,7 @@ public class RootController extends ParentController {
 
     @FXML
     protected void handleGitHubOpen(ActionEvent event) {
-        final String gitHubUrl = "https://www.github.com/HarryDulaney/SuperCommanderV2";
+        final String gitHubUrl = "https://www.github.com/HarryDulaney/file-commander";
         hostServices.showDocument(gitHubUrl);
 
     }
@@ -278,12 +278,11 @@ public class RootController extends ParentController {
                 "Please create a folder or choose a folder for your file source directory");
         directoryChooser.setInitialDirectory(path.toFile());
         File result = directoryChooser.showDialog(new Stage());
-        if (result == null) {
+        if (result == null && user.getDirectoryPath() == null) {
             DialogHelper.showErrorAlert(
                     "Please assign an input directory for reading source files.");
 
-        } else {
-
+        } else if (result != null) {
             String strPath = result.getAbsolutePath();
             user.setDirectoryPath(strPath);
             directoryPathTextField.setText(strPath);
@@ -308,11 +307,11 @@ public class RootController extends ParentController {
                 "Please create a folder or choose a folder where SuperCommander can write your converted files.");
         directoryChooser.setInitialDirectory(path.toFile());
         File result = directoryChooser.showDialog(new Stage());
-        if (result == null) {
+        if (result == null && user.getWriteDirectoryPath() == null) {
             DialogHelper.showErrorAlert(
-                    "Please assign an output directory to write new files into.");
+                    "Please assign an output directory to write new files into, before moving on.");
 
-        } else {
+        } else if (result != null) {
             String writePath = result.getAbsolutePath();
             user.setWriteDirectoryPath(writePath);
             outputPathTextField.setText(writePath);

@@ -27,7 +27,7 @@ public class PdfToDocx extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To-> " + out.getName());
+        final long starttime = System.currentTimeMillis();
         DialogHelper.showInfoAlert("Please ensure that all instances of Microsoft " +
                 "Word are closed before pressing OK to start the conversion", true);
 
@@ -44,6 +44,8 @@ public class PdfToDocx extends Converter {
 
             converter.shutDown();
 
+            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms. "));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,8 +54,8 @@ public class PdfToDocx extends Converter {
             DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
 
         } else {
-            DialogHelper.snackbarToast(toastPane, "Something went wrong, we were not able to create a new docx word document " +
-                    "from " + FilenameUtils.getName(in.toString()));
+            DialogHelper.showInfoAlert("Something went wrong, we were not able to create a new docx word document " +
+                    "from " + FilenameUtils.getName(in.toString()), false);
         }
 
     }

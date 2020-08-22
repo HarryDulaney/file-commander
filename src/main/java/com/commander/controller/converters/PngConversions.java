@@ -16,7 +16,7 @@ import java.io.IOException;
  * Because Png image files often have a transparent background
  * <em>This case requires manually removing the alpha channel before rendering the image as
  * another image format type.</em> //TODO: add Dialog popup to prompt user for background color choice when converting transparent PNG images to
- *                                            unsupported formats (for transparency).
+ * unsupported formats (for transparency).
  *
  * @author Harry Dulaney
  */
@@ -33,7 +33,7 @@ public class PngConversions extends Converter {
 
     @Override
     public void convert() {
-        log.info("convert() -- running -- From: " + in.getName() + " To -> " + out.getName());
+        final long starttime = System.currentTimeMillis();
         try {
             BufferedImage bufferedImage = ImageIO.read(in);
             BufferedImage imageRGB = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -41,13 +41,16 @@ public class PngConversions extends Converter {
             graphics.drawImage(bufferedImage, 0, 0, null);
             success = ImageIO.write(imageRGB, format, out);
             graphics.dispose();
+            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms. "));
 
         } catch (IOException ioe) {
-            log.error("IOException occurred while converting png.",ioe.getCause());
+            log.error("IOException occurred while converting png.", ioe.getCause());
             ioe.printStackTrace();
         }
         if (success) {
-            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() + ",\nview it by clicking on the link to your output directory", false);
+            DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() +
+                    ",\nview it by clicking on the link to your output directory", false);
+
         } else {
             DialogHelper.showErrorAlert("Something went wrong writing the image.");
         }

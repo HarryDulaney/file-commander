@@ -38,7 +38,7 @@ public class PngConversions extends Converter {
             BufferedImage bufferedImage = ImageIO.read(in);
             BufferedImage imageRGB = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = imageRGB.createGraphics();
-            graphics.drawImage(bufferedImage, 0, 0, null);
+            graphics.drawImage(bufferedImage, 0, 0, new java.awt.Color((float) bgColor.getRed(), (float) bgColor.getGreen(), (float) bgColor.getBlue()), null); //Set the background color per user preference
             success = ImageIO.write(imageRGB, format, out);
             graphics.dispose();
             log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms. "));

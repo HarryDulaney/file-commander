@@ -1,33 +1,31 @@
 package com.commander.utils;
 
-import com.jfoenix.controls.*;
-import com.jfoenix.skins.JFXPopupSkin;
-import com.sun.javafx.css.Style;
-import com.sun.prism.paint.Paint;
-import javafx.application.Platform;
-import javafx.css.PseudoClass;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXSnackbar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.awt.WindowIDProvider;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Stack;
 
 /**
  * This is a class of static methods to utilize for Alerts, Pop-ups and UI

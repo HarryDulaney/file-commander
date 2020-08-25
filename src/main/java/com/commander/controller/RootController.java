@@ -8,12 +8,16 @@ import com.commander.utils.DialogHelper;
 import com.commander.utils.ValidationUtils;
 import com.commander.utils.WindowUtil;
 import com.jfoenix.controls.JFXSnackbar;
+import com.sun.javafx.scene.control.skin.ColorPickerSkin;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -54,6 +58,8 @@ public class RootController extends ParentController {
     private HostServices hostServices;
     private ConfigurableApplicationContext ctx;
 
+    @FXML
+    private ColorPicker bgColorPicker;
     @FXML
     private RadioButton bmpRadioButton;
     @FXML
@@ -144,6 +150,10 @@ public class RootController extends ParentController {
 
         textDocPrefsComboBox.getItems().setAll(docOpsList);
         textDocPrefsComboBox.getSelectionModel().select(user.getDocPreference().getDocOperation());
+
+        //Configure ColorPicker combobox
+        bgColorPicker.setValue(user.getReplaceBgColor());
+
 
     }
 
@@ -321,6 +331,7 @@ public class RootController extends ParentController {
 
     @FXML
     private void handleExitPressed(ActionEvent event) {
+        setPreferences();
         fileService.onClose();
         ctx.close();
 
@@ -337,6 +348,12 @@ public class RootController extends ParentController {
         outputPathTextField.setText(user.getWriteDirectoryPath());
 
 
+    }
+
+    @FXML
+    private void handleColorChanged(ActionEvent actionEvent) {
+        Color colorChoice = bgColorPicker.getValue();
+        user.setReplaceBgColor(colorChoice);
     }
 
     /**
@@ -449,10 +466,12 @@ public class RootController extends ParentController {
 
     @Override
     protected void onClose() {
+        setPreferences();
         fileService.onClose();
         ctx.close();
         Platform.exit();
 
     }
+
 
 }

@@ -1,11 +1,11 @@
 package com.commander.controller;
 
 import com.commander.model.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.Doc;
 import java.util.HashMap;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -52,6 +52,8 @@ public abstract class ParentController {
     static final String DOC_TYPE_KEY = "DOC_PREF";
     static final String IMG_TYPE_KEY = "IMG_PREF";
     static final String SOURCE_POLICY_KEY = "SOURCE_POLICY";
+    static final String BACKGROUND_COLOR = "DEFAULT_BG_COLOR";
+
 
     /* --------------------------------------- Default values for User Enums --------------------------------------------- */
     private static final DocType DEFAULT_EXCEL_TYPE = DocType.XLSX;
@@ -62,8 +64,8 @@ public abstract class ParentController {
     static final String PROJECT_SOURCE_SAVE_KEY = "Save";
 
     static final String DOCX2PDF = "docx -> pdf";
-    static final String DOCX2HTML = "docx -> html";
-    static final String HTML2DOCX = "html -> docx";
+    static final String DOCX2HTML = "docx -> html"; //TODO
+    static final String HTML2DOCX = "html -> docx"; //TODO
     static final String PDFtxt2DOCX = "pdf -> (EXTRACT TEXT) -> docx";
     static final String CLONE_PDF_TO_DOCX = "pdf -> docx (Windows Only)";
 
@@ -108,6 +110,11 @@ public abstract class ParentController {
         userPreferences.put(IMG_TYPE_KEY, user.getImgPreference().getExtension());
         userPreferences.put(SOURCE_POLICY_KEY, user.getSourceFilePolicy());
         userPreferences.put(NEW_USER_KEY, "false");
+        // set color preference
+        userPreferences.put(BACKGROUND_COLOR, user.getReplaceBgColor().toString());
+        System.out.print("Setting persistent user preferences, background color for images string value is: ");
+        System.out.print(user.getReplaceBgColor().toString() + "\n");
+
         try {
             userPreferences.sync();
             return true;
@@ -129,9 +136,19 @@ public abstract class ParentController {
         user.setWriteDirectoryPath(userPreferences.get(DIR_WRITE_PATH_KEY, null));
         user.setSourceFilePolicy(userPreferences.get(SOURCE_POLICY_KEY, PROJECT_SOURCE_SAVE_KEY)); //Default is Save source file
 
-        String docPreference = userPreferences.get(DOC_TYPE_KEY,DocOperation.DOCX_TO_PDF.getDocOperation()); //Default treatment for Word Documents Docx to Pdf
+        String docPreference = userPreferences.get(DOC_TYPE_KEY, DocOperation.DOCX_TO_PDF.getDocOperation()); //Default treatment for Word Documents Docx to Pdf
         String excelPreference = userPreferences.get(EXCEL_PREF_KEY, DEFAULT_EXCEL_TYPE.getExtension()); //Default Excel Type is XLSX
         String imgPreference = userPreferences.get(IMG_TYPE_KEY, DEFAULT_IMG_TYPE.getExtension()); //Default ImgType is JPG
+        String colorPreference = userPreferences.get(BACKGROUND_COLOR, Color.WHITE.toString()); // Default white background
+        System.out.print("Loading preferences, Background Color for images string value is:  ");
+        System.out.print(colorPreference);
+        // set user preferences
+        updateUser(docPreference, excelPreference, imgPreference, colorPreference);
+
+
+    }
+
+    private static void updateUser(String docPreference, String excelPreference, String imgPreference, String colorStr) {
 
         if (docPreference.equals(DocOperation.DOCX_TO_PDF.getDocOperation())) {
             user.setDocPreference(DocOperation.DOCX_TO_PDF);
@@ -160,6 +177,9 @@ public abstract class ParentController {
         } else {
             user.setImgPreference(DocType.PNG);
         }
+
+        Color userColor = Color.valueOf(colorStr);
+        user.setReplaceBgColor(userColor);
 
     }
 

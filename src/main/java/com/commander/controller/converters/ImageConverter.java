@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class ImageConverter extends Converter {
 
     private String format;
     static Logger log = LoggerFactory.getLogger(ImageConverter.class);
+    private BufferedImage sourceImage;
 
     public ImageConverter(File fileIn, File fileOut, String format) {
         super(fileIn, fileOut);
@@ -30,8 +32,15 @@ public class ImageConverter extends Converter {
         try {
             final long starttime = System.currentTimeMillis();
 
-            BufferedImage bufferedImage = ImageIO.read(in);
-            result = ImageIO.write(bufferedImage, format, out);
+            sourceImage = ImageIO.read(in);
+            if (sourceImage.getTransparency() != BufferedImage.OPAQUE) {
+
+                result = handleTransBg(sourceImage, format, out);
+
+            } else {
+                result = ImageIO.write(sourceImage, format, out);
+            }
+
 
             log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
 
@@ -58,5 +67,12 @@ public class ImageConverter extends Converter {
         } else {
             DialogHelper.showErrorAlert("Something went wrong converting the image, please ensure it is a supported format and try again.");
         }
+    }
+
+    static boolean handleTransBg(BufferedImage srcImage, String imgFormat, File out) throws IOException {
+        BufferedImage modImage = new BufferedImage(srcImage.getWidth(), srcImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphic = modImage.createGraphics();
+        graphic.drawImage(srcImage, 0, 0, new java.awt.Color((float) bgColor.getRed(), (float) bgColor.getGreen(), (float) bgColor.getBlue()), null); //Set the bgColor per user preference
+        return ImageIO.write(modImage, imgFormat, out);
     }
 }

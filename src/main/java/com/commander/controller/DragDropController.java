@@ -20,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
@@ -73,11 +72,11 @@ public class DragDropController extends ParentController {
     @FXML
     private Button refreshListButton;
     @FXML
-    private FlowPane wordDocDisplayPane;
+    private AnchorPane wordDocDisplayPane;
     @FXML
-    private FlowPane excelPrefDisplayPane;
+    private AnchorPane excelPrefDisplayPane;
     @FXML
-    private FlowPane imgPrefDisplayPane;
+    private AnchorPane imgPrefDisplayPane;
 
     private HostServices hostServices;
 
@@ -183,6 +182,7 @@ public class DragDropController extends ParentController {
         String policy = user.getSourceFilePolicy();
 
         HashMap<String, Object> resources = new HashMap<>();
+        resources.put("default.bg.color",user.getReplaceBgColor());
         resources.put("delete.policy", policy.equals(PROJECT_SOURCE_DELETE_KEY));
         Converter.setResources(resources);
 

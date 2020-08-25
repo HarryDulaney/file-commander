@@ -37,6 +37,7 @@ public abstract class Converter implements Convertible {
      */
     protected static Logger log = LoggerFactory.getLogger(Converter.class);
     private static final String TAG = Converter.class.getCanonicalName();
+    protected static javafx.scene.paint.Color bgColor;
 
 
     /**
@@ -80,7 +81,8 @@ public abstract class Converter implements Convertible {
 
 
     /**
-     * Sets resources.
+     * Sets resources: Default Background Color for transparency not supported image conversions
+     * and users delete vs save source files after convert policy.
      *
      * @param <T>       the type parameter
      * @param resources the resources
@@ -88,6 +90,9 @@ public abstract class Converter implements Convertible {
     public static <T> void setResources(HashMap<String, T> resources) {
         if (resources.get("delete.policy") instanceof Boolean) {
             deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
+        }
+        if (resources.get("default.bg.color") instanceof javafx.scene.paint.Color) {
+            bgColor = (javafx.scene.paint.Color) resources.get("default.bg.color");
         }
 
     }

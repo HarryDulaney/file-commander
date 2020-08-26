@@ -175,9 +175,9 @@ public class ConvertibleFactory {
         log.info("Creating PngConvert: From: " + inputExtension + " To -> " + targetExtension);
 
 
-            return new PngConversions(configReadPath(directoryPath, fileName), configWritePath(name, writeDirPath,targetExtension),formatId);
+        return new PngConversions(configReadPath(directoryPath, fileName), configWritePath(name, writeDirPath, targetExtension), formatId);
 
-        }
+    }
 
 
     private static File configReadPath(String directoryPath, String fileName) {

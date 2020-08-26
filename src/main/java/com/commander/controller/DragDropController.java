@@ -137,8 +137,7 @@ public class DragDropController extends ParentController {
                         break;
                     }
                     case DocType.PNG_ID: {
-                        convertible = ConvertibleFactory.createPngConvert(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath(),
-                                                                                                    user.getImgPreference());
+                        convertible = ConvertibleFactory.createPngConvert(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                         break;
                     }
                     case DocType.BMP_ID:
@@ -165,7 +164,7 @@ public class DragDropController extends ParentController {
                 }
 
             } catch (FileAlreadyExistsException e2) {
-                DialogHelper.showErrorAlert(e2.getMessage());
+                DialogHelper.snackbarToast(rootPane, e2.getMessage());
 
             }
         }
@@ -182,7 +181,7 @@ public class DragDropController extends ParentController {
         String policy = user.getSourceFilePolicy();
 
         HashMap<String, Object> resources = new HashMap<>();
-        resources.put("default.bg.color",user.getReplaceBgColor());
+        resources.put("default.bg.color", user.getReplaceBgColor());
         resources.put("delete.policy", policy.equals(PROJECT_SOURCE_DELETE_KEY));
         Converter.setResources(resources);
 
@@ -235,7 +234,7 @@ public class DragDropController extends ParentController {
      */
     @FXML
     private void handleRefreshListButton(ActionEvent actionEvent) {
-        DialogHelper.snackbarToast(rootPane,"Refreshed");
+        DialogHelper.snackbarToast(rootPane, "Refreshed");
         reloadListFiles();
     }
 

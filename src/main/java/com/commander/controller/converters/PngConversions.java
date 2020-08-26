@@ -1,10 +1,10 @@
 package com.commander.controller.converters;
 
 
+import com.commander.model.DocType;
 import com.commander.utils.DialogHelper;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +17,9 @@ import java.io.IOException;
  * <em>This case requires manually removing the alpha channel before rendering the image as
  * another image format type.</em>
  *
- *
  * @author Harry Dulaney
  */
-public class PngConversions extends Converter {
+public class PngConversions extends AbstractImageConverter {
 
     private static Boolean success = false;
     private final String format;
@@ -34,19 +33,49 @@ public class PngConversions extends Converter {
     @Override
     public void convert() {
         final long starttime = System.currentTimeMillis();
-        try {
-            BufferedImage bufferedImage = ImageIO.read(in);
-            BufferedImage imageRGB = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics = imageRGB.createGraphics();
-            graphics.drawImage(bufferedImage, 0, 0, new java.awt.Color((float) bgColor.getRed(), (float) bgColor.getGreen(), (float) bgColor.getBlue()), null); //Set the background color per user preference
-            success = ImageIO.write(imageRGB, format, out);
-            graphics.dispose();
-            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms. "));
 
-        } catch (IOException ioe) {
-            log.error("IOException occurred while converting png.", ioe.getCause());
-            ioe.printStackTrace();
+        if (format.equalsIgnoreCase(DocType.JPG_ID) || format.equalsIgnoreCase(DocType.BMP_ID)) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(in);
+                success = handleTransBg(bufferedImage, format, out);
+
+                log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms. "));
+
+            } catch (IOException | IllegalArgumentException ioe) {
+                log.error("Exception occurred while converting png.", ioe.getCause());
+                ioe.printStackTrace();
+            }
+
+        } else {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(in);
+                try {
+                    success = ImageIO.write(bufferedImage, format, out);
+                    if (!success) {
+                        throw new Exception();
+                    }
+                    log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
+
+                } catch (Exception e) {
+                    log.info("Png conversion with transparent pixels failed, now attempting conversion with" +
+                            " user default color replacing transparent pixels...");
+                    boolean result = handleTransBg(bufferedImage, format, out);
+                    if (result) {
+                        success = true;
+                        log.info("The second conversion attempt was successful!");
+                        log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
+
+                    }
+
+                }
+            } catch (IOException | IllegalArgumentException exception) {
+                log.error("Conversion failed on " + in.getName());
+                exception.printStackTrace();
+            }
+
         }
+
+
         if (success) {
             DialogHelper.showInfoAlert("Success! Your file named: " + in.getName() + " was converted to: " + out.getName() +
                     ",\nview it by clicking on the link to your output directory", false);
@@ -56,8 +85,7 @@ public class PngConversions extends Converter {
         }
 
         deleteSourceFile(success, in);
-
-
     }
+
 }
 

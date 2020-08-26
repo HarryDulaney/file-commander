@@ -175,7 +175,7 @@ public abstract class ParentController {
             user.setImgPreference(DocType.GIF);
         } else if (imgPreference.equals(DocType.JPG.getExtension())) {
             user.setImgPreference(DocType.JPG);
-        } else {
+        } else if (imgPreference.equals(DocType.PNG.getExtension())) {
             user.setImgPreference(DocType.PNG);
         }
 

@@ -235,6 +235,7 @@ public class DragDropController extends ParentController {
      */
     @FXML
     private void handleRefreshListButton(ActionEvent actionEvent) {
+        DialogHelper.snackbarToast(rootPane,"Refreshed");
         reloadListFiles();
     }
 

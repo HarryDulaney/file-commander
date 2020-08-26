@@ -8,11 +8,8 @@ import com.commander.utils.DialogHelper;
 import com.commander.utils.ValidationUtils;
 import com.commander.utils.WindowUtil;
 import com.jfoenix.controls.JFXSnackbar;
-import com.sun.javafx.scene.control.skin.ColorPickerSkin;
 import javafx.application.HostServices;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -114,7 +111,7 @@ public class RootController extends ParentController {
                     openConverterButton.setDisable(true);
                     saveButton.setDisable(true);
                 } else {
-                    DialogHelper.showInfoAlert("Welcome Back to File Commander!", false);
+                    DialogHelper.snackbarToast(rootPane, "Welcome Back to File Commander!");
                 }
             }
             setProjectLabels();
@@ -331,10 +328,8 @@ public class RootController extends ParentController {
 
     @FXML
     private void handleExitPressed(ActionEvent event) {
-        setPreferences();
         fileService.onClose();
         ctx.close();
-
         Platform.exit();
     }
 
@@ -415,8 +410,11 @@ public class RootController extends ParentController {
 
             if (excelChoice.getText().equalsIgnoreCase(DocType.XLSX.getExtension())) {
                 user.setExcelPreference(DocType.XLSX);
-            } else
+            } else if (excelChoice.getText().equalsIgnoreCase(DocType.CSV.getExtension())) {
                 user.setExcelPreference(DocType.CSV);
+            } else {
+                throw new UnsupportedOperationException("Something unexpected happened while setting the Excel preference radio buttons");
+            }
         });
 
         jpgRadioButton.setToggleGroup(imgGroup);
@@ -426,7 +424,7 @@ public class RootController extends ParentController {
 
         imgGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
 
-            RadioButton imgChoice = (RadioButton) observable.getValue();
+            RadioButton imgChoice = (RadioButton) imgGroup.getSelectedToggle();
 
             if (imgChoice.getText().equalsIgnoreCase(DocType.JPG.getExtension())) {
                 user.setImgPreference(DocType.JPG);
@@ -435,8 +433,10 @@ public class RootController extends ParentController {
 
             } else if (imgChoice.getText().equalsIgnoreCase(DocType.GIF.getExtension())) {
                 user.setImgPreference(DocType.GIF);
+            } else if (imgChoice.getText().equalsIgnoreCase(DocType.PNG.getExtension())) {
+                user.setImgPreference(DocType.PNG);
             } else {
-                user.setImgPreference(DocType.GIF);
+                throw new UnsupportedOperationException("We were unable to process your image preference selection.");
             }
 
         });

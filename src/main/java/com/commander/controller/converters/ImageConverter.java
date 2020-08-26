@@ -34,9 +34,19 @@ public class ImageConverter extends Converter {
 
             sourceImage = ImageIO.read(in);
             if (sourceImage.getTransparency() != BufferedImage.OPAQUE) {
-
-                result = handleTransBg(sourceImage, format, out);
-
+                try {
+                    result = ImageIO.write(sourceImage, format, out);
+                    if (!result) {
+                        throw new Exception("Conversion with transparent pixels failed, now attempting conversion with" +
+                                " user default color replacing transparent pixels...");
+                    }
+                } catch (Exception exp) {
+                    log.info(exp.getMessage());
+                    result = handleTransBg(sourceImage, format, out);
+                    if (result) {
+                        log.info("The second conversion attempt was successful!");
+                    }
+                }
             } else {
                 result = ImageIO.write(sourceImage, format, out);
             }
@@ -73,6 +83,9 @@ public class ImageConverter extends Converter {
         BufferedImage modImage = new BufferedImage(srcImage.getWidth(), srcImage.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D graphic = modImage.createGraphics();
         graphic.drawImage(srcImage, 0, 0, new java.awt.Color((float) bgColor.getRed(), (float) bgColor.getGreen(), (float) bgColor.getBlue()), null); //Set the bgColor per user preference
-        return ImageIO.write(modImage, imgFormat, out);
+        boolean res = ImageIO.write(modImage, imgFormat, out);
+        graphic.dispose();
+
+        return res;
     }
 }

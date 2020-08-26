@@ -9,27 +9,28 @@ import com.commander.model.User;
  */
 public class ValidationUtils {
 
-    private ValidationUtils(){}
+    private ValidationUtils() {
+    }
 
     /**
      * @param user The current User
      * @return true if fields have been initialized
      */
     public static boolean validateUserPaths(User user) {
-        return  (user.getSourceFilePolicy() != null) &
+        return ((user.getSourceFilePolicy() != null) &
                 (user.getImgPreference() != null) &
                 (user.getWriteDirectoryPath() != null) &
                 (user.getDirectoryPath() != null) &
                 (user.getDocPreference() != null) &
-                (user.getExcelPreference() != null);
+                (user.getExcelPreference() != null) &
+                (user.getReplaceBgColor() != null));
     }
 
     /**
-     *
      * @param user The current User
      * @return true if User fields are initialized
      */
-    public static boolean validateUser(User user){
+    public static boolean validateUser(User user) {
         return ((user.getDocPreference() != null) & (user.getExcelPreference() != null))
                 && ((user.getImgPreference() != null) & (user.getDirectoryPath() != null))
                 && ((user.getWriteDirectoryPath() != null) & (user.getSourceFilePolicy() != null));

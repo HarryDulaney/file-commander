@@ -1,6 +1,7 @@
 package com.commander.controller;
 
 import com.commander.model.*;
+import com.commander.utils.ValidationUtils;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -109,11 +110,12 @@ public abstract class ParentController {
         userPreferences.put(DOC_TYPE_KEY, user.getDocPreference().getDocOperation());
         userPreferences.put(IMG_TYPE_KEY, user.getImgPreference().getExtension());
         userPreferences.put(SOURCE_POLICY_KEY, user.getSourceFilePolicy());
-        userPreferences.put(NEW_USER_KEY, "false");
+        if (ValidationUtils.validateUserPaths(user)) {
+            userPreferences.putBoolean(NEW_USER_KEY, false);
+        }
         // set color preference
         userPreferences.put(BACKGROUND_COLOR, user.getReplaceBgColor().toString());
-        System.out.print("Setting persistent user preferences, background color for images string value is: ");
-        System.out.print(user.getReplaceBgColor().toString() + "\n");
+        logger.info("Setting persistent user preferences, background color for images string value is: " + user.getReplaceBgColor().toString());
 
         try {
             userPreferences.sync();
@@ -140,8 +142,7 @@ public abstract class ParentController {
         String excelPreference = userPreferences.get(EXCEL_PREF_KEY, DEFAULT_EXCEL_TYPE.getExtension()); //Default Excel Type is XLSX
         String imgPreference = userPreferences.get(IMG_TYPE_KEY, DEFAULT_IMG_TYPE.getExtension()); //Default ImgType is JPG
         String colorPreference = userPreferences.get(BACKGROUND_COLOR, Color.WHITE.toString()); // Default white background
-        System.out.print("Loading preferences, Background Color for images string value is:  ");
-        System.out.print(colorPreference);
+        logger.info("Loading preferences, Background Color for images string value is: " + colorPreference);
         // set user preferences
         updateUser(docPreference, excelPreference, imgPreference, colorPreference);
 
@@ -181,19 +182,6 @@ public abstract class ParentController {
         Color userColor = Color.valueOf(colorStr);
         user.setReplaceBgColor(userColor);
 
-    }
-
-
-    /**
-     * Call Preferences.flush()
-     */
-    protected static void flushPreferences() {
-        try {
-            userPreferences.flush();
-        } catch (BackingStoreException bse) {
-            logger.error("BackingStoreException: " + bse.getMessage() + " | " + bse.getCause());
-
-        }
     }
 
     protected abstract void onClose();

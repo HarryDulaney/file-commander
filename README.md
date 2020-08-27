@@ -1,8 +1,21 @@
-# _File-Commander_
-## _File conversions made simple._ 
-## 1. Set your preferences the first time you run it.
-## 2. Drag and drop images(GIF,PNG,BMP,JPG), Word documents(DOCX,PDF) and Excel/Spreadsheet workbooks(CSV, XLSX).
-## 3. File Commander converts to your preferred format and saves in your output folder. 
+# File-Commander
+### File-Commander is a desktop application for performing file conversions. What makes File-Commander unique is its ability to persist 
+### the user's preferences between sessions. The user creates a settings profile and conversions are performed based on that.
+###  It is written purely in Java and comes packaged as a Jar file, executable on any system running Java 8 or later. 
+## The following conversions are currently supported:
+### Word Document Types:
+- DOCX ---> PDF
+- PDF --> text extraction to --> DOCX
+- PDF ---> DOCX (Windows only)
+### Excel Workbook / Spreadsheet Types:
+- XLSX ---> CSV
+- CSV ---> XLSX
+### Image Types: 
+#### The user chooses a default background color in the event of transparent background convert to a non-transparent supporting image format. 
+- PNG ---> JPG/ GIF/ BMP
+- JPG ---> PNG/ GIF/ BMP
+- GIF ---> PNG/ BMP/ JPG
+- BMP ---> PNG/ GIF/ JPG
 
-
-
+### This application was conceptualized, designed, and programmed by Harry Dulaney (HGDIV)
+### _Stay tuned for updates as new features are added on a regular basis_

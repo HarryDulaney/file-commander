@@ -80,16 +80,6 @@ public class ConvertibleFactory {
     }
 
 
-    /**
-     * @param fileName
-     * @param directoryPath
-     * @param writeDirectoryPath
-     * @return new Convertible
-     */
-    public static Convertible createDocx2HTML(String fileName, String directoryPath, String writeDirectoryPath) {
-        return new DocxToHtml(null, null);//TODO
-    }
-
 
 /************************************************/
 /*   Excel File Format Convertible Builders      *

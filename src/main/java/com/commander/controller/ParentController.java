@@ -65,9 +65,7 @@ public abstract class ParentController {
     static final String PROJECT_SOURCE_SAVE_KEY = "Save";
 
     static final String DOCX2PDF = "docx -> pdf";
-    static final String DOCX2HTML = "docx -> html"; //TODO
-    static final String HTML2DOCX = "html -> docx"; //TODO
-    static final String PDFtxt2DOCX = "pdf -> (EXTRACT TEXT) -> docx";
+//    static final String PDFtxt2DOCX = "pdf -> (EXTRACT TEXT) -> docx";
     static final String CLONE_PDF_TO_DOCX = "pdf -> docx (Windows Only)";
 
 
@@ -155,10 +153,6 @@ public abstract class ParentController {
             user.setDocPreference(DocOperation.DOCX_TO_PDF);
         } else if (docPreference.equals(DocOperation.PDF_txt_TO_DOCX.getDocOperation())) {
             user.setDocPreference(DocOperation.PDF_txt_TO_DOCX);
-        } else if (docPreference.equals(DocOperation.DOCX_TO_HTML.getDocOperation())) {
-            user.setDocPreference(DocOperation.DOCX_TO_HTML);
-        } else if (docPreference.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {
-            user.setDocPreference(DocOperation.HTML_TO_DOCX);
         } else if (docPreference.equals(DocOperation.PDF_TO_DOCX.getDocOperation())) {
             user.setDocPreference(DocOperation.PDF_TO_DOCX);
         }

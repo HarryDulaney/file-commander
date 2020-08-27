@@ -174,12 +174,6 @@ public class RootController extends ParentController {
         if (docPref.equals(DocOperation.PDF_txt_TO_DOCX.getDocOperation())) {
             user.setDocPreference(DocOperation.PDF_txt_TO_DOCX);
 
-        } else if (docPref.equals(DocOperation.DOCX_TO_HTML.getDocOperation())) {
-            user.setDocPreference(DocOperation.DOCX_TO_HTML);
-
-        } else if (docPref.equals(DocOperation.HTML_TO_DOCX.getDocOperation())) {
-            user.setDocPreference(DocOperation.HTML_TO_DOCX);
-
         } else if (docPref.equals(DocOperation.PDF_TO_DOCX.getDocOperation())) {
             user.setDocPreference(DocOperation.PDF_TO_DOCX);
 

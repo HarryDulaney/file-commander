@@ -7,10 +7,8 @@ package com.commander.model;
 public enum DocType {
     DOCX(".docx", "docx"),
     PDF(".pdf", "pdf"),
-    TXT(".txt", "txt"),
     XLSX(".xlsx", "xlsx"),
     CSV(".csv", "csv"),
-    HTML(".html", "html"),
     BMP(".bmp", "bmp"),
     PNG(".png", "png"),
     GIF(".gif", "gif"),
@@ -23,8 +21,6 @@ public enum DocType {
     public static final String XLSX_ID = "xlsx";
     public static final String DOCX_ID = "docx";
     public static final String PDF_ID = "pdf";
-    public static final String TXT_ID = "txt";
-    public static final String HTML_ID = "html";
     public static final String BMP_ID = "bmp";
     public static final String PNG_ID = "png";
     public static final String JPG_ID = "jpg";
@@ -53,13 +49,6 @@ public enum DocType {
     public static String pdf() {
         return PDF.extension;
 
-    }
-
-    public static String txt() {
-        return TXT.extension;
-    }
-    public static String html() {
-        return HTML.extension;
     }
 
     public static String csv() {

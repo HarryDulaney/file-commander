@@ -3,6 +3,7 @@ package com.commander.controller.converters;
 
 import com.commander.model.DocType;
 import com.commander.utils.DialogHelper;
+import com.sun.javafx.iio.png.PNGImageLoader2;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,8 +34,8 @@ public class PngConversions extends AbstractImageConverter {
     @Override
     public void convert() {
         final long starttime = System.currentTimeMillis();
-
-        if (format.equalsIgnoreCase(DocType.JPG_ID) || format.equalsIgnoreCase(DocType.BMP_ID)) {
+        /* Handle PNG to JPG*/
+        if (format.equalsIgnoreCase(DocType.JPG_ID)) {
             try {
                 BufferedImage bufferedImage = ImageIO.read(in);
                 success = handleTransBg(bufferedImage, format, out);
@@ -45,12 +46,47 @@ public class PngConversions extends AbstractImageConverter {
                 log.error("Exception occurred while converting png.", ioe.getCause());
                 ioe.printStackTrace();
             }
+            /* Handle PNG to BMP */
+        } else if (format.equalsIgnoreCase(DocType.BMP_ID)) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(in);
+                if (bufferedImage.getTransparency() != BufferedImage.OPAQUE) {
+                    try {
+                        success = handleSimpleImgConvert(bufferedImage, format, out);
+                        if (!success) {
+                            throw new Exception();
+                        }
+                        log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
 
+                    } catch (Exception ex1) {
+                        log.info("Png conversion with transparent pixels failed, now attempting conversion with" +
+                                " user default color replacing transparent pixels...");
+                        ex1.printStackTrace();
+                        boolean result = handleTransBg(bufferedImage, format, out);
+                        if (result) {
+                            success = true;
+                            log.info("The second conversion attempt was successful!");
+                            log.info("Converted --> from: " + in.getName() + " to -> " + out.getName() + " in " + ((System.currentTimeMillis() - starttime) + " ms."));
+
+                        }
+
+                    }
+
+                } else {
+                    success = handleSimpleImgConvert(bufferedImage, format, out);
+                }
+
+
+            } catch (IOException | IllegalArgumentException e) {
+                log.error("Error converting: " + in.getName() + " to -> " + out.getName());
+                e.printStackTrace();
+            }
+            /* Handle PNG to GIF*/
         } else {
             try {
                 BufferedImage bufferedImage = ImageIO.read(in);
                 try {
-                    success = ImageIO.write(bufferedImage, format, out);
+                    success = handleSimpleImgConvert(bufferedImage, format, out);
                     if (!success) {
                         throw new Exception();
                     }

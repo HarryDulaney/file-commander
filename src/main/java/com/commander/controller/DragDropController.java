@@ -117,9 +117,6 @@ public class DragDropController extends ParentController {
                         if (user.getDocPreference().getDocOperation().equals(DOCX2PDF)) {
                             convertible = ConvertibleFactory.createDocxToPdf(fileName,
                                     user.getDirectoryPath(), user.getWriteDirectoryPath());
-                        } else if (user.getDocPreference().getDocOperation().equals(DOCX2HTML)) {
-                            convertible = ConvertibleFactory.createDocx2HTML(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath());
-
                         }
                         break;
                     }
@@ -133,9 +130,7 @@ public class DragDropController extends ParentController {
                         }
                         break;
                     }
-                    case DocType.HTML_ID: {//TODO: Implement html to and from docx and pdf conversions
-                        break;
-                    }
+
                     case DocType.PNG_ID: {
                         convertible = ConvertibleFactory.createPngConvert(fileName, user.getDirectoryPath(), user.getWriteDirectoryPath(), user.getImgPreference());
                         break;

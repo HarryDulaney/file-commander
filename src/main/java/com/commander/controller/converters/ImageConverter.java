@@ -7,14 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 
 /**
- * {@code ImageConverter.class} is for programmatically converting between image file types.
+ * {@code ImageConverter } is for programmatically converting between image file types.
  */
 public class ImageConverter extends AbstractImageConverter {
 
@@ -79,7 +78,12 @@ public class ImageConverter extends AbstractImageConverter {
 
     @Override
     public void convert() {
+
+
         boolean succeeded = genericConversion();
+
+
+
         if (succeeded) {
             deleteSourceFile(true, in);
             DialogHelper.showInfoAlert("Success! Your image named: " + in.getName() + " was converted to: " + out.getName() +

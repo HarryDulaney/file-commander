@@ -4,10 +4,10 @@ It is unique in that it persists user preferences between sessions.
 The user creates a settings profile and conversions are performed based on that.
 ----
 ## How to run File-Commander:
-You can execute the File-Commander.jar file on any system with Java 8 or later installed. 
+You can execute the File-Commander.jar on any system with Java 8 or later installed. 
 + On Windows:
   + Use the .bat file included with the Release downloads to run the application. 
-+ On Mac/ Unix:
++ On Mac/ Linux:
   + Open a command prompt in the containing folder and run: java -jar File-Commander-0.1.0.jar
 ____
 ## What can it do?

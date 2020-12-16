@@ -16,6 +16,3 @@
 - JPG ---> PNG/ GIF/ BMP
 - GIF ---> PNG/ BMP/ JPG
 - BMP ---> PNG/ GIF/ JPG
-
-### This application was conceptualized, designed, and programmed by Harry Dulaney (HGDIV)
-### _Stay tuned for updates as new features are added on a regular basis_

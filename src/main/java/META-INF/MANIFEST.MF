@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.commander.FileCommanderApp
+Class-Path: BOOT-INF/classes
+

@@ -4,30 +4,32 @@ import com.commander.model.DocOperation;
 import com.commander.model.DocType;
 import com.commander.model.User;
 import com.commander.service.FileService;
+import com.commander.utils.Constants;
 import com.commander.utils.DialogHelper;
-import com.commander.utils.ValidationUtils;
-import com.commander.utils.WindowUtil;
 import com.jfoenix.controls.JFXSnackbar;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import com.jfoenix.controls.base.IFXLabelFloatControl;
+import net.rgielen.fxweaver.core.FxControllerAndView;
+import net.rgielen.fxweaver.core.FxWeaver;
+import net.rgielen.fxweaver.core.FxmlView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -39,12 +41,19 @@ import java.util.List;
  *
  * @author HGDIV
  */
-@Controller
-public class RootController extends ParentController {
+@Component
+@FxmlView("/fxml/mainview.fxml")
+public class RootController {
 
+    private final FxControllerAndView<DragDropController, BorderPane> dragDropController;
+    private final FxWeaver fxWeaver;
+    private User user;
+    @Autowired
+    RootController rootController;
     final Logger logger = LoggerFactory.getLogger(RootController.class);
-    public static final String MES_KEY = "MESSAGE";
 
+    @FXML
+    private BorderPane rootPane2;
 
     private FileService fileService;
     private ToggleGroup ssheetGroup;
@@ -53,7 +62,6 @@ public class RootController extends ParentController {
     private final boolean isWindowsOS = System.getProperty("os.name").contains("Windows");
 
     private HostServices hostServices;
-    private ConfigurableApplicationContext ctx;
 
     @FXML
     private ColorPicker bgColorPicker;
@@ -66,7 +74,7 @@ public class RootController extends ParentController {
     @FXML
     private RadioButton jpgRadioButton;
     @FXML
-    private AnchorPane rootPane;
+    private VBox rootPane;
 
     @FXML
     private Label projectUserLabel;
@@ -81,46 +89,33 @@ public class RootController extends ParentController {
     @FXML
     private Button saveButton;
     @FXML
-    private MenuItem openConverterButton;
-    @FXML
     private ComboBox<String> prefsComboBox;
     @FXML
     private ComboBox<String> textDocPrefsComboBox;
-    @FXML
-    private MenuItem saveUserPreferences;
-    @FXML
-    private MenuItem openPreferencesButton;
 
-
-    /**
-     * @param stage      The primary stage
-     * @param parameters message resources pass info about application lifecycle
-     */
-    @Override
-    public <T> void init(Stage stage, HashMap<String, T> parameters) {
-        super.init(stage, parameters);
-
-        if (parameters != null) {
-            String message = (String) parameters.get("MESSAGE");
-            if (message.equals(FRESH_START)) {
-                loadPreferences();
-                openPreferencesButton.setDisable(true);
-
-                if (user.getNuUser()) {
-                    handleNewProject();
-                    openConverterButton.setDisable(true);
-                    saveButton.setDisable(true);
-                } else {
-                    DialogHelper.snackbarToast(rootPane, "Welcome Back to File Commander!");
-                }
-            }
-            setProjectLabels();
-            configRadioButtonGroups();
-            configComboBoxes();
-
-        }
+    protected RootController(FxWeaver fxWeaver,
+                             @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<DragDropController, BorderPane> dragDropController) {
+        this.dragDropController = dragDropController;
+        this.fxWeaver = fxWeaver;
 
     }
+
+
+    @FXML
+    public void initialize() {
+
+        if (user.getNuUser()) {
+            handleNewProject();
+        } else {
+            DialogHelper.snackbarToast(rootPane, "Welcome Back to File Commander!");
+        }
+
+
+        setProjectLabels();
+        configRadioButtonGroups();
+        configComboBoxes();
+    }
+
 
     /**
      * Configures the Source File Policy Combobox and the Text Docs
@@ -129,7 +124,7 @@ public class RootController extends ParentController {
     private void configComboBoxes() {
         //Src File Policy ComboBox configure
         List<String> list = Arrays
-                .asList(PROJECT_SOURCE_DELETE_KEY, PROJECT_SOURCE_SAVE_KEY);
+                .asList(Constants.PROJECT_SOURCE_DELETE_KEY, Constants.PROJECT_SOURCE_SAVE_KEY);
         prefsComboBox.getItems().setAll(list);
         prefsComboBox.getSelectionModel().select(user.getSourceFilePolicy());
 
@@ -184,22 +179,6 @@ public class RootController extends ParentController {
     }
 
     /**
-     * @param event User clicked Save Preferences MenuItem on drop-down menu
-     */
-    @FXML
-    private void handleSaveUser(ActionEvent event) {
-        try {
-            setPreferences();
-            DialogHelper.snackbarToast(rootPane, "Your preferences have been saved.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            DialogHelper.showErrorAlert("Something went wrong trying to save your preferences");
-        }
-
-    }
-
-
-    /**
      * {@code handleSaveButton()}
      *
      * @param event User pressed Save button
@@ -207,8 +186,8 @@ public class RootController extends ParentController {
     @FXML
     private void handleSaveButton(ActionEvent event) {
         try {
-            setPreferences();
-            handleOpenConverter(event);
+            user.setPreferences();
+            dragDropController.getController().handleUpdatePreferences();
             DialogHelper.snackbarToast(rootPane, "Your preferences have been saved");
         } catch (Exception e3) {
             DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your preferences.");
@@ -217,50 +196,6 @@ public class RootController extends ParentController {
 
     }
 
-    /**
-     * Handles dropdown menu "Open Preferences Settings" option
-     *
-     * @param event menu item clicked
-     */
-    @FXML
-    private void handleOpenPreferences(ActionEvent event) {
-        HashMap<String, String> pbMap;
-
-        pbMap = new HashMap<>();
-        pbMap.put(MES_KEY, OPEN_PREFERENCES);
-
-        try {
-            WindowUtil.replaceFxmlOnWindow(rootPane, PREF_EMBED_FXML, stage, pbMap);
-            openPreferencesButton.setDisable(true);
-            saveUserPreferences.setDisable(false);
-            openConverterButton.setDisable(false);
-
-        } catch (Exception e2) {
-            e2.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    private void handleOpenConverter(ActionEvent event) {
-
-        if (ValidationUtils.validateUser(user)) {
-
-            HashMap<String, String> pbMap = new HashMap<>();
-            pbMap.put(MES_KEY, OPEN_CONVERTER);
-            try {
-                WindowUtil.replaceFxmlOnWindow(rootPane, DRAG_DROP_FXML, stage, pbMap);
-                openPreferencesButton.setDisable(false);
-                saveUserPreferences.setDisable(true);
-                openConverterButton.setDisable(true);
-
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        } else {
-            DialogHelper.showErrorAlert("Please confirm you have selected a preference for all fields before moving on.");
-        }
-    }
 
     @FXML
     protected void handleGitHubOpen(ActionEvent event) {
@@ -287,14 +222,8 @@ public class RootController extends ParentController {
             String strPath = result.getAbsolutePath();
             user.setDirectoryPath(strPath);
             directoryPathTextField.setText(strPath);
+            dragDropController.getController().setLabels();
 
-        }
-
-        if (saveButton.isDisable()) {
-            saveButton.setDisable(false);
-        }
-        if (openConverterButton.isDisable()) {
-            openConverterButton.setDisable(false);
         }
     }
 
@@ -323,7 +252,6 @@ public class RootController extends ParentController {
     @FXML
     private void handleExitPressed(ActionEvent event) {
         fileService.onClose();
-        ctx.close();
         Platform.exit();
     }
 
@@ -439,12 +367,11 @@ public class RootController extends ParentController {
 
 
     /***************************************************************
-     * Autowire
+     * Autowire Beans
      ***************************************************************/
-
     @Autowired
-    void setConfigurableApplicationContext(ConfigurableApplicationContext ctx) {
-        this.ctx = ctx;
+    void setUser(User user) {
+        this.user = user;
     }
 
 
@@ -454,18 +381,7 @@ public class RootController extends ParentController {
     }
 
     @Autowired
-    private void setHostServices(HostServices hostServices) {
+    private void setHostServices(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") HostServices hostServices) {
         this.hostServices = hostServices;
     }
-
-    @Override
-    protected void onClose() {
-        setPreferences();
-        fileService.onClose();
-        ctx.close();
-        Platform.exit();
-
-    }
-
-
 }

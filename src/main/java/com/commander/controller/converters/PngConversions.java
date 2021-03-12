@@ -3,8 +3,6 @@ package com.commander.controller.converters;
 
 import com.commander.model.DocType;
 import com.commander.utils.DialogHelper;
-import com.sun.javafx.iio.png.PNGImageLoader2;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,6 +31,7 @@ public class PngConversions extends AbstractImageConverter {
 
     @Override
     public void convert() {
+        // TODO: USE THE PNGDECODER to rework these methods
         final long starttime = System.currentTimeMillis();
         /* Handle PNG to JPG*/
         if (format.equalsIgnoreCase(DocType.JPG_ID)) {

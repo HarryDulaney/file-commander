@@ -255,7 +255,7 @@
         <top>
             <HBox prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                 <ImageView fitHeight="80.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../images/SPREADSHEET-ICON.png" />
+                    <Image url="@../../images/SPREADSHEET-ICON.png" />
                 </ImageView>
                 <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" prefHeight="74.0" prefWidth="901.0" text="Preferences " textAlignment="CENTER" wrapText="true">
                     <font>

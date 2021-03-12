@@ -1,7 +1,15 @@
 package com.commander.model;
 
+import com.commander.utils.Constants;
+import com.commander.utils.ValidationUtils;
 import javafx.scene.paint.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 /**
  * <p>
@@ -12,9 +20,9 @@ import org.springframework.stereotype.Component;
  *
  * @author HGDIV
  */
-
-@Component
 public class User {
+    static Logger logger = LoggerFactory.getLogger(User.class);
+
     /**
      * CURRENT_USER_ID is the System property "user.name" used for automatically identifying a unique application user
      */
@@ -55,12 +63,113 @@ public class User {
      * imgPreference contains the users preferred formatting option for image files
      */
     private DocType imgPreference;
+    /**
+     * Preferences Object
+     */
+    private static Preferences userPreferences;
+
+    /* --------------------------------------- Default values for User Enums --------------------------------------------- */
+    public static final DocType DEFAULT_EXCEL_TYPE = DocType.XLSX;
+    public static final DocType DEFAULT_IMG_TYPE = DocType.JPG;
 
 
     public User() {
         super();
+    }
+
+
+    /**
+     * Persist User's Preferences to memory
+     */
+    public Boolean setPreferences() {
+        userPreferences = Preferences.userNodeForPackage(getClass());
+
+        userPreferences.put(Constants.DIR_PATH_KEY, this.getDirectoryPath());
+        userPreferences.put(Constants.DIR_WRITE_PATH_KEY, this.getWriteDirectoryPath());
+        userPreferences.put(Constants.EXCEL_PREF_KEY, this.getExcelPreference().getExtension());
+        userPreferences.put(Constants.DOC_TYPE_KEY, this.getDocPreference().getDocOperation());
+        userPreferences.put(Constants.IMG_TYPE_KEY, this.getImgPreference().getExtension());
+        userPreferences.put(Constants.SOURCE_POLICY_KEY, this.getSourceFilePolicy());
+        if (ValidationUtils.validateUserPaths(this)) {
+            userPreferences.putBoolean(Constants.NEW_USER_KEY, false);
+        }
+        // set color preference
+        userPreferences.put(Constants.BACKGROUND_COLOR, this.getReplaceBgColor().toString());
+        logger.info("Setting persistent user preferences, background color for images string value is: " + this.getReplaceBgColor().toString());
+
+        try {
+            userPreferences.sync();
+            return true;
+        } catch (BackingStoreException bse) {
+            logger.error(bse.getMessage(), bse);
+            return false;
+        }
 
     }
+
+    /**
+     * Load Preferences into User (Handled internally by ParentController)
+     */
+    public void loadPreferences() {
+
+        userPreferences = Preferences.userNodeForPackage(getClass());
+        this.setNuUser(userPreferences.getBoolean(Constants.NEW_USER_KEY, true)); //Default value is true, meaning no
+        // pref
+        // stored for this user
+        this.setDirectoryPath(userPreferences.get(Constants.DIR_PATH_KEY, null));
+        this.setWriteDirectoryPath(userPreferences.get(Constants.DIR_WRITE_PATH_KEY, null));
+        this.setSourceFilePolicy(userPreferences.get(Constants.SOURCE_POLICY_KEY, Constants.PROJECT_SOURCE_SAVE_KEY));
+        //Default is Save
+        // source file
+
+        String docPreference = userPreferences.get(Constants.DOC_TYPE_KEY, DocOperation.DOCX_TO_PDF.getDocOperation());
+        //Default treatment for Word Documents Docx to Pdf
+        String excelPreference = userPreferences.get(Constants.EXCEL_PREF_KEY, DEFAULT_EXCEL_TYPE.getExtension());
+        //Default Excel Type is XLSX
+        String imgPreference = userPreferences.get(Constants.IMG_TYPE_KEY, DEFAULT_IMG_TYPE.getExtension());
+        //Default ImgType
+        // is JPG
+        String colorPreference = userPreferences.get(Constants.BACKGROUND_COLOR, Color.WHITE.toString()); // Default
+        // white
+        // background
+        logger.info("Loading preferences, Background Color for images string value is: " + colorPreference);
+        // set user preferences
+        updateUser(docPreference, excelPreference, imgPreference, colorPreference);
+
+
+    }
+
+    private void updateUser(String docPreference, String excelPreference, String imgPreference, String colorStr) {
+
+        if (docPreference.equals(DocOperation.DOCX_TO_PDF.getDocOperation())) {
+            setDocPreference(DocOperation.DOCX_TO_PDF);
+        } else if (docPreference.equals(DocOperation.PDF_txt_TO_DOCX.getDocOperation())) {
+            setDocPreference(DocOperation.PDF_txt_TO_DOCX);
+        } else if (docPreference.equals(DocOperation.PDF_TO_DOCX.getDocOperation())) {
+            setDocPreference(DocOperation.PDF_TO_DOCX);
+        }
+
+        if (excelPreference.equals(DocType.CSV.getExtension())) {
+            setExcelPreference(DocType.CSV);
+        } else if (excelPreference.equals(DocType.XLSX.getExtension())) {
+            setExcelPreference(DocType.XLSX);
+        }
+
+        if (imgPreference.equals(DocType.BMP.getExtension())) {
+            this.setImgPreference(DocType.BMP);
+        } else if (imgPreference.equals(DocType.GIF.getExtension())) {
+            this.setImgPreference(DocType.GIF);
+        } else if (imgPreference.equals(DocType.JPG.getExtension())) {
+            this.setImgPreference(DocType.JPG);
+        } else if (imgPreference.equals(DocType.PNG.getExtension())) {
+            this.setImgPreference(DocType.PNG);
+        }
+
+        Color userColor = Color.valueOf(colorStr);
+        this.setReplaceBgColor(userColor);
+
+    }
+
 
     public User(DocType excelPreference, DocOperation docPreference, DocType imgPreference) {
 

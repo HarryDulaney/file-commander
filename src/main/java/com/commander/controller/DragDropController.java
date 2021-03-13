@@ -1,33 +1,34 @@
 package com.commander.controller;
 
 import com.commander.controller.converters.Converter;
+import com.commander.controller.converters.ConvertibleFactory;
 import com.commander.model.Convertible;
 import com.commander.model.DocType;
+import com.commander.model.User;
 import com.commander.service.ConvertService;
 import com.commander.service.FileService;
-import com.commander.controller.converters.ConvertibleFactory;
+import com.commander.utils.Constants;
 import com.commander.utils.DialogHelper;
-import com.jfoenix.controls.JFXListView;
 import javafx.application.HostServices;
-import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
+import net.rgielen.fxweaver.core.FxWeaver;
+import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,55 +38,70 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
- * {@code DragDropController} is Controller for the list view
- * scene for performing file conversions
+ * {@code DragDropController} handles converterview, the FXMLView embedded in
+ * the  mainview and responsible for interacting with the user to
+ * perform the actual file conversions.
  *
  * @author HGDIV
  */
+@Component
+@FxmlView("/fxml/converterview.fxml")
+public class DragDropController {
 
-@Controller
-public class DragDropController extends ParentController {
+    private final FxWeaver fxWeaver;
 
     final Logger log = LoggerFactory.getLogger(DragDropController.class);
 
-    private ConfigurableApplicationContext ctx;
     private FileService fileService;
     private ConvertService convertService;
+    private User user;
+    private ObservableList<Label> observableList;
+    private ListView<Label> listView;
 
-    private ObservableList<Label> observableList = FXCollections.observableArrayList();
-    private JFXListView<Label> listView;
+    StringProperty obsSrcDirectory = new SimpleStringProperty();
+    StringProperty obsTrgtDirectory = new SimpleStringProperty();
+    StringProperty obsTextDocPref = new SimpleStringProperty();
+    StringProperty obsExcelDocPref = new SimpleStringProperty();
+    StringProperty obsImgTypePref = new SimpleStringProperty();
 
     @FXML
-    private AnchorPane embeddedPane;
+    private ScrollPane scrollPane;
     @FXML
     private Label superDirectoryLabel;
     @FXML
     private Label outputDirPathLbl;
     @FXML
-    private AnchorPane rootPane;
+    private BorderPane rootPane2;
     @FXML
     private Button runConvertButton;
     @FXML
-    private Button refreshListButton;
+    private Label wordPrefLabel;
     @FXML
-    private AnchorPane wordDocDisplayPane;
+    private Label imagePrefLabel;
     @FXML
-    private AnchorPane excelPrefDisplayPane;
-    @FXML
-    private AnchorPane imgPrefDisplayPane;
+    private Label excelPrefLabel;
 
     private HostServices hostServices;
+
+    protected DragDropController(FxWeaver fxWeaver) {
+        this.fxWeaver = fxWeaver;
+        observableList = FXCollections.observableArrayList();
+        listView = new ListView<>(observableList);
+    }
 
 
     /**
      * {@code handleSelectedItemConvert(ActionEvent e)}
      * Handles determining the conversion to run based on
      * 1. Extension of the file selected for conversion and
-     * 2. The users preference for that file type.
+     * 2. The users' preferences for that file type.
      *
      * @param event ActionEvent invoked when user selects to run file conversion.
      */
@@ -114,14 +130,14 @@ public class DragDropController extends ParentController {
                         break;
                     }
                     case DocType.DOCX_ID: {
-                        if (user.getDocPreference().getDocOperation().equals(DOCX2PDF)) {
+                        if (user.getDocPreference().getDocOperation().equals(Constants.DOCX2PDF)) {
                             convertible = ConvertibleFactory.createDocxToPdf(fileName,
                                     user.getDirectoryPath(), user.getWriteDirectoryPath());
                         }
                         break;
                     }
                     case DocType.PDF_ID: {
-                        if (user.getDocPreference().getDocOperation().equals(CLONE_PDF_TO_DOCX)) {
+                        if (user.getDocPreference().getDocOperation().equals(Constants.CLONE_PDF_TO_DOCX)) {
                             convertible = ConvertibleFactory.createClonePDFtoDOCX(fileName,
                                     user.getDirectoryPath(), user.getWriteDirectoryPath());
                         } else {
@@ -159,7 +175,7 @@ public class DragDropController extends ParentController {
                 }
 
             } catch (FileAlreadyExistsException e2) {
-                DialogHelper.snackbarToast(rootPane, e2.getMessage());
+                DialogHelper.snackbarToast(rootPane2, e2.getMessage());
 
             }
         }
@@ -167,88 +183,27 @@ public class DragDropController extends ParentController {
     }
 
 
-    @Override
-    public <T> void init(Stage stage, HashMap<String, T> parameters) {
-        super.init(stage, parameters);
-
-        fileService = (FileService) ctx.getBean("fileService");
-        convertService = (ConvertService) ctx.getBean("convertService");
-        String policy = user.getSourceFilePolicy();
-
-        HashMap<String, Object> resources = new HashMap<>();
-        resources.put("default.bg.color", user.getReplaceBgColor());
-        resources.put("delete.policy", policy.equals(PROJECT_SOURCE_DELETE_KEY));
-        Converter.setResources(resources);
-
-        setPreferencesViewer();
-        runConvertButton.setDisable(true);
-        setLabels();
-        initListView();
-    }
-
-    private void setPreferencesViewer() {
-        Label wordPref = new Label(user.getDocPreference().getDocOperation().toUpperCase());
-        wordPref.setFont(Font.font("SansSerif", 16.0));
-        wordPref.setAlignment(Pos.CENTER);
-        Label excelPref = new Label(user.getExcelPreference().getExtension().toUpperCase());
-        excelPref.setFont(Font.font("SansSerif", 17.0));
-        excelPref.setAlignment(Pos.CENTER);
-        Label imgPref = new Label(user.getImgPreference().getExtension().toUpperCase());
-        imgPref.setFont(Font.font("SansSerif", 17.0));
-        imgPref.setAlignment(Pos.CENTER);
-
-        wordDocDisplayPane.getChildren().add(wordPref);
-        excelPrefDisplayPane.getChildren().add(excelPref);
-        imgPrefDisplayPane.getChildren().add(imgPref);
-
-    }
-
-    /**
-     * {@code setLabels()} Initializes the clickable Labels and event listeners for the
-     * source directory and output directory.
-     */
-    private void setLabels() {
-        superDirectoryLabel.setText(user.getDirectoryPath());
-        outputDirPathLbl.setText(user.getWriteDirectoryPath());
-
-        superDirectoryLabel.setOnMouseClicked(event -> {
-            Path p = Paths.get(user.getDirectoryPath());
-            hostServices.showDocument(p.toUri().toString());
-        });
-        outputDirPathLbl.setOnMouseClicked(ev -> {
-            Path path = Paths.get(user.getWriteDirectoryPath());
-            hostServices.showDocument(path.toUri().toString());
-        });
-
-    }
-
-    /**
-     * Loads/Reloads the contents of list view
-     *
-     * @param actionEvent refreshListButton pressed
-     */
     @FXML
-    private void handleRefreshListButton(ActionEvent actionEvent) {
-        DialogHelper.snackbarToast(rootPane, "Refreshed");
-        reloadListFiles();
-    }
+    public void initialize() {
+        HashMap<String, Object> resourceBundle = new HashMap<>();
+        resourceBundle.put("delete.policy", user.getSourceFilePolicy());
+        resourceBundle.put("default.bg.color", user.getReplaceBgColor());
 
-    /**
-     * Handles checkbox selected / un-selected behavior. When selected,
-     * the ListView populates with files in the source directory that need
-     * to be converted, under the current preferences settings.
-     */
-    private void reloadListFiles() {
-        observableList.clear();
-        runConvertButton.setDisable(true);
-        fileService.getFilterDirectoryFiles(user, e -> {
-            File[] files = (File[]) e.getSource().getValue();
-            for (File file : files) {
-                observableList.add(new Label(file.getName()));
-            }
-            listView.setItems(observableList);
-        }, null);
+        if (Objects.nonNull(user)) {
+            //Bind reactive preference values
+            wordPrefLabel.textProperty().bind(obsTextDocPref);
+            excelPrefLabel.textProperty().bind(obsExcelDocPref);
+            imagePrefLabel.textProperty().bind(obsImgTypePref);
+            superDirectoryLabel.textProperty().bind(obsSrcDirectory);
+            outputDirPathLbl.textProperty().bind(obsTrgtDirectory);
 
+            Converter.setResources(resourceBundle);
+
+
+            setPreferencesViewer();
+            setLabels();
+            initListView();
+        }
     }
 
     /**
@@ -257,13 +212,7 @@ public class DragDropController extends ParentController {
      * behaviors for rapid adding of new files to the directory
      */
     private void initListView() {
-        ScrollPane scrollPane = new ScrollPane();
-        listView = new JFXListView<>();
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        listView.setPrefSize(610, 610);
-        reloadListFiles();
-
+        listView.setMinSize(600, 450);
         listView.setItems(observableList);
         listView.setOnDragOver(event -> {
             if (event.getDragboard().hasFiles()) {
@@ -313,33 +262,99 @@ public class DragDropController extends ParentController {
                 }
             }
         });
+        loadFilesList();
         scrollPane.setContent(listView);
-        embeddedPane.getChildren().add(scrollPane);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+    }
+
+
+    /**
+     * Handles Refresh button logic. Reloads files to populate the Drag and Drop
+     * ListView with new Labels that represent files that the user would want to convert
+     * based on an update to the User's Preferences
+     * TODO: this should be triggered automatically when the SAVE event is fired from {@code RootController.class}.
+     */
+    private void loadFilesList() {
+        List<Label> fileList = new ArrayList<>();
+        fileService.getFilterDirectoryFiles(user, e -> {
+            File[] files = (File[]) e.getSource().getValue();
+            for (File file : files) {
+
+                fileList.add(new Label(file.getName()));
+            }
+            observableList.setAll(fileList);
+
+        }, null);
+    }
+
+    void setPreferencesViewer() {
+
+        obsTextDocPref.set(user.getDocPreference().getDocOperation());
+        obsExcelDocPref.set(user.getExcelPreference().getExtension());
+        obsImgTypePref.set(user.getImgPreference().getExtension());
+    }
+
+    /**
+     * {@code setLabels()} Initializes the clickable Labels and event listeners for the
+     * source directory and output directory.
+     */
+    void setLabels() {
+
+        obsSrcDirectory.set(user.getDirectoryPath());
+        obsTrgtDirectory.set(user.getWriteDirectoryPath());
+
+        superDirectoryLabel.setOnMouseClicked(event -> {
+            Path p = Paths.get(user.getDirectoryPath());
+            hostServices.showDocument(p.toUri().toString());
+        });
+        outputDirPathLbl.setOnMouseClicked(ev -> {
+            Path path = Paths.get(user.getWriteDirectoryPath());
+            hostServices.showDocument(path.toUri().toString());
+        });
+
+    }
+
+    /**
+     * Loads/Reloads the contents of list view
+     *
+     * @param actionEvent refreshListButton pressed
+     */
+    @FXML
+    protected void handleRefreshListButton(ActionEvent actionEvent) {
+        loadFilesList();
+        DialogHelper.snackbarToast(rootPane2, "Refreshed");
     }
 
 
     /**************************************************************
-     * Autowire
+     * Autowire Beans
      **************************************************************/
 
     @Autowired
-    private void setConfigurableApplicationContext(ConfigurableApplicationContext ctx) {
-        this.ctx = ctx;
+    private void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
+
+
+    @Autowired
+    private void setConvertService(ConvertService convertService) {
+        this.convertService = convertService;
     }
 
     @Autowired
-    private void setHostServices(HostServices hostServices) {
+    private void setUser(User user) {
+        this.user = user;
+    }
+
+    @Autowired
+    private void setHostServices(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") HostServices hostServices) {
         this.hostServices = hostServices;
     }
 
-
-    @Override
-    protected void onClose() {
-        ctx.close();
-        fileService.onClose();
-        convertService.onClose();
-        Platform.exit();
-
+    protected void handleUpdatePreferences() {
+        loadFilesList();
+        setPreferencesViewer();
+        setLabels();
     }
-
 }

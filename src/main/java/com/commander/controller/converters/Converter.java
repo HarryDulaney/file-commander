@@ -1,6 +1,7 @@
 package com.commander.controller.converters;
 
 import com.commander.model.Convertible;
+import com.commander.utils.Constants;
 import com.commander.utils.DialogHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,8 +89,10 @@ public abstract class Converter implements Convertible {
      * @param resources the resources
      */
     public static <T> void setResources(HashMap<String, T> resources) {
-        if (resources.get("delete.policy") instanceof Boolean) {
-            deleteSourceAfterConverted = (Boolean) resources.get("delete.policy");
+        if (resources.get("delete.policy") instanceof String) {
+            deleteSourceAfterConverted =
+                    String.valueOf(resources.get("delete.policy")).equals(Constants.PROJECT_SOURCE_DELETE_KEY) ?
+                            Boolean.TRUE : Boolean.FALSE;
         }
         if (resources.get("default.bg.color") instanceof javafx.scene.paint.Color) {
             bgColor = (javafx.scene.paint.Color) resources.get("default.bg.color");

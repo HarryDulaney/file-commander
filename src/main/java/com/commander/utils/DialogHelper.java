@@ -11,11 +11,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -198,15 +201,18 @@ public final class DialogHelper {
         snackbar.setPrefWidth(500);
         VBox vbox = new VBox();
         Label label = new Label(message);
-        label.setFont(Font.font("SansSerif", FontWeight.BOLD,16.0));
-        label.setTextFill(Color.WHITE);
+        label.setFont(Font.font("SansSerif", FontWeight.BOLD, 16.0));
+        label.setTextFill(Color.MIDNIGHTBLUE);
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setAlignment(Pos.CENTER);
         label.setWrapText(true);
-        vbox.setAlignment(Pos.CENTER);
-        label.setPrefSize(500,100);
+        label.setPrefSize(500, 100);
         vbox.autosize();
-        label.setBackground(new Background(new BackgroundFill(Color.GRAY,new CornerRadii(3.5),Insets.EMPTY)));
+        label.setBackground(new Background(new BackgroundFill(new Color(0.2, 0.1, 0.3, 0.1),
+                new CornerRadii(3.5),
+                Insets.EMPTY)));
         vbox.getChildren().add(label);
-        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(3.33),null);
+        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(3.33), null);
         snackbar.enqueue(snackbarEvent);
 
     }

@@ -17,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import com.jfoenix.controls.base.IFXLabelFloatControl;
 import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -48,8 +47,6 @@ public class RootController {
     private final FxControllerAndView<DragDropController, BorderPane> dragDropController;
     private final FxWeaver fxWeaver;
     private User user;
-    @Autowired
-    RootController rootController;
     final Logger logger = LoggerFactory.getLogger(RootController.class);
 
     @FXML
@@ -58,7 +55,6 @@ public class RootController {
     private FileService fileService;
     private ToggleGroup ssheetGroup;
     private ToggleGroup imgGroup;
-    private JFXSnackbar snackbar;
     private final boolean isWindowsOS = System.getProperty("os.name").contains("Windows");
 
     private HostServices hostServices;

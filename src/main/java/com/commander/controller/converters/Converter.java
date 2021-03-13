@@ -31,7 +31,7 @@ public abstract class Converter implements Convertible {
     File out;
 
 
-    private static Boolean deleteSourceAfterConverted;
+    private static Boolean deleteSourceAfterConverted = Boolean.FALSE;
     /**
      * The constant log.
      */

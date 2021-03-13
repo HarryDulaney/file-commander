@@ -22,10 +22,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.commons.io.FilenameUtils;
@@ -98,8 +94,6 @@ public class DragDropController {
         this.fxWeaver = fxWeaver;
         observableList = FXCollections.observableArrayList();
         listView = new ListView<>(observableList);
-
-
     }
 
 
@@ -191,18 +185,25 @@ public class DragDropController {
 
     @FXML
     public void initialize() {
+        HashMap<String, Object> resourceBundle = new HashMap<>();
+        resourceBundle.put("delete.policy", user.getSourceFilePolicy());
+        resourceBundle.put("default.bg.color", user.getReplaceBgColor());
 
-        if (Objects.nonNull(user))
-        //Bind reactive preference values
-        wordPrefLabel.textProperty().bind(obsTextDocPref);
-        excelPrefLabel.textProperty().bind(obsExcelDocPref);
-        imagePrefLabel.textProperty().bind(obsImgTypePref);
-        superDirectoryLabel.textProperty().bind(obsSrcDirectory);
-        outputDirPathLbl.textProperty().bind(obsTrgtDirectory);
+        if (Objects.nonNull(user)) {
+            //Bind reactive preference values
+            wordPrefLabel.textProperty().bind(obsTextDocPref);
+            excelPrefLabel.textProperty().bind(obsExcelDocPref);
+            imagePrefLabel.textProperty().bind(obsImgTypePref);
+            superDirectoryLabel.textProperty().bind(obsSrcDirectory);
+            outputDirPathLbl.textProperty().bind(obsTrgtDirectory);
 
-        setPreferencesViewer();
-        setLabels();
-        initListView();
+            Converter.setResources(resourceBundle);
+
+
+            setPreferencesViewer();
+            setLabels();
+            initListView();
+        }
     }
 
     /**

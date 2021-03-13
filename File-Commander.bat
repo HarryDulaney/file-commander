@@ -1,0 +1,1 @@
+java -jar File-Commander-0.2.0.jar

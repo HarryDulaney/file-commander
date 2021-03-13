@@ -11,7 +11,7 @@
 
     <groupId>com.commander</groupId>
     <artifactId>FileCommander</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
     <name>FileCommander</name>
     <description>File format conversion system with settings for preferred file formatting by type</description>
@@ -155,7 +155,7 @@
 
     </dependencies>
     <build>
-        <finalName>File-Commander-0.1.0</finalName>
+        <finalName>File-Commander-0.2.0</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

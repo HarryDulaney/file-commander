@@ -12,3 +12,4 @@ target/
 .settings/
 /src/main/resources/application.properties
 /File Commander.iml
+/design/

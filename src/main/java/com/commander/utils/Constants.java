@@ -1,19 +1,5 @@
 package com.commander.utils;
 
-import com.commander.model.*;
-import com.commander.utils.ValidationUtils;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Priority;
-import java.util.HashMap;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
-
 
 /**
  * Global Application Constants
@@ -23,8 +9,8 @@ import java.util.prefs.Preferences;
 public class Constants {
 
     /* ------------------------------------------ FXML Path Constants ---------------------------------------------------- */
-    public static final String DRAG_DROP_FXML = "/fxml/archive/draganddrop.fxml";
-    public static final String PREF_EMBED_FXML = "/fxml/archive/settingsframe.fxml";
+    public static final String DRAG_DROP_FXML = "/design/archive/draganddrop.fxml";
+    public static final String PREF_EMBED_FXML = "/design/archive/settingsframe.fxml";
     public static final String ROOT_FXML = "/fxml/mainview.fxml";
 
 

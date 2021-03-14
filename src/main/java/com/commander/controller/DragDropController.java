@@ -62,14 +62,11 @@ public class DragDropController {
     private FileService fileService;
     private ConvertService convertService;
     private User user;
-    private ObservableList<Label> observableList;
-    private ListView<Label> listView;
+    private final ObservableList<Label> observableList;
+    private final ListView<Label> listView;
 
     StringProperty obsSrcDirectory = new SimpleStringProperty();
     StringProperty obsTrgtDirectory = new SimpleStringProperty();
-    StringProperty obsTextDocPref = new SimpleStringProperty();
-    StringProperty obsExcelDocPref = new SimpleStringProperty();
-    StringProperty obsImgTypePref = new SimpleStringProperty();
 
     @FXML
     private ScrollPane scrollPane;
@@ -81,12 +78,6 @@ public class DragDropController {
     private BorderPane rootPane2;
     @FXML
     private Button runConvertButton;
-    @FXML
-    private Label wordPrefLabel;
-    @FXML
-    private Label imagePrefLabel;
-    @FXML
-    private Label excelPrefLabel;
 
     private HostServices hostServices;
 
@@ -185,25 +176,25 @@ public class DragDropController {
 
     @FXML
     public void initialize() {
+
+        if (Objects.nonNull(user)) {
+
+            superDirectoryLabel.textProperty().bind(obsSrcDirectory);
+            outputDirPathLbl.textProperty().bind(obsTrgtDirectory);
+
+            setLabels();
+            initListView();
+            updateSrcFileAndBgColorPreference();
+        }
+    }
+
+   protected void updateSrcFileAndBgColorPreference() {
         HashMap<String, Object> resourceBundle = new HashMap<>();
         resourceBundle.put("delete.policy", user.getSourceFilePolicy());
         resourceBundle.put("default.bg.color", user.getReplaceBgColor());
 
-        if (Objects.nonNull(user)) {
-            //Bind reactive preference values
-            wordPrefLabel.textProperty().bind(obsTextDocPref);
-            excelPrefLabel.textProperty().bind(obsExcelDocPref);
-            imagePrefLabel.textProperty().bind(obsImgTypePref);
-            superDirectoryLabel.textProperty().bind(obsSrcDirectory);
-            outputDirPathLbl.textProperty().bind(obsTrgtDirectory);
+        Converter.setResources(resourceBundle);
 
-            Converter.setResources(resourceBundle);
-
-
-            setPreferencesViewer();
-            setLabels();
-            initListView();
-        }
     }
 
     /**
@@ -288,13 +279,6 @@ public class DragDropController {
         }, null);
     }
 
-    void setPreferencesViewer() {
-
-        obsTextDocPref.set(user.getDocPreference().getDocOperation());
-        obsExcelDocPref.set(user.getExcelPreference().getExtension());
-        obsImgTypePref.set(user.getImgPreference().getExtension());
-    }
-
     /**
      * {@code setLabels()} Initializes the clickable Labels and event listeners for the
      * source directory and output directory.
@@ -354,7 +338,7 @@ public class DragDropController {
 
     protected void handleUpdatePreferences() {
         loadFilesList();
-        setPreferencesViewer();
         setLabels();
     }
+
 }

@@ -202,17 +202,17 @@ public final class DialogHelper {
         VBox vbox = new VBox();
         Label label = new Label(message);
         label.setFont(Font.font("SansSerif", FontWeight.BOLD, 16.0));
-        label.setTextFill(Color.MIDNIGHTBLUE);
+        label.setTextFill(Color.DARKSLATEBLUE);
         label.setTextAlignment(TextAlignment.CENTER);
         label.setAlignment(Pos.CENTER);
         label.setWrapText(true);
-        label.setPrefSize(500, 100);
         vbox.autosize();
         label.setBackground(new Background(new BackgroundFill(new Color(0.2, 0.1, 0.3, 0.1),
                 new CornerRadii(3.5),
-                Insets.EMPTY)));
+                new Insets(3.5))));
         vbox.getChildren().add(label);
-        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(3.33), null);
+        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(1.33),
+                null);
         snackbar.enqueue(snackbarEvent);
 
     }

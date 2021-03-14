@@ -64,25 +64,6 @@ public abstract class AbstractImageConverter extends Converter {
         return res;
     }
 
-//    /**
-//     * Handle trans support boolean.
-//     *
-//     * @param srcImage  the src image
-//     * @param imgFormat the img format
-//     * @param out       the out
-//     * @return the boolean
-//     * @throws IOException              the io exception
-//     * @throws IllegalArgumentException the illegal argument exception
-//     */
-//    static boolean handleTransSupport(BufferedImage srcImage, String imgFormat, File out) throws IOException, IllegalArgumentException {
-//        log.info("Attempting manual conversion with alpha channel (transparent background)");
-//        java.awt.Color transparency = new java.awt.Color(0,0,0,0);
-//
-//        graphic.dispose();
-//
-//        return res;
-//    }
-
     /**
      * Handle simple img convert boolean.
      *

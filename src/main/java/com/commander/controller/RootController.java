@@ -6,7 +6,6 @@ import com.commander.model.User;
 import com.commander.service.FileService;
 import com.commander.utils.Constants;
 import com.commander.utils.DialogHelper;
-import com.jfoenix.controls.JFXSnackbar;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -83,8 +82,6 @@ public class RootController {
     @FXML
     private TextField outputPathTextField;
     @FXML
-    private Button saveButton;
-    @FXML
     private ComboBox<String> prefsComboBox;
     @FXML
     private ComboBox<String> textDocPrefsComboBox;
@@ -152,7 +149,9 @@ public class RootController {
     private void handleSrcFilePrefChanged(ActionEvent event) {
         String pref = prefsComboBox.getSelectionModel().getSelectedItem();
         user.setSourceFilePolicy(pref);
-
+        updatePreferenceValues("Source file handling policy changed to " + user.getSourceFilePolicy() + " the file " +
+                "after conversion.");
+        dragDropController.getController().updateSrcFileAndBgColorPreference();
     }
 
     /**
@@ -172,22 +171,23 @@ public class RootController {
             user.setDocPreference(DocOperation.DOCX_TO_PDF);
 
         }
+        updatePreferenceValues("Text document file type preference changed to " + user.getDocPreference().getDocOperation());
+
     }
 
     /**
-     * {@code handleSaveButton()}
+     * {@code updatePreferenceValues(String message)}
      *
-     * @param event User pressed Save button
+     * @param message to display on updating preferences
      */
-    @FXML
-    private void handleSaveButton(ActionEvent event) {
-        try {
-            user.setPreferences();
+    private void updatePreferenceValues(String message) {
+
+        Boolean success = user.setPreferences();
+        if (success) {
             dragDropController.getController().handleUpdatePreferences();
-            DialogHelper.snackbarToast(rootPane, "Your preferences have been saved");
-        } catch (Exception e3) {
+            DialogHelper.snackbarToast(rootPane, message);
+        } else {
             DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your preferences.");
-            e3.printStackTrace();
         }
 
     }
@@ -218,7 +218,8 @@ public class RootController {
             String strPath = result.getAbsolutePath();
             user.setDirectoryPath(strPath);
             directoryPathTextField.setText(strPath);
-            dragDropController.getController().setLabels();
+
+            updatePreferenceValues("Source folder updated.");
 
         }
     }
@@ -235,12 +236,14 @@ public class RootController {
         File result = directoryChooser.showDialog(new Stage());
         if (result == null && user.getWriteDirectoryPath() == null) {
             DialogHelper.showErrorAlert(
-                    "Please assign an output directory to write new files into, before moving on.");
+                    "Please assign an output directory to write new files into, before running conversions.");
 
         } else if (result != null) {
             String writePath = result.getAbsolutePath();
             user.setWriteDirectoryPath(writePath);
             outputPathTextField.setText(writePath);
+
+            updatePreferenceValues("Output folder updated.");
 
         }
     }
@@ -248,11 +251,12 @@ public class RootController {
     @FXML
     private void handleExitPressed(ActionEvent event) {
         fileService.onClose();
+        updatePreferenceValues("Saving user preferences before exiting...");
         Platform.exit();
     }
 
     /**
-     * Configures GUI labels and textfield saved values.
+     * Configures GUI labels and text field saved values.
      */
     private void setProjectLabels() {
 
@@ -267,7 +271,10 @@ public class RootController {
     private void handleColorChanged(ActionEvent actionEvent) {
         Color colorChoice = bgColorPicker.getValue();
         user.setReplaceBgColor(colorChoice);
+        updatePreferenceValues("Background color to use when image does not support transparency updated.");
+        dragDropController.getController().updateSrcFileAndBgColorPreference();
     }
+
 
     /**
      * Triggers Welcome message Pop-Up if User.nuUser evaluates to true
@@ -333,6 +340,11 @@ public class RootController {
             } else {
                 throw new UnsupportedOperationException("Something unexpected happened while setting the Excel preference radio buttons");
             }
+            if (oldValue != newValue) {
+                updatePreferenceValues("Excel file type preference changed to " + user.getExcelPreference().getExtension());
+
+            }
+
         });
 
         jpgRadioButton.setToggleGroup(imgGroup);
@@ -348,13 +360,17 @@ public class RootController {
                 user.setImgPreference(DocType.JPG);
             } else if (imgChoice.getText().equalsIgnoreCase(DocType.BMP.getExtension())) {
                 user.setImgPreference(DocType.BMP);
-
             } else if (imgChoice.getText().equalsIgnoreCase(DocType.GIF.getExtension())) {
                 user.setImgPreference(DocType.GIF);
             } else if (imgChoice.getText().equalsIgnoreCase(DocType.PNG.getExtension())) {
                 user.setImgPreference(DocType.PNG);
             } else {
                 throw new UnsupportedOperationException("We were unable to process your image preference selection.");
+            }
+            if (oldValue != newValue) {
+                updatePreferenceValues("Image file type preference changed to " + user.getImgPreference().getExtension().toUpperCase());
+
+
             }
 
         });

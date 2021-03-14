@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 
 <VBox fx:id="rootPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.RootController">
-    <BorderPane VBox.vgrow="ALWAYS">
+    <BorderPane maxWidth="900.0">
         <center>
             <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="528.0" prefWidth="250.0" BorderPane.alignment="CENTER_LEFT">
                 <columnConstraints>
@@ -34,13 +34,6 @@
                         <Tooltip text="Choose how you want Excel workbook file types to be handled" wrapText="true" />
                     </tooltip>
                 </Label>
-                <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
-                    onAction="#handleSaveButton" text="Update" textAlignment="CENTER" GridPane.columnSpan="2"
-                    GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-                    <GridPane.margin>
-                        <Insets top="30.0" />
-                    </GridPane.margin>
-                </Button>
                 <Group GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                     <RadioButton id="xlsx" mnemonicParsing="false" text=".xlsx" fx:id="xlsxRadioButton">
                         <font>
@@ -174,7 +167,7 @@
                 </VBox>
                 <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAssignOutputDirectory" text="Change Output" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="TOP">
                     <GridPane.margin>
-                        <Insets right="10.0" />
+                        <Insets right="10.0" top="10.0" />
                     </GridPane.margin>
                 </Button>
                 <TextField fx:id="outputPathTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="386.0" promptText="Output Folder" text="Choose an output folder" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
@@ -222,7 +215,7 @@
             <fx:include source="converterview.fxml" VBox.vgrow="ALWAYS" />
         </right>
       <top>
-          <MenuBar prefHeight="26.0" prefWidth="778.0" BorderPane.alignment="CENTER">
+          <MenuBar BorderPane.alignment="CENTER">
               <Menu mnemonicParsing="false" text="File">
                   <MenuItem mnemonicParsing="false" onAction="#handleExitPressed" text="Exit" />
               </Menu>

@@ -31,7 +31,7 @@ public class DocxToPdf extends Converter {
 
         try {
             PdfOptions pdfOptions = PdfOptions.create();
-            pdfOptions.fontEncoding("UTF-8");
+//            pdfOptions.fontEncoding("UTF-8");
             XWPFDocument d = new XWPFDocument(OPCPackage.open(in));
             FileOutputStream fileOutputStream = new FileOutputStream(out);
             PdfConverter.getInstance().convert(d, fileOutputStream, pdfOptions);

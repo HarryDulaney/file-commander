@@ -21,7 +21,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.commons.io.FilenameUtils;
@@ -166,7 +169,7 @@ public class DragDropController {
                 }
 
             } catch (FileAlreadyExistsException e2) {
-                DialogHelper.snackbarToast(rootPane2, e2.getMessage());
+                DialogHelper.snackbarToast(e2.getMessage());
 
             }
         }
@@ -188,7 +191,7 @@ public class DragDropController {
         }
     }
 
-   protected void updateSrcFileAndBgColorPreference() {
+    protected void updateSrcFileAndBgColorPreference() {
         HashMap<String, Object> resourceBundle = new HashMap<>();
         resourceBundle.put("delete.policy", user.getSourceFilePolicy());
         resourceBundle.put("default.bg.color", user.getReplaceBgColor());
@@ -307,7 +310,7 @@ public class DragDropController {
     @FXML
     protected void handleRefreshListButton(ActionEvent actionEvent) {
         loadFilesList();
-        DialogHelper.snackbarToast(rootPane2, "Refreshed");
+        DialogHelper.snackbarToast("Refreshed");
     }
 
 

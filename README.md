@@ -13,7 +13,7 @@ You can execute the File-Commander.jar on any system with Java 8 or later instal
   + Open a command prompt in the containing folder and run: java -jar File-Commander-0.1.0.jar
 ____
 ## What can it do?
-## The following conversions are currently supported:
+## File Commander supports the following conversions:
 ### Word Document Types:
 - DOCX ---> PDF
 - PDF --> text extraction to --> DOCX
@@ -27,3 +27,4 @@ ____
 - JPG ---> PNG/ GIF/ BMP
 - GIF ---> PNG/ BMP/ JPG
 - BMP ---> PNG/ GIF/ JPG
+ 

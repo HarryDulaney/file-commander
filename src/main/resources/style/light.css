@@ -1,0 +1,76 @@
+@font-face {
+    font-family: TitilliumWeb;
+    src: url('fonts/TitilliumWeb-Regular.ttf');
+}
+
+@font-face {
+    font-family: TitilliumWeb;
+    src: url('fonts/TitilliumWeb-Italic.ttf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: TitilliumWeb;
+    src: url('fonts/TitilliumWeb-Bold.ttf');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: TitilliumWeb;
+    src: url('fonts/TitilliumWeb-Black.ttf');
+    font-stretch: expanded;
+}
+
+@font-face {
+    font-family: TitilliumWeb;
+    src: url('fonts/TitilliumWeb-Light.ttf');
+    font-style: light;
+}
+
+.root {
+    -fx-font-size: 11pt;
+    -fx-base: #ffffff;
+    -fx-background: #ffffff;
+    -fx-font-family: "TitilliumWeb";
+}
+
+.drag-drop-icon {
+    -fx-background-color: black;
+}
+
+.button {
+    -fx-font-family: TitilliumWeb;
+    -fx-text-fill: black;
+    -fx-background-color: lightblue;
+}
+
+.button:hover {
+    -fx-background-color: #0470e2;
+
+}
+
+.label {
+    -fx-font-family: TitilliumWeb;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+
+}
+
+.link-label {
+    -fx-text-fill: #044ed0;
+    -fx-font-family: TitilliumWeb;
+    -fx-font-size: 10px;
+
+}
+
+.pref-header-label {
+    -fx-font-family: TitilliumWeb;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+
+}
+
+.link-label:hover {
+    -fx-text-fill: #5986f5;
+}

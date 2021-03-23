@@ -11,7 +11,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
@@ -45,11 +47,9 @@ public class RootController {
 
     private final FxControllerAndView<DragDropController, BorderPane> dragDropController;
     private final FxWeaver fxWeaver;
+
     private User user;
     final Logger logger = LoggerFactory.getLogger(RootController.class);
-
-    @FXML
-    private BorderPane rootPane2;
 
     private FileService fileService;
     private ToggleGroup ssheetGroup;
@@ -70,6 +70,8 @@ public class RootController {
     private RadioButton jpgRadioButton;
     @FXML
     private VBox rootPane;
+    @FXML
+    private AnchorPane infoPane;
 
     @FXML
     private Label projectUserLabel;
@@ -85,12 +87,21 @@ public class RootController {
     private ComboBox<String> prefsComboBox;
     @FXML
     private ComboBox<String> textDocPrefsComboBox;
+    @FXML
+    private MenuItem darkThemeMenuItem;
+    @FXML
+    private MenuItem lightThemeMenuItem;
+
+    private String lightTheme;
+    private String darkTheme;
+
 
     protected RootController(FxWeaver fxWeaver,
                              @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<DragDropController, BorderPane> dragDropController) {
         this.dragDropController = dragDropController;
         this.fxWeaver = fxWeaver;
-
+        lightTheme = getClass().getClassLoader().getResource("style" + File.separator + "light.css").toExternalForm();
+        darkTheme = getClass().getClassLoader().getResource("style" + File.separator + "dark.css").toExternalForm();
     }
 
 
@@ -100,9 +111,8 @@ public class RootController {
         if (user.getNuUser()) {
             handleNewProject();
         } else {
-            DialogHelper.snackbarToast(rootPane, "Welcome Back to File Commander!");
+            DialogHelper.snackbarToast(infoPane, "Welcome Back to File Commander!");
         }
-
 
         setProjectLabels();
         configRadioButtonGroups();
@@ -185,7 +195,7 @@ public class RootController {
         Boolean success = user.setPreferences();
         if (success) {
             dragDropController.getController().handleUpdatePreferences();
-            DialogHelper.snackbarToast(rootPane, message);
+            DialogHelper.snackbarToast(infoPane, message);
         } else {
             DialogHelper.showErrorAlert("Something went wrong,\nWe're not able to save your preferences.");
         }
@@ -271,8 +281,26 @@ public class RootController {
     private void handleColorChanged(ActionEvent actionEvent) {
         Color colorChoice = bgColorPicker.getValue();
         user.setReplaceBgColor(colorChoice);
-        updatePreferenceValues("Background color to use when image does not support transparency updated.");
+        updatePreferenceValues("Background color to use when conversion doesn't support transparency set to " + colorChoice.toString());
         dragDropController.getController().updateSrcFileAndBgColorPreference();
+    }
+
+    @FXML
+    private void handleInitLightTheme(ActionEvent actionEvent) {
+        rootPane.getScene().getStylesheets().clear();
+        rootPane.getScene().getStylesheets().add(lightTheme);
+
+        lightThemeMenuItem.setDisable(true);
+        darkThemeMenuItem.setDisable(false);
+    }
+
+    @FXML
+    private void handleInitDarkTheme(ActionEvent actionEvent) {
+        rootPane.getScene().getStylesheets().clear();
+        rootPane.getScene().getStylesheets().add(darkTheme);
+
+        darkThemeMenuItem.setDisable(true);
+        lightThemeMenuItem.setDisable(false);
     }
 
 
@@ -377,6 +405,10 @@ public class RootController {
 
     }
 
+    AnchorPane getInfoPane() {
+        return infoPane;
+    }
+
 
     /***************************************************************
      * Autowire Beans
@@ -396,4 +428,6 @@ public class RootController {
     private void setHostServices(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") HostServices hostServices) {
         this.hostServices = hostServices;
     }
+
+
 }

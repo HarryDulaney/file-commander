@@ -10,6 +10,5 @@ target/
 .springBeans
 .sts4-cache
 .settings/
-/src/main/resources/application.properties
 /File Commander.iml
 /design/

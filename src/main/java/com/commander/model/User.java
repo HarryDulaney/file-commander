@@ -64,9 +64,14 @@ public class User {
      */
     private DocType imgPreference;
     /**
+     * The users selected color theme i.e. light/ dark theme
+     */
+    private String colorThemePreference;
+    /**
      * Preferences Object
      */
     private static Preferences userPreferences;
+
 
     /* --------------------------------------- Default values for User Enums --------------------------------------------- */
     public static final DocType DEFAULT_EXCEL_TYPE = DocType.XLSX;
@@ -119,6 +124,7 @@ public class User {
         this.setDirectoryPath(userPreferences.get(Constants.DIR_PATH_KEY, null));
         this.setWriteDirectoryPath(userPreferences.get(Constants.DIR_WRITE_PATH_KEY, null));
         this.setSourceFilePolicy(userPreferences.get(Constants.SOURCE_POLICY_KEY, Constants.PROJECT_SOURCE_SAVE_KEY));
+        this.setColorThemePreference(userPreferences.get(Constants.GUI_COLOR_THEME, Constants.LIGHT_THEME_ID)); 
         //Default is Save
         // source file
 
@@ -130,8 +136,7 @@ public class User {
         //Default ImgType
         // is JPG
         String colorPreference = userPreferences.get(Constants.BACKGROUND_COLOR, Color.WHITE.toString()); // Default
-        // white
-        // background
+
         logger.info("Loading preferences, Background Color for images string value is: " + colorPreference);
         // set user preferences
         updateUser(docPreference, excelPreference, imgPreference, colorPreference);
@@ -241,6 +246,15 @@ public class User {
 
     public void setReplaceBgColor(Color replaceBgColor) {
         this.replaceBgColor = replaceBgColor;
+    }
+
+    public String getColorThemePreference() {
+        return colorThemePreference;
+    }
+
+    public User setColorThemePreference(String colorThemePreference) {
+        this.colorThemePreference = colorThemePreference;
+        return this;
     }
 
 

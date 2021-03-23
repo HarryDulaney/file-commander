@@ -10,7 +10,7 @@
 <VBox fx:id="rootPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.RootController">
     <BorderPane maxWidth="900.0">
         <center>
-            <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="528.0" prefWidth="250.0" BorderPane.alignment="CENTER_LEFT">
+            <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="528.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" />
                     <ColumnConstraints halignment="LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
@@ -23,41 +23,33 @@
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     <RowConstraints fillHeight="false" maxHeight="-Infinity" vgrow="SOMETIMES" />
                 </rowConstraints>
-                <Label alignment="TOP_CENTER" layoutX="10.0" prefHeight="22.0" prefWidth="262.0" text="Excel Workbooks " GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <Label alignment="TOP_CENTER" layoutX="10.0" prefHeight="22.0" prefWidth="262.0" styleClass="pref-header-label" text="Excel Workbooks " GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" />
                     </GridPane.margin>
-                    <font>
-                        <Font name="Source Serif Pro Bold" size="12.0" />
-                    </font>
                     <tooltip>
                         <Tooltip text="Choose how you want Excel workbook file types to be handled" wrapText="true" />
                     </tooltip>
                 </Label>
                 <Group GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                    <RadioButton id="xlsx" mnemonicParsing="false" text=".xlsx" fx:id="xlsxRadioButton">
-                        <font>
-                            <Font name="Source Sans Pro Bold" size="12.0" />
-                        </font>
-                    </RadioButton>
-                    <RadioButton id="csv" fx:id="csvRadioButton" contentDisplay="CENTER" layoutX="136.0" mnemonicParsing="false" text=".csv">
-                        <font>
-                            <Font name="Source Sans Pro Bold" size="12.0" />
-                        </font>
-                    </RadioButton>
+                    <RadioButton id="xlsx" mnemonicParsing="false" styleClass="pref-radio-button" text=".xlsx" fx:id="xlsxRadioButton" />
+                    <RadioButton id="csv" fx:id="csvRadioButton" contentDisplay="CENTER" layoutX="136.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".csv" />
                     <GridPane.margin>
                         <Insets bottom="25.0" />
                     </GridPane.margin>
                 </Group>
-                <Group GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <Group GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                     <children>
-                        <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="26.0" prefWidth="129.0" text="Word Documents" textAlignment="CENTER">
-                            <font>
-                                <Font name="Source Serif Pro Bold" size="12.0" />
-                            </font>
-                        </Label>
-                        <ComboBox fx:id="textDocPrefsComboBox" layoutY="20.0" onAction="#handleTextDocPrefChanged" prefHeight="25.0" prefWidth="130.0" promptText="No Preference" />
+                        <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="219.0" styleClass="pref-header-label" text="Word Documents" textAlignment="CENTER" />
+                        <ComboBox fx:id="textDocPrefsComboBox" layoutY="20.0" onAction="#handleTextDocPrefChanged" prefHeight="25.0" prefWidth="219.0" promptText="No Preference">
+                            <opaqueInsets>
+                                <Insets left="5.0" />
+                            </opaqueInsets>
+                        </ComboBox>
                     </children>
+                    <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </GridPane.margin>
                 </Group>
                 <RadioButton mnemonicParsing="false" text="RadioButton" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                     <GridPane.margin>
@@ -98,10 +90,7 @@
                 </TextField>
                 <Group GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Choose how to handle source files">
-                            <font>
-                                <Font name="Source Serif Pro Bold" size="12.0" />
-                            </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" styleClass="pref-header-label" text="Choose how to handle source files">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
@@ -124,10 +113,7 @@
                 </Group>
                 <VBox prefHeight="114.0" prefWidth="323.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <children>
-                        <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="27.0" prefWidth="931.0" text="Image Formats" VBox.vgrow="ALWAYS">
-                            <font>
-                                <Font name="Source Serif Pro Bold" size="12.0" />
-                            </font>
+                        <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="27.0" prefWidth="931.0" styleClass="pref-header-label" text="Image Formats" VBox.vgrow="ALWAYS">
                             <tooltip>
                                 <Tooltip text="Choose your format preference for images. All bmp, jpg, png, and gifs will format to the value set below" wrapText="true" />
                             </tooltip>
@@ -136,26 +122,10 @@
                             </VBox.margin>
                         </Label>
                         <Group VBox.vgrow="ALWAYS">
-                            <RadioButton id="jpg" fx:id="jpgRadioButton" mnemonicParsing="false" text=".jpg">
-                                <font>
-                                    <Font name="Source Sans Pro Bold" size="12.0" />
-                                </font>
-                            </RadioButton>
-                            <RadioButton id="png" fx:id="pngRadioButton" contentDisplay="CENTER" layoutX="85.0" mnemonicParsing="false" text=".png">
-                                <font>
-                                    <Font name="Source Sans Pro Bold" size="12.0" />
-                                </font>
-                            </RadioButton>
-                            <RadioButton id="gif" fx:id="gifRadioButton" layoutX="200.0" mnemonicParsing="false" text=".gif">
-                                <font>
-                                    <Font name="Source Sans Pro Bold" size="12.0" />
-                                </font>
-                            </RadioButton>
-                            <RadioButton id="bmp" fx:id="bmpRadioButton" contentDisplay="CENTER" layoutX="300.0" mnemonicParsing="false" text=".bmp">
-                                <font>
-                                    <Font name="Source Sans Pro Bold" size="12.0" />
-                                </font>
-                            </RadioButton>
+                            <RadioButton id="jpg" fx:id="jpgRadioButton" mnemonicParsing="false" styleClass="pref-radio-button" text=".jpg" />
+                            <RadioButton id="png" fx:id="pngRadioButton" contentDisplay="CENTER" layoutX="85.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".png" />
+                            <RadioButton id="gif" fx:id="gifRadioButton" layoutX="200.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".gif" />
+                            <RadioButton id="bmp" fx:id="bmpRadioButton" contentDisplay="CENTER" layoutX="300.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".bmp" />
                             <effect>
                                 <ColorAdjust />
                             </effect>
@@ -185,18 +155,15 @@
                         <Insets top="35.0" />
                     </GridPane.margin>
                     <tooltip>
-                        <Tooltip text="We will need to fill in transparent regions with a color background in some cases like PNG to JPG." wrapText="true" />
+                        <Tooltip text="This is the default background color to use when converting a transparent image to a format that doesn't support transparency." wrapText="true" />
                     </tooltip>
                 </ColorPicker>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="260.0" text="Default bg color for images that don't support transparency " textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
-                    <font>
-                        <Font name="Source Serif Pro Bold" size="12.0" />
-                    </font>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="260.0" styleClass="pref-header-label" text="Image Background Color" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
                     <tooltip>
-                        <Tooltip text="Choose how to handle the source file upon completing conversion" wrapText="true" />
+                        <Tooltip text="This is the default background color to use when converting a transparent image to a format that doesn't support transparency." wrapText="true" />
                     </tooltip>
                     <GridPane.margin>
                         <Insets bottom="35.0" />
@@ -205,24 +172,37 @@
             </GridPane>
         </center>
         <bottom>
-            <Label fx:id="projectUserLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="1218.0" text="New Project Profile">
-                <font>
-                    <Font name="System Bold" size="10.0" />
-                </font>
-            </Label>
+            <AnchorPane fx:id="infoPane" BorderPane.alignment="CENTER">
+                <children>
+                    <Label fx:id="projectUserLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="41.0" prefWidth="900.0" text="New Project Profile" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                </children>
+                <effect>
+                    <Blend mode="OVERLAY" />
+                </effect>
+            </AnchorPane>
         </bottom>
         <right>
             <fx:include source="converterview.fxml" VBox.vgrow="ALWAYS" />
         </right>
-      <top>
-          <MenuBar BorderPane.alignment="CENTER">
-              <Menu mnemonicParsing="false" text="File">
-                  <MenuItem mnemonicParsing="false" onAction="#handleExitPressed" text="Exit" />
-              </Menu>
-              <Menu mnemonicParsing="false" text="Help">
-                  <MenuItem mnemonicParsing="false" onAction="#handleGitHubOpen" text="About FileCommander" />
-              </Menu>
-          </MenuBar>
-      </top>
+        <top>
+            <MenuBar BorderPane.alignment="CENTER">
+                <Menu mnemonicParsing="false" text="File">
+                    <MenuItem mnemonicParsing="false" onAction="#handleExitPressed" text="Exit" />
+                </Menu>
+            <Menu mnemonicParsing="false" text="View">
+              <items>
+                  <Menu mnemonicParsing="false" text="Appearance">
+                    <items>
+                      <MenuItem fx:id="lightThemeMenuItem" disable="true" mnemonicParsing="false" onAction="#handleInitLightTheme" text="Light Theme" />
+                      <MenuItem fx:id="darkThemeMenuItem" mnemonicParsing="false" onAction="#handleInitDarkTheme" text="Dark Theme" />
+                    </items>
+                  </Menu>
+              </items>
+            </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <MenuItem mnemonicParsing="false" onAction="#handleGitHubOpen" text="About FileCommander" />
+                </Menu>
+            </MenuBar>
+        </top>
     </BorderPane>
 </VBox>

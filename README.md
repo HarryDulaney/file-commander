@@ -1,8 +1,10 @@
 # File-Commander
 File-Commander is a desktop application for performing file conversions. 
 It is unique in that it persists user preferences between sessions.
-The user creates a settings profile and conversions are performed based on that.
+The user creates settings profile and File Commander performs conversions based on that.
 ----
+![ScreenShot](https://github.com/HarryDulaney/file-commander/blob/master/screenshots/file_commander_screenshot-1.jpg)
+
 ## How to run File-Commander:
 You can execute the File-Commander.jar on any system with Java 8 or later installed. 
 + On Windows:
@@ -11,7 +13,7 @@ You can execute the File-Commander.jar on any system with Java 8 or later instal
   + Open a command prompt in the containing folder and run: java -jar File-Commander-0.1.0.jar
 ____
 ## What can it do?
-## The following conversions are currently supported:
+## File Commander supports the following conversions:
 ### Word Document Types:
 - DOCX ---> PDF
 - PDF --> text extraction to --> DOCX
@@ -25,3 +27,4 @@ ____
 - JPG ---> PNG/ GIF/ BMP
 - GIF ---> PNG/ BMP/ JPG
 - BMP ---> PNG/ GIF/ JPG
+ 

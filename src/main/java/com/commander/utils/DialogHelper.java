@@ -29,17 +29,18 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Objects;
 
 /**
- * This is a class of static methods to utilize for Alerts, Pop-ups and UI
- * Dialogs.
+ * {@code DialogHelper.class} is a helper class filled with static methods to utilize for Alerts, Pop-ups, UI
+ * Dialogs, and SnackBar Toast's. This makes it simple to convey information to the application user.
  *
- * @author HGDIV
+ * @author Harry Dulaney
  */
 public final class DialogHelper {
 
     private static Logger log = LoggerFactory.getLogger(DialogHelper.class);
-
+    private static AnchorPane displayNoticePane;
 
     public static void defaultDialog(StackPane root, String title, String body, DialogAction action) {
 
@@ -196,25 +197,40 @@ public final class DialogHelper {
 
     }
 
-    public static void snackbarToast(Pane pane, String message) {
-        JFXSnackbar snackbar = new JFXSnackbar(pane);
-        snackbar.setPrefWidth(500);
+    private static void displaySnackBarToast(String message) {
+
+        JFXSnackbar snackbar = new JFXSnackbar(displayNoticePane);
+//        snackbar.resizeRelocate(displayNoticePane.getLayoutX(), displayNoticePane.getLayoutY(), displayNoticePane.getWidth(),
+//                displayNoticePane.getHeight());
         VBox vbox = new VBox();
         Label label = new Label(message);
         label.setFont(Font.font("SansSerif", FontWeight.BOLD, 16.0));
-        label.setTextFill(Color.DARKSLATEBLUE);
         label.setTextAlignment(TextAlignment.CENTER);
         label.setAlignment(Pos.CENTER);
+        label.setPadding(new Insets(15.0));
         label.setWrapText(true);
-        vbox.autosize();
-        label.setBackground(new Background(new BackgroundFill(new Color(0.2, 0.1, 0.3, 0.1),
+        label.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
                 new CornerRadii(3.5),
                 new Insets(3.5))));
         vbox.getChildren().add(label);
-        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(1.33),
+//        vbox.autosize();
+        final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(2.33),
                 null);
         snackbar.enqueue(snackbarEvent);
-
     }
 
+    public static void snackbarToast(Pane pane, String message) {
+        if (Objects.isNull(displayNoticePane)) {
+            if (pane instanceof AnchorPane) {
+                displayNoticePane = (AnchorPane) pane;
+            }
+        }
+        displaySnackBarToast(message);
+    }
+
+    public static void snackbarToast(String message) {
+        if (Objects.nonNull(displayNoticePane)) {
+            displaySnackBarToast(message);
+        }
+    }
 }

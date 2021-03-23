@@ -29,7 +29,7 @@ public class Constants {
     public static final String IMG_TYPE_KEY = "IMG_PREF";
     public static final String SOURCE_POLICY_KEY = "SOURCE_POLICY";
     public static final String BACKGROUND_COLOR = "DEFAULT_BG_COLOR";
-
+    public static final String GUI_COLOR_THEME = "COLOR_THEME";
 
     /* ----------------------------------------- Misc Controller Keys ---------------------------------------------------- */
     public static final String PROJECT_SOURCE_DELETE_KEY = "Delete";
@@ -38,6 +38,10 @@ public class Constants {
     public static final String DOCX2PDF = "docx -> pdf";
     //    static final String PDFtxt2DOCX = "pdf -> (EXTRACT TEXT) -> docx";
     public static final String CLONE_PDF_TO_DOCX = "pdf -> docx (Windows Only)";
+
+    public static final String LIGHT_THEME_ID = "light.theme.default";
+    public static final String DARK_THEME_ID = "dark.theme.dark";
+
 
 }
 

@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import com.jfoenix.controls.JFXSnackbar?><?import com.jfoenix.controls.JFXSnackbarLayout?>
 <VBox fx:id="rootPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.RootController">
     <BorderPane maxWidth="900.0">
         <center>

@@ -285,6 +285,8 @@ public class RootController {
         dragDropController.getController().updateSrcFileAndBgColorPreference();
     }
 
+    /*  Handle Theme Toggle */
+
     @FXML
     private void handleInitLightTheme(ActionEvent actionEvent) {
         rootPane.getScene().getStylesheets().clear();
@@ -292,6 +294,7 @@ public class RootController {
 
         lightThemeMenuItem.setDisable(true);
         darkThemeMenuItem.setDisable(false);
+        DialogHelper.snackbarToast(rootPane, "Light Theme Activated");
     }
 
     @FXML
@@ -301,6 +304,8 @@ public class RootController {
 
         darkThemeMenuItem.setDisable(true);
         lightThemeMenuItem.setDisable(false);
+        DialogHelper.snackbarToast(rootPane, "Dark Theme Activated");
+
     }
 
 

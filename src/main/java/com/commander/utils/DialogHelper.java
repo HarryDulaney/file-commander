@@ -132,9 +132,9 @@ public final class DialogHelper {
     }
 
     public static void showWarningAlert(String content) {
-        Alert alrt = new Alert(AlertType.WARNING);
-        alrt.setContentText(content);
-        alrt.show();
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setContentText(content);
+        alert.show();
 
     }
 
@@ -200,12 +200,11 @@ public final class DialogHelper {
     private static void displaySnackBarToast(String message) {
 
         JFXSnackbar snackbar = new JFXSnackbar(displayNoticePane);
-//        snackbar.resizeRelocate(displayNoticePane.getLayoutX(), displayNoticePane.getLayoutY(), displayNoticePane.getWidth(),
-//                displayNoticePane.getHeight());
         VBox vbox = new VBox();
         Label label = new Label(message);
         label.setFont(Font.font("SansSerif", FontWeight.BOLD, 16.0));
         label.setTextAlignment(TextAlignment.CENTER);
+        label.setTextFill(Color.DARKSLATEGRAY);
         label.setAlignment(Pos.CENTER);
         label.setPadding(new Insets(15.0));
         label.setWrapText(true);
@@ -213,7 +212,6 @@ public final class DialogHelper {
                 new CornerRadii(3.5),
                 new Insets(3.5))));
         vbox.getChildren().add(label);
-//        vbox.autosize();
         final JFXSnackbar.SnackbarEvent snackbarEvent = new JFXSnackbar.SnackbarEvent(vbox, Duration.seconds(2.33),
                 null);
         snackbar.enqueue(snackbarEvent);

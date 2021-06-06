@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+# File-Commander
+File-Commander is a desktop application for performing file conversions. 
+It is unique in that it persists user preferences between sessions.
+The user creates settings profile and File Commander performs conversions based on that.
+----
+![ScreenShot](https://github.com/HarryDulaney/file-commander/blob/rework-fxweaver/screenshots/ScreenshotDarkTheme.png)
 
-You can use the [editor on GitHub](https://github.com/HarryDulaney/file-commander/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/HarryDulaney/file-commander/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## How to run File-Commander:
+You can execute the File-Commander.jar on any system with Java 8 or later installed. 
++ On Windows:
+  + Use the .bat file included with the Release downloads to run the application. 
++ On Mac/ Linux:
+  + Open a command prompt in the containing folder and run: java -jar File-Commander-0.1.0.jar
+____
+## What can it do?
+## File Commander supports the following conversions:
+### Word Document Types:
+- DOCX ---> PDF
+- PDF --> text extraction to --> DOCX
+- PDF ---> DOCX (Windows only)
+### Excel Workbook / Spreadsheet Types:
+- XLSX ---> CSV
+- CSV ---> XLSX
+### Image Types: 
+#### The user chooses a default background color in the event of transparent background convert to a non-transparent supporting image format. 
+- PNG ---> JPG/ GIF/ BMP
+- JPG ---> PNG/ GIF/ BMP
+- GIF ---> PNG/ BMP/ JPG
+- BMP ---> PNG/ GIF/ JPG
+ 

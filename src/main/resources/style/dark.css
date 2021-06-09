@@ -6,25 +6,21 @@
 @font-face {
     font-family: TitilliumWeb;
     src: url('fonts/TitilliumWeb-Italic.ttf');
-    font-style: italic;
 }
 
 @font-face {
     font-family: TitilliumWeb;
     src: url('fonts/TitilliumWeb-Bold.ttf');
-    font-weight: bold;
 }
 
 @font-face {
     font-family: TitilliumWeb;
     src: url('fonts/TitilliumWeb-Black.ttf');
-    font-stretch: expanded;
 }
 
 @font-face {
     font-family: TitilliumWeb;
     src: url('fonts/TitilliumWeb-Light.ttf');
-    font-style: light;
 }
 
 .root {

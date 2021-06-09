@@ -25,7 +25,7 @@ public class ImageConverter extends AbstractImageConverter {
      *
      * @param fileIn  the in
      * @param fileOut the out
-     * @param format the output format
+     * @param format  the output format
      */
     public ImageConverter(File fileIn, File fileOut, String format) {
         super(fileIn, fileOut);
@@ -40,7 +40,7 @@ public class ImageConverter extends AbstractImageConverter {
             BufferedImage sourceImage = ImageIO.read(in);
             if (sourceImage.getTransparency() != BufferedImage.OPAQUE) {
                 if ((FilenameUtils.getExtension(in.getName())).equals(DocType.GIF_ID) && !(format.equalsIgnoreCase(DocType.PNG_ID))) {
-                  result = handleTransBg(sourceImage,format,out);
+                    result = handleTransBg(sourceImage, format, out);
 
                 } else {
                     try {
@@ -79,10 +79,7 @@ public class ImageConverter extends AbstractImageConverter {
     @Override
     public void convert() {
 
-
         boolean succeeded = genericConversion();
-
-
 
         if (succeeded) {
             deleteSourceFile(true, in);

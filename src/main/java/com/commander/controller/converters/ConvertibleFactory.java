@@ -14,10 +14,9 @@ import java.nio.file.Paths;
 import static org.apache.commons.io.FilenameUtils.EXTENSION_SEPARATOR_STR;
 
 /**
- * {@code ConvertibleFactory} is an utility class for creating {@code Convertible} objects
- * to be passed on to ConvertUtils for conversions.
+ * {@code ConvertibleFactory} is an utility class for creating {@code Convertible} objects.
  *
- * @author HGDIV
+ * @author Harry Dulaney
  */
 public class ConvertibleFactory {
 

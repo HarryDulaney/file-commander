@@ -31,7 +31,6 @@ public class PngConversions extends AbstractImageConverter {
 
     @Override
     public void convert() {
-        // TODO: USE THE PNGDECODER to rework these methods
         final long starttime = System.currentTimeMillis();
         /* Handle PNG to JPG*/
         if (format.equalsIgnoreCase(DocType.JPG_ID)) {

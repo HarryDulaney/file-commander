@@ -45,7 +45,7 @@ public abstract class AbstractImageConverter extends Converter {
 
 
     /**
-     * Handle trans bg boolean.
+     * Handle transparent background conversion.
      *
      * @param srcImage  the src image
      * @param imgFormat the img format

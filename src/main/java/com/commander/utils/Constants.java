@@ -1,6 +1,8 @@
 package com.commander.utils;
 
 
+import java.io.File;
+
 /**
  * Global Application Constants
  *
@@ -30,6 +32,10 @@ public class Constants {
     public static final String SOURCE_POLICY_KEY = "SOURCE_POLICY";
     public static final String BACKGROUND_COLOR = "DEFAULT_BG_COLOR";
     public static final String GUI_COLOR_THEME = "COLOR_THEME";
+
+    /* ------------------------------------------ Preferences Defaults ---------------------------------------------- */
+    public static final String DEFAULT_INPUT_DIR = System.getProperty("java.io.tmpdir") + File.separator.concat("fcComIn");
+    public static final String DEFAULT_OUTPUT_DIR = System.getProperty("java.io.tmpdir") + File.separator.concat("fcComOut");
 
     /* ----------------------------------------- Misc Controller Keys ---------------------------------------------------- */
     public static final String PROJECT_SOURCE_DELETE_KEY = "Delete";

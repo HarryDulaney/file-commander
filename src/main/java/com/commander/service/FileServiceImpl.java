@@ -3,6 +3,7 @@ package com.commander.service;
 import com.commander.model.Convertible;
 import com.commander.model.DocType;
 import com.commander.model.User;
+import com.commander.utils.Constants;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -35,8 +36,6 @@ public class FileServiceImpl extends ParentService implements FileService {
      * The Logger.
      */
     final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
-    private static final String DEFAULT_OUTPUT_DIR_NAME = "super-commander-tmp";
-
 
     private FileServiceImpl() {
         super();
@@ -44,7 +43,6 @@ public class FileServiceImpl extends ParentService implements FileService {
     }
 
     /**
-     *
      * @param user
      * @param onSuccess
      * @param beforeStart
@@ -70,11 +68,10 @@ public class FileServiceImpl extends ParentService implements FileService {
      * user interface. The users input directory is iterated and files are added to the array if:
      * 1.  Their file extension belongs to a file type that this application is capable of processing
      * 2.  Their file extension does not belong to the file type of the users current output preference, because such
-     *     a file is already in the preferred format and does not need to be converted.
+     * a file is already in the preferred format and does not need to be converted.
      *
-     *
-     * @param user The current User
-     * @param onSuccess Service worker indicates successful completion of the service
+     * @param user        The current User
+     * @param onSuccess   Service worker indicates successful completion of the service
      * @param beforeStart Service worker indicates it's about to start the service
      * @return an Array of filtered files
      */
@@ -87,13 +84,34 @@ public class FileServiceImpl extends ParentService implements FileService {
             final String imgTypeExt = user.getImgPreference().getExtension();
 
             protected File[] call() {
-                final File file = new File(user.getDirectoryPath());
+                if (user.getDirectoryPath() == null) {
+                    try {
+                        String inPath = writeInputDirectory();
+                        user.setDirectoryPath(inPath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (user.getWriteDirectoryPath() == null) {
+                    try {
+                        String outPath = writeOutputDirectory();
+                        user.setDirectoryPath(outPath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 FilenameFilter filter = (dir, name) -> !name.endsWith(docTypeExt) && !name.endsWith(ssTypeExt) && !name.endsWith(imgTypeExt)
                         && (name.endsWith(DocType.JPG.getExtension()) || name.endsWith(DocType.GIF.getExtension())
                         || name.endsWith(DocType.BMP.getExtension()) || name.endsWith(DocType.PNG.getExtension()) || name.endsWith(DocType.PDF.getExtension())
                         || name.endsWith(DocType.DOCX.getExtension()) || name.endsWith(DocType.CSV.getExtension()) || name.endsWith(DocType.XLSX.getExtension()));
 
-                return file.listFiles(filter);
+                final File file = new File(user.getDirectoryPath());
+                if (file.exists()) {
+                    return file.listFiles(filter);
+                }
+                return new File[0];
+
 
             }
         }, onSuccess, beforeStart);
@@ -101,33 +119,36 @@ public class FileServiceImpl extends ParentService implements FileService {
     }
 
     /**
-     * This method creates directory folder nested in the User's source directory in the event
+     * This method creates a default directory for converted files in User's tmpdir path
      * <p>
-     * 1.) SuperCommander can't write to the output directory
-     * 2.) Application needs a backup folder to write info for the User to easily access
+     * 1) SuperCommander can't write to the output directory
+     * 2) User has not set a preference for output directory
      *
-     * @param onSuccess   service worker reports state after successful thread execution
-     * @param beforeStart service worker reports state before executing thread
      * @return String of write path
      */
-    @Override
-    public javafx.concurrent.Service<String> writeOutputDirectory(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
-        return createService(new Task<String>() {
-            protected String call() throws IOException {
-                final String tmpFile = System.getProperty("java.io.tmpdir");
+    public String writeOutputDirectory() throws IOException {
+        Path writePath = Paths.get(Constants.DEFAULT_OUTPUT_DIR);
+        Path p = Files.createDirectory(writePath);
+        logger.info("Created write directory at" + p.toString());
 
-                Path path = Paths.get(tmpFile);
-                Path writePath = path.resolve(DEFAULT_OUTPUT_DIR_NAME);
-                Path p = Files.createDirectory(writePath);
-
-                logger.info("Created temp file at" + p.toString());
-
-                return p.toString();
-            }
-        }, onSuccess, beforeStart);
+        return p.toString();
     }
 
+    /**
+     * This method creates a default directory for input files in the User's tmpdir path
+     * <p>
+     * 1) SuperCommander can't read to the input directory
+     * 2) User has not set a preference for input directory
+     *
+     * @return String of read path
+     */
+    public String writeInputDirectory() throws IOException {
+        Path readPath = Paths.get(Constants.DEFAULT_INPUT_DIR);
+        Path p = Files.createDirectory(readPath);
+        logger.info("Created write directory at" + p.toString());
 
+        return p.toString();
+    }
 }
 
 

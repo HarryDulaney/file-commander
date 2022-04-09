@@ -5,8 +5,6 @@ import com.commander.utils.ValidationUtils;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -18,10 +16,18 @@ import java.util.prefs.Preferences;
  * username, references, file extension type preferences.
  * </p>
  *
- * @author HGDIV
+ * @author Harry Dulaney
  */
 public class User {
     static Logger logger = LoggerFactory.getLogger(User.class);
+
+    public static Preferences getUserPreferences() {
+        if (userPreferences != null) {
+            return userPreferences;
+        }
+        new User().loadPreferences();
+        return userPreferences;
+    }
 
     /**
      * CURRENT_USER_ID is the System property "user.name" used for automatically identifying a unique application user
@@ -45,7 +51,6 @@ public class User {
      * image conversions where the output format does not support transparency.
      */
     private Color replaceBgColor;
-
     /**
      * nuUser is true, if user is a first-time User with no persistent preferences
      */
@@ -89,12 +94,19 @@ public class User {
     public Boolean setPreferences() {
         userPreferences = Preferences.userNodeForPackage(getClass());
 
-        userPreferences.put(Constants.DIR_PATH_KEY, this.getDirectoryPath());
-        userPreferences.put(Constants.DIR_WRITE_PATH_KEY, this.getWriteDirectoryPath());
+        if (this.getDirectoryPath() != null)
+            userPreferences.put(Constants.DIR_PATH_KEY, this.getDirectoryPath());
+
+        if (this.getWriteDirectoryPath() != null)
+            userPreferences.put(Constants.DIR_WRITE_PATH_KEY, this.writeDirectoryPath);
+
         userPreferences.put(Constants.EXCEL_PREF_KEY, this.getExcelPreference().getExtension());
         userPreferences.put(Constants.DOC_TYPE_KEY, this.getDocPreference().getDocOperation());
         userPreferences.put(Constants.IMG_TYPE_KEY, this.getImgPreference().getExtension());
         userPreferences.put(Constants.SOURCE_POLICY_KEY, this.getSourceFilePolicy());
+
+        String themePreference = this.getColorThemePreference() != null ? this.getColorThemePreference() : Constants.LIGHT_THEME_ID;
+        userPreferences.put(Constants.GUI_COLOR_THEME, themePreference);
         if (ValidationUtils.validateUserPaths(this)) {
             userPreferences.putBoolean(Constants.NEW_USER_KEY, false);
         }
@@ -119,26 +131,17 @@ public class User {
 
         userPreferences = Preferences.userNodeForPackage(getClass());
         this.setNuUser(userPreferences.getBoolean(Constants.NEW_USER_KEY, true)); //Default value is true, meaning no
-        // pref
-        // stored for this user
         this.setDirectoryPath(userPreferences.get(Constants.DIR_PATH_KEY, null));
         this.setWriteDirectoryPath(userPreferences.get(Constants.DIR_WRITE_PATH_KEY, null));
         this.setSourceFilePolicy(userPreferences.get(Constants.SOURCE_POLICY_KEY, Constants.PROJECT_SOURCE_SAVE_KEY));
-        this.setColorThemePreference(userPreferences.get(Constants.GUI_COLOR_THEME, Constants.LIGHT_THEME_ID)); 
-        //Default is Save
-        // source file
-
+        this.setColorThemePreference(userPreferences.get(Constants.GUI_COLOR_THEME, Constants.LIGHT_THEME_ID));
         String docPreference = userPreferences.get(Constants.DOC_TYPE_KEY, DocOperation.DOCX_TO_PDF.getDocOperation());
-        //Default treatment for Word Documents Docx to Pdf
         String excelPreference = userPreferences.get(Constants.EXCEL_PREF_KEY, DEFAULT_EXCEL_TYPE.getExtension());
-        //Default Excel Type is XLSX
         String imgPreference = userPreferences.get(Constants.IMG_TYPE_KEY, DEFAULT_IMG_TYPE.getExtension());
-        //Default ImgType
-        // is JPG
         String colorPreference = userPreferences.get(Constants.BACKGROUND_COLOR, Color.WHITE.toString()); // Default
 
         logger.info("Loading preferences, Background Color for images string value is: " + colorPreference);
-        // set user preferences
+
         updateUser(docPreference, excelPreference, imgPreference, colorPreference);
 
 

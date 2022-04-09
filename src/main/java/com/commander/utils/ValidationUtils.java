@@ -17,12 +17,12 @@ public class ValidationUtils {
      * @return true if fields have been initialized
      */
     public static boolean validateUserPaths(User user) {
-        return ((user.getSourceFilePolicy() != null) &
-                (user.getImgPreference() != null) &
-                (user.getWriteDirectoryPath() != null) &
-                (user.getDirectoryPath() != null) &
-                (user.getDocPreference() != null) &
-                (user.getExcelPreference() != null) &
+        return ((user.getSourceFilePolicy() != null) &&
+                (user.getImgPreference() != null) &&
+                (user.getWriteDirectoryPath() != null) &&
+                (user.getDirectoryPath() != null) &&
+                (user.getDocPreference() != null) &&
+                (user.getExcelPreference() != null) &&
                 (user.getReplaceBgColor() != null));
     }
 

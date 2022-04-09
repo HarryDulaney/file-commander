@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
@@ -39,7 +38,7 @@ import java.util.List;
  * <p>
  * This class handles all UI events for the File Menu Toolbar(Drop Down Menu)
  *
- * @author HGDIV
+ * @author Harry Dulaney
  */
 @Component
 @FxmlView("/fxml/mainview.fxml")
@@ -92,22 +91,21 @@ public class RootController {
     @FXML
     private MenuItem lightThemeMenuItem;
 
-    private String lightTheme;
-    private String darkTheme;
+    private final String LIGHT_THEME_STYLE;
+    private final String DARK_THEME_STYLE;
 
 
     protected RootController(FxWeaver fxWeaver,
                              @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<DragDropController, BorderPane> dragDropController) {
         this.dragDropController = dragDropController;
         this.fxWeaver = fxWeaver;
-        lightTheme = getClass().getClassLoader().getResource("style" + File.separator + "light.css").toExternalForm();
-        darkTheme = getClass().getClassLoader().getResource("style" + File.separator + "dark.css").toExternalForm();
+        LIGHT_THEME_STYLE = getClass().getClassLoader().getResource("style" + File.separator + "light.css").toExternalForm();
+        DARK_THEME_STYLE = getClass().getClassLoader().getResource("style" + File.separator + "dark.css").toExternalForm();
     }
 
 
     @FXML
     public void initialize() {
-
         if (user.getNuUser()) {
             handleNewProject();
         } else {
@@ -118,7 +116,6 @@ public class RootController {
         configRadioButtonGroups();
         configComboBoxes();
     }
-
 
     /**
      * Configures the Source File Policy Combobox and the Text Docs
@@ -290,20 +287,20 @@ public class RootController {
     @FXML
     private void handleInitLightTheme(ActionEvent actionEvent) {
         rootPane.getScene().getStylesheets().clear();
-        rootPane.getScene().getStylesheets().add(lightTheme);
-
+        rootPane.getScene().getStylesheets().add(LIGHT_THEME_STYLE);
         lightThemeMenuItem.setDisable(true);
         darkThemeMenuItem.setDisable(false);
+        user.setColorThemePreference(Constants.LIGHT_THEME_ID);
         DialogHelper.snackbarToast(rootPane, "Light Theme Activated");
     }
 
     @FXML
     private void handleInitDarkTheme(ActionEvent actionEvent) {
         rootPane.getScene().getStylesheets().clear();
-        rootPane.getScene().getStylesheets().add(darkTheme);
-
+        rootPane.getScene().getStylesheets().add(DARK_THEME_STYLE);
         darkThemeMenuItem.setDisable(true);
         lightThemeMenuItem.setDisable(false);
+        user.setColorThemePreference(Constants.DARK_THEME_ID);
         DialogHelper.snackbarToast(rootPane, "Dark Theme Activated");
 
     }

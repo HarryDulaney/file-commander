@@ -48,18 +48,17 @@ import java.util.Objects;
 
 
 /**
- * {@code DragDropController} handles converterview, the FXMLView embedded in
- * the  mainview and responsible for interacting with the user to
+ * {@code DragDropController} handles counterview, the FXMLView embedded in
+ * the mainview and responsible for interacting with the user to
  * perform the actual file conversions.
  *
- * @author HGDIV
+ * @author Harry Dulaney
  */
 @Component
 @FxmlView("/fxml/converterview.fxml")
 public class DragDropController {
 
     private final FxWeaver fxWeaver;
-
     final Logger log = LoggerFactory.getLogger(DragDropController.class);
 
     private FileService fileService;
@@ -273,11 +272,13 @@ public class DragDropController {
         List<Label> fileList = new ArrayList<>();
         fileService.getFilterDirectoryFiles(user, e -> {
             File[] files = (File[]) e.getSource().getValue();
-            for (File file : files) {
-
-                fileList.add(new Label(file.getName()));
+            if (files.length > 0) {
+                for (File file : files) {
+                    fileList.add(new Label(file.getName()));
+                }
+                observableList.setAll(fileList);
             }
-            observableList.setAll(fileList);
+
 
         }, null);
     }

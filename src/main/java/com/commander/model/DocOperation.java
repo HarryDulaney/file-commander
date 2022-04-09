@@ -1,7 +1,6 @@
 package com.commander.model;
 
 public enum DocOperation {
-
     DOCX_TO_PDF("docx -> pdf", ".pdf"),
     DOCX_TO_HTML("docx -> html", ".html"),
     HTML_TO_DOCX("html -> docx", ".docx"),

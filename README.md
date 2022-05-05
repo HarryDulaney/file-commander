@@ -28,6 +28,5 @@ ____
 - GIF ---> PNG/ BMP/ JPG
 - BMP ---> PNG/ GIF/ JPG
  ____
- ____
- ## Planned Features
+ ## Future Features
  - Batch file conversions

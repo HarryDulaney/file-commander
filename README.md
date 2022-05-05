@@ -30,6 +30,7 @@ ____
  ____
  ## Future Features
  - Batch file conversions
+    + Display a switch element for turning batch mode on and off.
  - Create OS specific installers/packaging
     + Launch4J?
  - Reformat Main view without ugly file preferences. 

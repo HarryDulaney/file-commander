@@ -31,7 +31,7 @@ ____
  ## Future Features
  - Batch file conversions
  - Create OS specific installers/packaging
-  + Launch4J?
+    + Launch4J?
  - Reformat Main view without ugly file preferences. 
-  + Implement default preferences.
-  + Move customizing preferences view to it's own tab. 
+    + Implement default preferences.
+    + Move customizing preferences view to it's own tab. 

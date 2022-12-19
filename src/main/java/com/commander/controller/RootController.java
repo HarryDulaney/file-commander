@@ -23,9 +23,13 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -96,11 +100,13 @@ public class RootController {
 
 
     protected RootController(FxWeaver fxWeaver,
-                             @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<DragDropController, BorderPane> dragDropController) {
+                             @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<DragDropController, BorderPane> dragDropController) throws IOException {
         this.dragDropController = dragDropController;
         this.fxWeaver = fxWeaver;
-        LIGHT_THEME_STYLE = getClass().getClassLoader().getResource("style" + File.separator + "light.css").toExternalForm();
-        DARK_THEME_STYLE = getClass().getClassLoader().getResource("style" + File.separator + "dark.css").toExternalForm();
+        LIGHT_THEME_STYLE = getClass().getClassLoader().getResource("light.css").toExternalForm();
+        DARK_THEME_STYLE = getClass().getClassLoader().getResource("dark.css").toExternalForm();
+
+
     }
 
 

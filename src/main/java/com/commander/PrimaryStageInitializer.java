@@ -19,9 +19,9 @@ public class PrimaryStageInitializer implements ApplicationListener<com.commande
 
     private final FxWeaver fxWeaver;
     private final String LIGHT_STYLE_SHEET =
-            getClass().getClassLoader().getResource("style" + File.separator + "light.css").toExternalForm();
+            getClass().getClassLoader().getResource("light.css").toExternalForm();
     private final String DARK_STYLE_SHEET =
-            getClass().getClassLoader().getResource("style" + File.separator + "dark.css").toExternalForm();
+            getClass().getClassLoader().getResource("dark.css").toExternalForm();
 
     @Value("${application.ui.title}")
     private String title;

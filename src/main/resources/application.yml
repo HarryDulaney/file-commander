@@ -1,0 +1,8 @@
+application:
+  ui:
+    title: File Commander 1.1.0
+    
+spring:
+  main:
+    banner-mode: off
+    web-application-type: none

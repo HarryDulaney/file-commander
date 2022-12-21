@@ -9,6 +9,8 @@ import java.io.File;
  * @author HGDIV
  */
 public class Constants {
+    /* --------------------------------------------- App Constants ------------------------------------------------ */
+    public static final String GITHUB_URL = "https://www.github.com/HarryDulaney/file-commander";
 
     /* ------------------------------------------ FXML Path Constants ---------------------------------------------------- */
     public static final String DRAG_DROP_FXML = "/design/archive/draganddrop.fxml";

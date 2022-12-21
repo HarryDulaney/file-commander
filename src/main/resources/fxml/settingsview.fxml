@@ -1,64 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <VBox fx:id="settingsPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.controller.SettingsController">
-   <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-        <content>
-          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0">
-               <opaqueInsets>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <padding>
+    <children>
+      <HBox alignment="CENTER" prefHeight="31.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="681.0" text="Preferences" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children></HBox>
+        <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+            <content>
+                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0">
+                    <opaqueInsets>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <children>
-                        <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#closeSettingsView" text="Close Settings" />
-                           </children>
-                        </HBox>
-                        <GridPane prefHeight="416.0" prefWidth="557.0">
-                          <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                        </GridPane>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#saveSettingsAndClose" prefHeight="26.0" prefWidth="634.0" text="Save Settings">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-        </content>
-      </ScrollPane>
-   </children>
+                    </opaqueInsets>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                    <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                            <children>
+                                <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="415.0" prefWidth="551.0" BorderPane.alignment="CENTER">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" />
+                                        <ColumnConstraints halignment="LEFT" maxWidth="262.40000000000003" minWidth="-Infinity" prefWidth="262.40000000000003" />
+                                        <ColumnConstraints maxWidth="57.400000000000034" minWidth="0.0" prefWidth="0.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints fillHeight="false" maxHeight="-Infinity" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <Label alignment="TOP_CENTER" layoutX="10.0" prefHeight="22.0" prefWidth="262.0" styleClass="pref-header-label" text="Excel Workbooks " GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                        <GridPane.margin>
+                                            <Insets bottom="5.0" />
+                                        </GridPane.margin>
+                                        <tooltip>
+                                            <Tooltip text="Choose how you want Excel workbook file types to be handled" wrapText="true" />
+                                        </tooltip>
+                                    </Label>
+                                    <Group GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                        <RadioButton id="xlsx" mnemonicParsing="false" styleClass="pref-radio-button" text=".xlsx" fx:id="xlsxRadioButton" />
+                                        <RadioButton id="csv" fx:id="csvRadioButton" contentDisplay="CENTER" layoutX="136.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".csv" />
+                                        <GridPane.margin>
+                                            <Insets bottom="25.0" />
+                                        </GridPane.margin>
+                                    </Group>
+                                    <Group GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                        <children>
+                                            <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="219.0" styleClass="pref-header-label" text="Word Documents" textAlignment="CENTER" />
+                                            <ComboBox fx:id="textDocPrefsComboBox" layoutY="20.0" onAction="#handleTextDocPrefChanged" prefHeight="25.0" prefWidth="219.0" promptText="No Preference">
+                                                <opaqueInsets>
+                                                    <Insets left="5.0" />
+                                                </opaqueInsets>
+                                            </ComboBox>
+                                        </children>
+                                        <GridPane.margin>
+                                            <Insets left="5.0" right="5.0" />
+                                        </GridPane.margin>
+                                    </Group>
+                                    <RadioButton mnemonicParsing="false" text="RadioButton" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                        <GridPane.margin>
+                                            <Insets right="30.0" />
+                                        </GridPane.margin>
+                                        <font>
+                                            <Font name="Tw Cen MT Condensed" size="21.0" />
+                                        </font>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="RadioButton" visible="false" GridPane.rowIndex="2">
+                                        <GridPane.margin>
+                                            <Insets left="20.0" />
+                                        </GridPane.margin>
+                                        <font>
+                                            <Font name="Tw Cen MT Condensed" size="21.0" />
+                                        </font>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="RadioButton" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                        <GridPane.margin>
+                                            <Insets right="30.0" />
+                                        </GridPane.margin>
+                                        <font>
+                                            <Font name="Tw Cen MT Condensed" size="21.0" />
+                                        </font>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" text="RadioButton" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                        <GridPane.margin>
+                                            <Insets left="20.0" />
+                                        </GridPane.margin>
+                                        <font>
+                                            <Font name="Tw Cen MT Condensed" size="21.0" />
+                                        </font>
+                                    </RadioButton>
+                                    <TextField fx:id="directoryPathTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="447.0" promptText="Source Folder" text="Choose a source folder" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP">
+                                        <GridPane.margin>
+                                            <Insets left="5.0" />
+                                        </GridPane.margin>
+                              <font>
+                                 <Font size="10.0" />
+                              </font>
+                                    </TextField>
+                                    <Group GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                        <children>
+                                            <Label alignment="CENTER" contentDisplay="CENTER" styleClass="pref-header-label" text="Choose how to handle source files">
+                                                <opaqueInsets>
+                                                    <Insets />
+                                                </opaqueInsets>
+                                                <tooltip>
+                                                    <Tooltip text="Choose how to handle the source file upon completing conversion" wrapText="true" />
+                                                </tooltip>
+                                                <padding>
+                                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                </padding>
+                                            </Label>
+                                            <ComboBox fx:id="prefsComboBox" layoutX="35.0" layoutY="28.0" onAction="#handleSrcFilePrefChanged" prefHeight="25.0" prefWidth="138.0" promptText="Source File Policy">
+                                                <tooltip>
+                                                    <Tooltip text="Choose how to handle the source file upon completing conversion" wrapText="true" />
+                                                </tooltip>
+                                            </ComboBox>
+                                        </children>
+                                        <GridPane.margin>
+                                            <Insets left="5.0" right="5.0" />
+                                        </GridPane.margin>
+                                    </Group>
+                                    <VBox prefHeight="114.0" prefWidth="323.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                        <children>
+                                            <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="12.0" prefWidth="551.0" styleClass="pref-header-label" text="Image Formats" VBox.vgrow="ALWAYS">
+                                                <tooltip>
+                                                    <Tooltip text="Choose your format preference for images. All bmp, jpg, png, and gifs will format to the value set below" wrapText="true" />
+                                                </tooltip>
+                                                <VBox.margin>
+                                                    <Insets bottom="5.0" />
+                                                </VBox.margin>
+                                            </Label>
+                                 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="570.0" VBox.vgrow="ALWAYS">
+                                    <VBox.margin>
+                                       <Insets />
+                                    </VBox.margin>
+                                    <children>
+                                                  <Group layoutX="111.0" layoutY="3.0" AnchorPane.bottomAnchor="3.200000762939453" AnchorPane.leftAnchor="111.0" AnchorPane.rightAnchor="110.75311889648435" AnchorPane.topAnchor="3.0">
+                                                      <RadioButton id="jpg" fx:id="jpgRadioButton" mnemonicParsing="false" styleClass="pref-radio-button" text=".jpg" />
+                                                      <RadioButton id="png" fx:id="pngRadioButton" contentDisplay="CENTER" layoutX="85.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".png" />
+                                                      <RadioButton id="gif" fx:id="gifRadioButton" layoutX="200.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".gif" />
+                                                      <RadioButton id="bmp" fx:id="bmpRadioButton" contentDisplay="CENTER" layoutX="300.0" mnemonicParsing="false" styleClass="pref-radio-button" text=".bmp" />
+                                                      <effect>
+                                                          <ColorAdjust />
+                                                      </effect>
+                                                  </Group>
+                                    </children>
+                                 </AnchorPane>
+                                        </children>
+                                    </VBox>
+                                    <Button alignment="BASELINE_LEFT" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleAssignOutputDirectory" prefHeight="21.0" prefWidth="86.0" text="Change Output" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+                                        <GridPane.margin>
+                                            <Insets bottom="1.0" right="5.0" />
+                                        </GridPane.margin>
+                              <font>
+                                 <Font name="System Bold" size="10.0" />
+                              </font>
+                                    </Button>
+                                    <TextField fx:id="outputPathTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="447.0" promptText="Output Folder" text="Choose an output folder" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+                                        <GridPane.margin>
+                                            <Insets left="5.0" top="15.0" />
+                                        </GridPane.margin>
+                              <font>
+                                 <Font size="10.0" />
+                              </font>
+                                    </TextField>
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAssignDirectory" text="Change Source" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+                                        <GridPane.margin>
+                                            <Insets bottom="10.0" right="7.0" />
+                                        </GridPane.margin>
+                              <font>
+                                 <Font name="System Bold" size="10.0" />
+                              </font>
+                                    </Button>
+                                    <ColorPicker fx:id="bgColorPicker" onAction="#handleColorChanged" prefHeight="26.0" prefWidth="42.0" promptText="Pick a color" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                        <GridPane.margin>
+                                            <Insets top="35.0" />
+                                        </GridPane.margin>
+                                        <tooltip>
+                                            <Tooltip text="This is the default background color to use when converting a transparent image to a format that doesn't support transparency." wrapText="true" />
+                                        </tooltip>
+                                    </ColorPicker>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="260.0" styleClass="pref-header-label" text="Image Background Color" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
+                                        <opaqueInsets>
+                                            <Insets />
+                                        </opaqueInsets>
+                                        <tooltip>
+                                            <Tooltip text="This is the default background color to use when converting a transparent image to a format that doesn't support transparency." wrapText="true" />
+                                        </tooltip>
+                                        <GridPane.margin>
+                                            <Insets bottom="35.0" />
+                                        </GridPane.margin>
+                                    </Label>
+                                </GridPane>
+                                <HBox alignment="CENTER" prefHeight="16.0" prefWidth="566.0" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+    </children>
 </VBox>

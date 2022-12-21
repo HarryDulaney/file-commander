@@ -288,7 +288,6 @@ public class DragDropController {
      * source directory and output directory.
      */
     void setLabels() {
-
         obsSrcDirectory.set(user.getDirectoryPath());
         obsTrgtDirectory.set(user.getWriteDirectoryPath());
 

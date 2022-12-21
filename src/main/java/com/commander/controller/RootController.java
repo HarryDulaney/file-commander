@@ -6,10 +6,12 @@ import com.commander.model.User;
 import com.commander.service.FileService;
 import com.commander.utils.Constants;
 import com.commander.utils.DialogHelper;
+import com.sun.javafx.stage.StageHelper;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -186,6 +188,21 @@ public class RootController {
         }
         updatePreferenceValues("Text document file type preference changed to " + user.getDocPreference().getDocOperation());
 
+    }
+
+    /**
+     * File menu button pressed to open the Settings view
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    private void handleSettingsPressed(ActionEvent event) {
+        Stage stage = new Stage();
+        stage.setTitle("Settings and Preferences");
+        Scene scene = new Scene(fxWeaver.loadView(SettingsController.class));
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
     }
 
     /**
